@@ -1,15 +1,15 @@
-import { useState } from 'react'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import OverView from "./components/pages/overview";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+const App = () => {
   return (
-    <>
-      <div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<OverView />} />
+      </Routes>
+    </Router>
+  );
+};
 
-      </div>
-    </>
-  )
-}
-
-export default App
+export default App;
