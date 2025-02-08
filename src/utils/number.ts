@@ -13,3 +13,13 @@ export const addCommasToNumber = (
 
   return decimalPart ? `${formattedInteger}.${decimalPart}` : formattedInteger;
 };
+
+export const addPlusSignToNonNegativeNumber = (
+  number: number
+): number | string => {
+  if (Math.sign(number) !== -1) {
+    return "+" + number;
+  } else {
+    return number;
+  }
+};

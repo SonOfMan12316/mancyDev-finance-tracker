@@ -1,5 +1,11 @@
-import { addCommasToNumber } from "../../utils/number";
-import { RightIcon, SavingIcon } from "../icons";
+import {
+  addCommasToNumber,
+  addPlusSignToNonNegativeNumber,
+} from "../../utils/number";
+import { Line, RightIcon, SavingIcon } from "../icons";
+// const { transaction }
+import transactions from "../../data/transaction";
+import { toDMYString } from "../../utils/date";
 
 const OverView = () => {
   const figure = [
@@ -38,6 +44,7 @@ const OverView = () => {
       color: "ch-yellow",
     },
   ];
+
   return (
     <div className="bg-ch-beige">
       <div className="p-4">
@@ -105,6 +112,44 @@ const OverView = () => {
             </div>
             <div className="flex items-center space-x-3">
               <h1 className="text-xs text-ch-grey capitalize">view all</h1>
+              <RightIcon color="#696868" />
+            </div>
+          </div>
+          {transactions.slice(0, 5).map((transaction, index) => (
+            <div key={index} className="flex justify-between">
+              <div className="flex space-x-5 items-center">
+                <div className="w-8">
+                  <img className="rounded-full" src={transaction.avatar} />
+                </div>
+                <h1 className="font-bold text-sm">{transaction.name}</h1>
+              </div>
+              <div className="flex flex-col py-3">
+                <h1
+                  className={`font-bold ${
+                    index === 0 || index === 3 ? "text-ch-green" : "text-black"
+                  }`}
+                >
+                  {" "}
+                  {"$" +
+                    addPlusSignToNonNegativeNumber(Number(transaction.amount))}
+                </h1>
+                <div className="text-ch-grey text-xs font-light my-1">
+                  {toDMYString(transaction.date)}
+                </div>
+              </div>
+              <div className="absolute">
+                <Line className={`${index === 0 ? "hidden" : ""}`} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="bg-white my-4 px-4 py-5 rounded-xl">
+          <div className="flex justify-between">
+            <div>
+              <h1 className="text-lg font-bold">Budgets</h1>
+            </div>
+            <div className="flex items-center space-x-3">
+              <h1 className="text-xs text-ch-grey capitalize">see details</h1>
               <RightIcon color="#696868" />
             </div>
           </div>
