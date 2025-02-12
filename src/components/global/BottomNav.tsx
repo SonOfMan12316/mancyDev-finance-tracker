@@ -30,66 +30,66 @@ const BottomNav = () => {
     setActiveNavItem(label);
   };
 
-  useEffect(() => {
-    console.log(activeNavItem);
-  }, [activeNavItem]);
-
   const NavItem: Array<NavItem> = [
     {
       icon: <Home />,
-      label: "Overview",
+      label: "overview",
       action: () => {
         navigate("/overview");
       },
     },
     {
       icon: <Transaction />,
-      label: "Transactions",
+      label: "transaction",
       action: () => {
         navigate("/transaction");
       },
     },
     {
       icon: <Budget />,
-      label: "Budgets",
+      label: "budget",
       action: () => {
         navigate("/budget");
       },
     },
     {
       icon: <Saving />,
-      label: "Savings",
+      label: "saving",
       action: () => {
         navigate("/saving");
       },
     },
     {
       icon: <Bill />,
-      label: "Recurring Bills",
+      label: "recurring bills",
       action: () => {
-        navigate("/bill");
+        navigate("/recurring-bill");
       },
     },
   ];
 
   return (
-    <ul className="bg-ch-dark-grey flex items-center justify-around h-16 rounded-t-xl w-screen">
+    <ul className="bg-ch-dark-grey flex items-center justify-around h-16 rounded-t-xl w-screen relative">
       {NavItem.map((i: NavItem, index: number) => (
-        <li key={index}>
-          <div
-            className={classnames(
-              "cursor-pointer transition-all duration-300 ease-in-out",
-              {
-                "bg-[#E2EDF9]": activeNavItem === i?.label,
-              }
-            )}
-            onClick={() => {
-              i?.label && handleNavClick(i?.label);
-              i?.action && i?.action();
-            }}
-          >
-            <>{i.icon}</>
+        <li
+          key={index}
+          className={classnames(
+            "cursor-pointer transition-all duration-300 ease-in-out relative",
+            {
+              "": activeNavItem === i?.label,
+            }
+          )}
+          onClick={() => {
+            i?.label && handleNavClick(i?.label);
+            i?.action && i?.action();
+          }}
+        >
+          <div className="z-10 relative flex justify-center items-center">
+            {i.icon}
           </div>
+          {activeNavItem === i?.label && (
+            <div className="absolute inset-0 bg-white  h-14 w-16 border-ch-green border-b-8 transform -translate-y-3.5 -translate-x-5 rounded-t-xl"></div>
+          )}
         </li>
       ))}
     </ul>

@@ -49,22 +49,22 @@ const OverView = () => {
   const budgetsData = [
     {
       name: "Entertainment",
-      amount: 159,
+      amount: 50,
       color: "ch-green",
     },
     {
       name: "Bills",
-      amount: 40,
+      amount: 750,
       color: "ch-cyan",
     },
     {
       name: "Dining Out",
-      amount: 110,
+      amount: 75,
       color: "ch-navy",
     },
     {
       name: "Personal Care",
-      amount: 10,
+      amount: 100,
       color: "ch-yellow",
     },
   ];
@@ -90,31 +90,33 @@ const OverView = () => {
     <div className="bg-ch-beige w-screen">
       <div className="px-4 py-3">
         <div className="">
-          <h1 className="text-3xl font-extrabold">Overview</h1>
-          {figure.map((item, index) => (
-            <div
-              key={index}
-              className={`flex flex-col justify-center mt-3 py-5 px-4 rounded-xl ${
-                index === 0 ? "bg-black" : "bg-white"
-              }`}
-            >
-              <h1
-                className={`font-light text-xs ${
-                  index === 0 ? "text-white" : "text-black"
-                }`}
-              >
-                {item.name}
-              </h1>
+          <h1 className="text-3xl font-extrabold py-2">Overview</h1>
+          <div className="sm:flex sm:justify-between">
+            {figure.map((item, index) => (
               <div
-                className={`text-2xl font-bold my-2 ${
-                  index === 0 ? "text-white" : "text-black"
+                key={index}
+                className={`flex flex-col justify-center mt-3 py-5 px-4 rounded-xl sm:w-48 ${
+                  index === 0 ? "bg-black" : "bg-white"
                 }`}
               >
-                {"$" + addCommasToNumber(item.amount.toFixed(2))}
+                <h1
+                  className={`font-light text-xs ${
+                    index === 0 ? "text-white" : "text-black"
+                  }`}
+                >
+                  {item.name}
+                </h1>
+                <div
+                  className={`text-2xl font-bold my-2 ${
+                    index === 0 ? "text-white" : "text-black"
+                  }`}
+                >
+                  {"$" + addCommasToNumber(item.amount.toFixed(2))}
+                </div>
               </div>
-            </div>
-          ))}
-          <div className="bg-white my-8 px-4 py-5 rounded-xl">
+            ))}
+          </div>
+          <div className="bg-white my-8 px-4 py-5 sm:py-3 rounded-xl">
             <div className="flex justify-between">
               <div>
                 <h1 className="text-lg font-bold">Pots</h1>
@@ -124,12 +126,14 @@ const OverView = () => {
                 <RightIcon color="#696868" />
               </div>
             </div>
-            <div className="bg-ch-beige my-2 py-5 px-4 rounded-xl">
-              <div className="flex items-center">
-                <SavingIcon color="#277C78" />
-                <div>
-                  <h1 className="text-xs text-ch-grey">Total Saved</h1>
-                  <div className="my-3 font-bold text-2xl">$850</div>
+            <div className="sm:flex justify-between">
+              <div className="bg-ch-beige my-2 py-5 px-4 rounded-xl sm:w-52">
+                <div className="flex space-x-4 items-center">
+                  <SavingIcon color="#277C78" />
+                  <div>
+                    <h1 className="text-sm text-ch-grey">Total Saved</h1>
+                    <div className="my-3 font-bold text-3xl">$850</div>
+                  </div>
                 </div>
               </div>
               <div className="grid grid-cols-2 px-2">
@@ -149,7 +153,7 @@ const OverView = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white my-4 px-4 py-5 rounded-xl">
+          <div className="bg-white my-4 px-4 py-5 relative rounded-xl overflow-hidden">
             <div className="flex justify-between">
               <div>
                 <h1 className="text-lg font-bold">Transactions</h1>
@@ -160,7 +164,7 @@ const OverView = () => {
               </div>
             </div>
             {transactions.slice(0, 5).map((transaction, index) => (
-              <div key={index} className="flex justify-between">
+              <div key={index} className="relative flex justify-between w-full">
                 <div className="flex space-x-5 items-center">
                   <div className="w-8">
                     <img className="rounded-full" src={transaction.avatar} />
@@ -185,13 +189,14 @@ const OverView = () => {
                     {toDMYString(transaction.date)}
                   </div>
                 </div>
-                <div
-                  className={`max-w-screen-sm ${
-                    index === 0 ? "hidden" : "absolute"
-                  }`}
-                >
+                {/* <div className={` ${index === 0 ? "hidden" : "absolute"}`}>
                   <Line />
-                </div>
+                </div> */}
+                {index !== 4 && (
+                  <div className="absolute left-0 w-full bottom-0">
+                    <div className=" border-b border-ch-light-grey" />
+                  </div>
+                )}
               </div>
             ))}
           </div>
@@ -205,7 +210,7 @@ const OverView = () => {
                 <RightIcon color="#696868" />
               </div>
             </div>
-            <div className="mt-5">
+            <div className="mt-8">
               <PieChart />
             </div>
             <div className="grid grid-cols-2 px-2 my-2">
@@ -216,7 +221,9 @@ const OverView = () => {
                   ></div>
                   <div className="flex flex-col justify-center">
                     <h1 className="text-ch-grey text-sm">{saving.name}</h1>
-                    <div className="font-bold my-1">{"$" + saving.amount}</div>
+                    <div className="font-bold my-1">
+                      {"$" + saving.amount.toFixed(2)}
+                    </div>
                   </div>
                 </div>
               ))}
