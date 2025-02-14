@@ -28,7 +28,7 @@ const PieChart = () => {
 
   return (
     <div>
-      <Pie data={data} radius={135} hole={80} colors={colors} strokeWidth={1} />
+      <Pie data={data} radius={150} hole={80} colors={colors} strokeWidth={1} />
     </div>
   );
 };
@@ -56,7 +56,6 @@ const Pie: React.FC<PieProps> = ({
     >
       {data.map((slice, sliceIndex) => {
         const angle = (slice / sum) * 360;
-        const percentValue = ((slice / sum) * 100).toFixed(1);
         const nextAngle = startAngle;
         startAngle += angle;
 
@@ -164,22 +163,22 @@ const Slice: React.FC<SliceProps> = ({
       <circle cx={radius} cy={radius} r={radius * 0.6} fill="white" />
       <text
         x={radius}
-        y="130"
+        y="140"
         fontFamily="'Public Sans', sans-serif"
         fontWeight="700"
         textAnchor="middle"
         alignmentBaseline="middle"
         dominantBaseline="middle"
-        fontSize="30"
+        fontSize="40"
         fill="#000"
       >
         $338
       </text>
       <text
         x={radius - 35}
-        y="160"
+        y="175"
         fontFamily="'Public Sans', sans-serif"
-        fontWeight="500"
+        fontWeight="600"
         alignmentBaseline="middle"
         fontSize="12"
         fill="rgba(0, 0, 0, 0.30)"

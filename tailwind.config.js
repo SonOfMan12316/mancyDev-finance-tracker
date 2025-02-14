@@ -12,7 +12,8 @@ module.exports = {
         'ch-navy': '#626070',
         'ch-yellow': '#F2CDAC',
         'ch-dark-grey': '#201F24',
-        'ch-light-grey': '#F2F2F2'
+        'ch-light-grey': '#F2F2F2',
+        'ch-lighter-grey': '#B3B3B3'
       }
     },
   },

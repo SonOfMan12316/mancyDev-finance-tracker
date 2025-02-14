@@ -69,7 +69,7 @@ const BottomNav = () => {
   ];
 
   return (
-    <ul className="bg-ch-dark-grey flex items-center justify-around h-16 rounded-t-xl w-screen relative">
+    <ul className="bg-ch-dark-grey flex items-center justify-around h-16 md:h-24 rounded-t-xl w-screen relative">
       {NavItem.map((i: NavItem, index: number) => (
         <li
           key={index}
@@ -84,11 +84,24 @@ const BottomNav = () => {
             i?.action && i?.action();
           }}
         >
-          <div className="z-10 relative flex justify-center items-center">
-            {i.icon}
+          <div className="z-10 relative flex flex-col items-center">
+            <div className="pl-4 md:pl-6">
+              <>{i?.icon}</>
+            </div>
+            <div className="mx-auto">
+              <span
+                className={`capitalize hidden md:block font-bold text-base text-right pt-2 md:pl-6 ${
+                  activeNavItem === i?.label
+                    ? "text-black"
+                    : "text-ch-lighter-grey"
+                }`}
+              >
+                {i?.label}
+              </span>
+            </div>
           </div>
           {activeNavItem === i?.label && (
-            <div className="absolute inset-0 bg-white  h-14 w-16 border-ch-green border-b-8 transform -translate-y-3.5 -translate-x-5 rounded-t-xl"></div>
+            <div className="absolute inset-0 bg-white  h-14 md:h-20 w-12 md:w-28 border-ch-green border-b-8 transform -translate-y-3.5 md:-translate-y-2  md:translate-x-2 rounded-t-xl"></div>
           )}
         </li>
       ))}
