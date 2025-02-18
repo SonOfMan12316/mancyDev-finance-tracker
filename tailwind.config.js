@@ -17,9 +17,16 @@ module.exports = {
         'ch-red': '#C94736'
       }
     },
+    fontFamily: {
+      poppins: ['Poppins', 'ui-sans-serif']
+    },
   },
   variants: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    function ({ addVariant }) {
+      addVariant('hover-focus-active', ['&:hover', '&:focus', '&:active']);
+    },
+  ],
 }
