@@ -88,15 +88,15 @@ const OverView = () => {
   ];
 
   return (
-    <Layout>
-      <div className="bg-ch-beige w-screen">
-        <div className="px-4 md:px-8 py-3">
+    <div className="bg-ch-beige w-screen">
+      <Layout title="overview">
+        <div className="px-4 md:px-8">
           <div className="">
-            <div className="md:flex md:justify-between">
+            <div className="md:flex lg:space-x-4 space-y-3 md:space-y-0 md:justify-between">
               {figure.map((item, index) => (
                 <div
                   key={index}
-                  className={`flex flex-col justify-center mt-3 py-5 px-4 md:px-8 rounded-xl md:w-56 ${
+                  className={`flex flex-col  justify-center py-5 px-4 md:px-8 rounded-xl md:w-56 lg:w-11/12 xl:w-10/12 ${
                     index === 0 ? "bg-black" : "bg-white"
                   }`}
                 >
@@ -274,8 +274,8 @@ const OverView = () => {
         <div className="lg:hidden">
           <BottomNav />
         </div>
-      </div>
-    </Layout>
+      </Layout>
+    </div>
   );
 };
 
