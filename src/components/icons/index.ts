@@ -6,3 +6,5 @@ export { default as Bill } from "./Bill";
 export { default as Budget } from "./Budget";
 export { default as Saving } from "./Saving";
 export { default as Transaction } from "./Transaction";
+export { default as ArrowLeft } from "./ArrowLeft";
+export { default as ArrowRight } from "./ArrowRight";

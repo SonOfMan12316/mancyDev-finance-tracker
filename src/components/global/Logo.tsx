@@ -1,6 +1,6 @@
 const Logo = () => {
   return (
-    <div className="flex items-center ml-4">
+    <div className="flex items-center">
       <a href="/">
         <span className="not-italic font-serif  text-xl lg:text-xl font-bold  font-poppins text-white hover:text-red-500 duration-75 ease-in-out">
           J

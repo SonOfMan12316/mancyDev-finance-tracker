@@ -1,9 +1,8 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { shallow } from "zustand/shallow";
 import classnames from "classnames";
 
-import { useUIStore } from "../../store/ui";
 import { Bill, Budget, Home, Saving, Transaction } from "../icons";
 
 interface NavItem {
@@ -18,13 +17,6 @@ const BottomNav = () => {
   const [activeNavItem, setActiveNavItem] = useState<string>(
     location.pathname.split("/")?.filter((part) => part !== "")[0]
   );
-  // const { bottomnavState, updateBottomnavState } = useUIStore(
-  //   (state) => ({
-  //     bottomnavState: state.bottomnavState,
-  //     updateBottomnavState: state.updateBottomnavState,
-  //   }),
-  //   shallow
-  // );
 
   const handleNavClick = (label: string) => {
     setActiveNavItem(label);
