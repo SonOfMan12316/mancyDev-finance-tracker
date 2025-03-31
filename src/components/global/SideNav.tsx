@@ -75,26 +75,46 @@ const SideNav = () => {
   return (
     <div
       style={{
-        minWidth: sidenavState ? "16.5rem" : "4rem",
-        width: sidenavState ? "17%" : "7.2%",
-        transitionProperty: "margin-left",
-        transitionDuration: "150ms",
+        width: sidenavState ? "15%" : "5%",
+        fontFamily: "Poppins",
       }}
       className={classnames(
-        "hidden lg:block bg-black rounded-r-3xl h-screen overflow-x-hidden lg:w-11/12 overflow-y-auto absolute lg:relative transition  duration-700 z-20 ease-in-out",
-        { "ml-0": sidenavState },
-        { "-ml-100": !sidenavState }
+        "hidden lg:block bg-black rounded-r-2xl h-screen overflow-x-hidden lg:w-11/12 overflow-y-auto absolute lg:relative z-20 max-w-[5rem] w-1/12 expanded:max-w-[16rem]",
+        { "animate-sidebar-expand": sidenavState },
+        { "animate-sidebar-collapse": !sidenavState }
       )}
     >
       <div className="w-full h-full py-6 relative flex flex-col">
-        <div className="flex items-center ml-5">
-          <span className="not-italic ml-4 capitalize font-serif  text-xl lg:text-xl font-bold  font-poppins text-white hover:text-red-500 duration-75 ease-in-out">
-            {!sidenavState ? "j" : <Logo />}
+        <div className="flex items-center ml-5 mt-4">
+          <span
+            className={classnames(
+              "absolute not-italic capitalize font-serif text-xl font-bold text-white",
+              "hover:text-red-500 transition-all duration-500 ease-in-out",
+              "transform origin-left ml-3",
+              {
+                "opacity-100 scale-x-100": !sidenavState,
+                "opacity-0 scale-x-0": sidenavState,
+              }
+            )}
+          >
+            j
+          </span>
+          <span
+            className={classnames(
+              "absolute transition-all duration-500 ease-in-out",
+              "transform origin-left ml-3",
+              {
+                "opacity-100 scale-x-100": sidenavState,
+                "opacity-0 scale-x-0": !sidenavState,
+              }
+            )}
+          >
+            <Logo />
           </span>
         </div>
         <nav
-          style={{ height: "calc(100vh - 8rem)" }}
-          className="w-full flex flex-col justify-between py-14"
+          style={{ height: "calc(100vh - 6rem)" }}
+          className="w-full flex flex-col justify-between py-14 pb-10"
         >
           <ul className="w-full flex flex-col space-y-3 pb-10 relative">
             {navItem?.map((i: NavItem, index: number) => {
@@ -102,9 +122,9 @@ const SideNav = () => {
                 <li className="capitalize" key={index}>
                   <div
                     className={classnames(
-                      "py-3 pl-9 flex cursor-pointer transition-all duration-300 ease-in-out",
+                      "py-3 pl-5 flex cursor-pointer transition-all duration-300 ease-in-out",
                       {
-                        "inset-0 bg-ch-beige text-black h-12  w-12 lg:w-11/12 rounded-r-xl border-ch-green border-l-4 transform":
+                        "inset-0 bg-ch-beige text-black h-12 w-12 lg:w-11/12 rounded-r-xl border-ch-green border-l-4 transform":
                           activeNavItem === i?.label,
                       }
                     )}
@@ -113,13 +133,13 @@ const SideNav = () => {
                       i?.action && i.action();
                     }}
                   >
-                    <div className="flex items-center relative z-10">
+                    <div className="flex items-center relative z-10 overflow-hidden ml-3">
                       <div
                         className={classnames(
                           "w-5 flex items-center justify-center",
                           {
                             "text-ch-green": activeNavItem === i?.label,
-                            "text-ch-grey": activeNavItem !== i?.label,
+                            "text-ch-lighter-grey": activeNavItem !== i?.label,
                           }
                         )}
                       >
@@ -127,8 +147,10 @@ const SideNav = () => {
                       </div>
                       <span
                         className={classnames(
-                          "text-base font-bold tracking-[-0.04em] pl-6",
+                          "text-sm font-bold tracking-[-0.04em] pt-1 pl-4 transform origin-left transition-all duration-500 ease-in-out overflow-hidden whitespace-nowrap",
                           {
+                            "scale-x-0 opacity-0 w-0": !sidenavState,
+                            "scale-x-100 opacity-100": sidenavState,
                             "text-black": activeNavItem === i?.label,
                             "text-ch-lighter-grey": activeNavItem !== i?.label,
                           }
@@ -143,16 +165,33 @@ const SideNav = () => {
             })}
           </ul>
         </nav>
-        <div className="flex space-x-4 ml-10">
-          <button onClick={() => updateSidenavState(false)}>
-            {sidenavState ? (
-              <div className="flex space-x-2">
-                <ArrowLeft />
-                <span className="text-ch-lighter-grey">Minimize Menu</span>
-              </div>
-            ) : (
+        <div className="ml-8 relative h-[30px]">
+          <button
+            className="absolute inset-0 flex items-center"
+            onClick={() => updateSidenavState(false)}
+          >
+            <span
+              className={classnames(
+                "flex space-x-2 transition-all duration-300 ease-in-out ",
+                {
+                  "opacity-0 w-0": !sidenavState,
+                  "opacity-100 w-auto": sidenavState,
+                }
+              )}
+            >
+              <ArrowLeft />
+              <span className="text-ch-lighter-grey text-sm font-poppins pt-1  whitespace-nowrap">
+                Minimize Menu
+              </span>
+            </span>
+            <span
+              className={classnames("transition-all duration-300 ease-in-out", {
+                "opacity-0 w-0": sidenavState,
+                "opacity-100": !sidenavState,
+              })}
+            >
               <ArrowRight />
-            )}
+            </span>
           </button>
         </div>
       </div>

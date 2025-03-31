@@ -15,7 +15,26 @@ module.exports = {
         'ch-light-grey': '#F2F2F2',
         'ch-lighter-grey': '#B3B3B3',
         'ch-red': '#C94736'
-      }
+      },
+      keyframes: {
+        sidebarExpand: {
+          '0%': { 'min-width': '5.5rem' },
+          '100%': { 'min-width': '16rem' },
+        },
+        sidebarCollapse: {
+          '0%': { 'min-width': '16rem' },
+          '100%': { 'min-width': '5.5rem' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+      },
+      animation: {
+        'sidebar-expand': 'sidebarExpand 0.3s ease-in-out forwards',
+        'sidebar-collapse': 'sidebarCollapse 0.3s ease-in-out forwards',
+        'fade-in': 'fadeIn 0.5s ease-in'
+      },
     },
     fontFamily: {
       poppins: ['Poppins', 'ui-sans-serif']
@@ -26,7 +45,7 @@ module.exports = {
   },
   plugins: [
     function ({ addVariant }) {
-      addVariant('hover-focus-active', ['&:hover', '&:focus', '&:active']);
+      addVariant('hover-focus-active', ['&:hover', '&:focus', '&:active'], 'expanded', '&.expanded');
     },
   ],
 }
