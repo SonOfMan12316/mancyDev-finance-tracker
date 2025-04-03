@@ -18,11 +18,11 @@ module.exports = {
       },
       keyframes: {
         sidebarExpand: {
-          '0%': { 'min-width': '5.5rem' },
-          '100%': { 'min-width': '16rem' },
+          '0%': { 'width': '5.5rem' },
+          '100%': { 'width': '14rem' },
         },
         sidebarCollapse: {
-          '0%': { 'min-width': '16rem' },
+          '0%': { 'min-width': '14rem' },
           '100%': { 'min-width': '5.5rem' },
         },
         fadeIn: {
@@ -31,9 +31,12 @@ module.exports = {
         },
       },
       animation: {
-        'sidebar-expand': 'sidebarExpand 0.3s ease-in-out forwards',
+        'sidebar-expand': 'sidebarExpand 0.5s ease-in-out forwards',
         'sidebar-collapse': 'sidebarCollapse 0.3s ease-in-out forwards',
         'fade-in': 'fadeIn 0.5s ease-in'
+      },
+      screens: {
+        'xl': '1200px',
       },
     },
     fontFamily: {

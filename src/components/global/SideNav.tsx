@@ -43,14 +43,14 @@ const SideNav = () => {
     },
     {
       icon: <Budget />,
-      label: "budget",
+      label: "budgets",
       action: () => {
         navigate("/budget");
       },
     },
     {
       icon: <Saving />,
-      label: "saving",
+      label: "savings",
       action: () => {
         navigate("/saving");
       },
@@ -75,13 +75,16 @@ const SideNav = () => {
   return (
     <div
       style={{
-        width: sidenavState ? "15%" : "5%",
         fontFamily: "Poppins",
       }}
       className={classnames(
-        "hidden lg:block bg-black rounded-r-2xl h-screen overflow-x-hidden lg:w-11/12 overflow-y-auto absolute lg:relative z-20 max-w-[5rem] w-1/12 expanded:max-w-[16rem]",
-        { "animate-sidebar-expand": sidenavState },
-        { "animate-sidebar-collapse": !sidenavState }
+        "hidden lg:block bg-black rounded-r-2xl h-screen overflow-x-hidden overflow-y-auto absolute lg:relative z-20",
+        "transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
+        "will-change-transform",
+        {
+          "w-[14rem] animate-sidebar-expand": sidenavState,
+          "w-[5rem] animate-sidebar-collapse": !sidenavState,
+        }
       )}
     >
       <div className="w-full h-full py-6 relative flex flex-col">

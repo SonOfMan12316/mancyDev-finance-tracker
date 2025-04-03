@@ -47,7 +47,7 @@ const Pie: React.FC<PieProps> = ({
 
   return (
     <svg
-      className="w-11/12 mx-auto"
+      className="w-11/12 mx-auto lg:w-full lg:mx-0"
       width={diameter}
       height={diameter}
       viewBox={`0 0 ${diameter} ${diameter}`}

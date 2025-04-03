@@ -19,14 +19,14 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
     <div className="w-screen h-screen relative overflow-hidden">
       <div className="w-full h-full flex">
         <SideNav />
-        <main className="relative w-screen h-full overflow-auto">
+        <main className="relative flex-1 h-full overflow-auto">
           <Header
             title={title}
             className={className}
             displayButton={displayButton}
             buttonTitle={buttonTitle}
           />
-          <div className="">{children}</div>
+          <div className="pb-4 lg:pb-8">{children}</div>
         </main>
       </div>
     </div>

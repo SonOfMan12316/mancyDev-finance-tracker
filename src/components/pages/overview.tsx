@@ -27,7 +27,7 @@ const OverView = () => {
   ];
   const savingsData = [
     {
-      name: "Outfit",
+      name: "Savings",
       amount: 159,
       color: "ch-green",
     },
@@ -90,7 +90,7 @@ const OverView = () => {
   return (
     <div className="bg-ch-beige w-screen">
       <Layout title="overview">
-        <div className="px-4 md:px-8">
+        <div className="px-4 lg:px-6">
           <div className="md:flex lg:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
             {figure.map((item, index) => (
               <div
@@ -116,12 +116,9 @@ const OverView = () => {
               </div>
             ))}
           </div>
-          <div
-            style={{ flex: "1 1 auto" }}
-            className="lg:flex lg:w-full lg:gap-3"
-          >
-            <div className="">
-              <div className="bg-white my-8 px-4 md:px-8 py-5 md:py-3 rounded-xl">
+          <div className="lg:flex lg:gap-4 lg:mt-6">
+            <div className="lg:flex flex-col lg:w-2/4 xl:w-4/6 gap-4">
+              <div className="bg-white my-8 px-4 md:px-8 py-5 md:py-3 lg:my-0 rounded-xl lg:w-full">
                 <div className="flex justify-between">
                   <div>
                     <h1 className="text-lg font-bold">Pots</h1>
@@ -132,7 +129,7 @@ const OverView = () => {
                   </div>
                 </div>
                 <div className="md:flex justify-between">
-                  <div className="bg-ch-beige my-2 py-5 px-4 rounded-xl md:w-64">
+                  <div className="bg-ch-beige my-2 py-5 px-4 lg:my-0 rounded-xl md:w-64">
                     <div className="flex space-x-4 items-center">
                       <SavingIcon color="#277C78" />
                       <div>
@@ -148,9 +145,9 @@ const OverView = () => {
                           className={`w-1 max-h-[2rem] rounded-xl bg-${saving.color}`}
                         ></div>
                         <div className="flex flex-col justify-center">
-                          <h1 className="text-ch-grey text-sm">
+                          <span className="text-ch-grey text-xs whitespace-nowrap">
                             {saving.name}
-                          </h1>
+                          </span>
                           <div className="font-bold my-1">
                             {"$" + saving.amount}
                           </div>
@@ -160,7 +157,7 @@ const OverView = () => {
                   </div>
                 </div>
               </div>
-              <div className="bg-white my-8 px-4 md:px-8 py-5 relative rounded-xl overflow-hidden">
+              <div className="bg-white my-8 px-4 md:px-8 py-5  lg:my-0 relative rounded-xl overflow-hidden">
                 <div className="flex justify-between">
                   <div>
                     <h1 className="text-lg font-bold">Transactions</h1>
@@ -184,7 +181,7 @@ const OverView = () => {
                           src={transaction.avatar}
                         />
                       </div>
-                      <h1 className="font-bold text-xs md:text-base">
+                      <h1 className="font-bold text-xs md:text-sm">
                         {transaction.name}
                       </h1>
                     </div>
@@ -215,31 +212,31 @@ const OverView = () => {
                 ))}
               </div>
             </div>
-            <div className="">
-              <div className="bg-white my-8 px-4 md:px-8 py-5 rounded-xl">
+            <div className="lg:flex flex-col gap-4 lg:w-2/4 ">
+              <div className="bg-white my-8 px-4 md:px-8 py-5 lg:my-0 rounded-xl">
                 <div className="flex justify-between items-center">
                   <div>
                     <h1 className="text-lg font-bold">Budgets</h1>
                   </div>
-                  <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-3 lg:space-x-2">
                     <h1 className="text-sm text-ch-grey capitalize">
                       see details
                     </h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
-                <div className="md:flex md:justify-between">
-                  <div className="mt-8 md:mt-0 mx-auto">
+                <div className="md:flex md:items-center md:justify-between lg:justify-center">
+                  <div className="mt-8 md:mt-0 mx-auto lg:mx-0">
                     <PieChart />
                   </div>
                   <div className="grid grid-cols-2 md:flex md:flex-col px-2 my-2">
                     {budgetsData.map((saving, index) => (
-                      <div key={index} className="flex space-x-5 my-2 ">
+                      <div key={index} className="flex space-x-5 my-2 lg:my-1">
                         <div
                           className={`w-1 max-h-[2rem] rounded-xl bg-${saving.color}`}
                         ></div>
                         <div className="flex flex-col justify-center">
-                          <h1 className="text-ch-grey text-sm">
+                          <h1 className="text-ch-grey text-xs">
                             {saving.name}
                           </h1>
                           <div className="font-bold my-1">
@@ -251,7 +248,7 @@ const OverView = () => {
                   </div>
                 </div>
               </div>
-              <div className="bg-white my-8 px-4 md:px-8 py-5 rounded-xl">
+              <div className="bg-white my-8 px-4 md:px-8 py-5 lg:my-0 rounded-xl">
                 <div className="flex justify-between items-center">
                   <div>
                     <h1 className="text-lg font-bold">Recurring Bills</h1>
