@@ -88,7 +88,7 @@ const OverView = () => {
   ];
 
   return (
-    <div className="bg-ch-beige w-screen">
+    <div className="w-screen">
       <Layout title="overview">
         <div className="px-4 lg:px-6">
           <div className="md:flex lg:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
@@ -145,7 +145,7 @@ const OverView = () => {
                           className={`w-1 max-h-[2rem] rounded-xl bg-${saving.color}`}
                         ></div>
                         <div className="flex flex-col justify-center">
-                          <span className="text-ch-grey text-xs whitespace-nowrap">
+                          <span className="text-ch-grey text-xs flex-wrap">
                             {saving.name}
                           </span>
                           <div className="font-bold my-1">
@@ -212,7 +212,7 @@ const OverView = () => {
                 ))}
               </div>
             </div>
-            <div className="lg:flex flex-col gap-4 lg:w-2/4 ">
+            <div className="lg:flex flex-col gap-5 lg:w-2/4">
               <div className="bg-white my-8 px-4 md:px-8 py-5 lg:my-0 rounded-xl">
                 <div className="flex justify-between items-center">
                   <div>
@@ -284,9 +284,9 @@ const OverView = () => {
             </div>
           </div>
         </div>
-        <div className="lg:hidden">
+        {/* <div>
           <BottomNav />
-        </div>
+        </div> */}
       </Layout>
     </div>
   );

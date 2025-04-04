@@ -61,12 +61,13 @@ const BottomNav = () => {
   ];
 
   return (
-    <ul className="bg-ch-dark-grey flex items-center justify-around h-16 md:h-24 rounded-t-xl w-screen relative">
+    <ul className="lg:hidden bg-ch-dark-grey flex items-center justify-around h-16 md:h-24 rounded-t-xl w-screen relative">
       {NavItem.map((i: NavItem, index: number) => (
         <li
           key={index}
           className={classnames(
             "cursor-pointer transition-all duration-300 ease-in-out relative",
+            "h-14 md:h-20", // Set fixed height for consistent positioning
             {
               "": activeNavItem === i?.label,
             }
@@ -76,9 +77,14 @@ const BottomNav = () => {
             i?.action && i?.action();
           }}
         >
-          <div className="z-10 relative flex flex-col items-center">
-            <div className="pl-4 md:pl-6">
-              <>{i?.icon}</>
+          <div className="z-10 relative flex flex-col items-center h-full justify-center">
+            <div
+              className={classnames("pl-4 md:pl-6", {
+                "text-ch-green": activeNavItem === i?.label,
+                "text-ch-lighter-grey": activeNavItem !== i?.label,
+              })}
+            >
+              {i?.icon && <>{i?.icon}</>}
             </div>
             <div className="mx-auto">
               <span
@@ -92,8 +98,10 @@ const BottomNav = () => {
               </span>
             </div>
           </div>
+
+          {/* Active Indicator */}
           {activeNavItem === i?.label && (
-            <div className="absolute inset-0 bg-white  h-14 md:h-20 w-12 md:w-28 border-ch-green border-b-8 transform -translate-y-3.5 md:-translate-y-2  md:translate-x-2 rounded-t-xl"></div>
+            <span className="absolute inset-x-0 -bottom-1 top-0 bg-white px-4 w-16 md:w-32 border-ch-green border-b-8 rounded-t-xl z-0" />
           )}
         </li>
       ))}
