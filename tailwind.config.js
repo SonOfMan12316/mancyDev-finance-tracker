@@ -6,6 +6,7 @@ module.exports = {
     extend: {
       colors: {
         'ch-beige': '#F8F4F0',
+        'ch-lighter-beige': '#98908B',
         'ch-grey': '#696868',
         'ch-green': '#277C78',
         'ch-cyan': '#82C9D7',
@@ -14,7 +15,11 @@ module.exports = {
         'ch-dark-grey': '#201F24',
         'ch-light-grey': '#F2F2F2',
         'ch-lighter-grey': '#B3B3B3',
-        'ch-red': '#C94736'
+        'ch-red': '#C94736',
+        'bg-beige': '#F2F3F7'
+      },
+      flexGrow: {
+        1.2: '1.2',
       },
       keyframes: {
         sidebarExpand: {

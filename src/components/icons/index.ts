@@ -8,3 +8,7 @@ export { default as Saving } from "./Saving";
 export { default as Transaction } from "./Transaction";
 export { default as ArrowLeft } from "./ArrowLeft";
 export { default as ArrowRight } from "./ArrowRight";
+export { default as Search } from "./Search";
+export { default as Download } from "./Download";
+export { default as Filter } from "./Filter";
+export { default as Dropdown } from "./DropDown";

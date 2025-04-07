@@ -1,6 +1,7 @@
 import { useState, ReactNode } from "react";
 import { OptionsInterface } from "../../../types/global";
 import { useClickOutside } from "../../../hooks/useClickOutside";
+import "./Dropdown.css";
 
 type DropdownProps<T> = {
   options: OptionsInterface<T>[];
@@ -94,7 +95,7 @@ const DropdownItem = <T extends string | number>({
   isPlaceholder?: boolean;
 }) => (
   <li
-    className={`relative cursor-pointer select-none py-2 lg:py-4 pl-3 pr-4 ${
+    className={`relative cursor-pointer select-none py-2 pl-3 pr-4${
       isPlaceholder ? "text-black font-semibold" : "hover:bg-gray-100"
     } ${isSelected ? "bg-gray-100 font-semibold" : ""} ${className}`}
     role="option"
