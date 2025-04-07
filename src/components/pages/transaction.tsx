@@ -8,6 +8,9 @@ import {
   SortOptions,
 } from "../../assets/lib/getSelectOptions";
 import { OptionsInterface } from "../../types/global";
+import transactions from "../../data/transaction";
+
+const column = ["Recipient / Sender", "Category", "Transaction Date", "Amount"];
 
 export const Transaction = () => {
   const [selectedSortOption, setSelectedSortOption] =
@@ -61,6 +64,38 @@ export const Transaction = () => {
                 </div>
               </div>
             </div>
+            <table className="py-4 my-4 table-fixed">
+              <thead>
+                <tr className="text-left">
+                  {column.map((i, index) => {
+                    return <th key={index}>{i}</th>;
+                  })}
+                </tr>
+              </thead>
+              <tbody>
+                {transactions.map((transaction, index) => (
+                  <tr key={index}>
+                    <td className="w-2/4 items-center">
+                      <img
+                        className="w-10 h-10 rounded-full"
+                        src={transaction.avatar}
+                      />
+                      <h1 className="whitespace-nowrap">{transaction.name}</h1>
+                    </td>
+
+                    <td className="w-1/4">
+                      <span>{transaction.category}</span>
+                    </td>
+                    <td className="w-1/4">
+                      <h1>{transaction.amount}</h1>
+                    </td>
+                    <td className="w-1/4">
+                      <span>{transaction.date}</span>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </Layout>
