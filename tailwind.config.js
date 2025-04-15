@@ -16,7 +16,8 @@ module.exports = {
         'ch-light-grey': '#F2F2F2',
         'ch-lighter-grey': '#B3B3B3',
         'ch-red': '#C94736',
-        'bg-beige': '#F2F3F7'
+        'bg-beige': '#F2F3F7',
+        'ch-black': '#000000'
       },
       flexGrow: {
         1.2: '1.2',

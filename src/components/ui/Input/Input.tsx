@@ -43,7 +43,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
     <label className={classnames(className, "flex flex-col items-start")}>
       <div
         className={classnames("w-full h-fit relative rounded-md", {
-          "bg-white border border-ch-lighter-beige focus-within:ring-ch-tertiary/30 focus-within:ring-2":
+          "bg-white border-1.5 border-ch-lighter-beige focus-within:ring-ch-tertiary/30 focus-within:ring-2":
             variant === "primary",
         })}
       >

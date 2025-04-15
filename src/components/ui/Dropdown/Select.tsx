@@ -1,7 +1,8 @@
 import { useState, ReactNode } from "react";
 import { OptionsInterface } from "../../../types/global";
 import { useClickOutside } from "../../../hooks/useClickOutside";
-import "./Dropdown.css";
+import { Button } from "../Button/Button";
+import "./Select.css";
 
 type DropdownProps<T> = {
   options: OptionsInterface<T>[];
@@ -48,21 +49,21 @@ const Dropdown = <T extends string | number>({
 
   return (
     <div ref={dropdownRef} className={`relative ${className}`}>
-      <button
-        type="button"
-        className="flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 shadow-sm hover:bg-gray-50 focus:outline-none"
+      <Button
+        variant="action"
+        size="lg"
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         <span className="truncate">{selectedOption?.label || placeholder}</span>
 
-        {icon && <span className="ml-2">{icon}</span>}
-      </button>
+        {icon && <span className="ml-4">{icon}</span>}
+      </Button>
 
       {isOpen && (
         <ul
-          className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border-1 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
           role="listbox"
         >
           {allOptions.map((option) => (
@@ -95,7 +96,7 @@ const DropdownItem = <T extends string | number>({
   isPlaceholder?: boolean;
 }) => (
   <li
-    className={`relative cursor-pointer select-none py-2 pl-3 pr-4${
+    className={`relative cursor-pointer select-none py-2 pl-6 pr-4${
       isPlaceholder ? "text-black font-semibold" : "hover:bg-gray-100"
     } ${isSelected ? "bg-gray-100 font-semibold" : ""} ${className}`}
     role="option"
@@ -108,7 +109,7 @@ const DropdownItem = <T extends string | number>({
         ✓
       </span>
     )}
-    <div className="border-b border-ch-light-grey py-1"></div>
+    <div className="border-b-1 border-ch-light-grey py-1 w-10/12"></div>
   </li>
 );
 
