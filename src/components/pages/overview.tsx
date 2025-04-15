@@ -88,9 +88,9 @@ const OverView = () => {
   ];
 
   return (
-    <div className="w-screen px-4 lg:px-6">
+    <div className="">
       <Layout title="overview">
-        <div className="">
+        <div className="px-4 lg:px-6">
           <div className="md:flex lg:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
             {figure.map((item, index) => (
               <div
@@ -284,9 +284,6 @@ const OverView = () => {
             </div>
           </div>
         </div>
-        {/* <div>
-          <BottomNav />
-        </div> */}
       </Layout>
     </div>
   );

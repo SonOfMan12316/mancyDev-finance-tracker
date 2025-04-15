@@ -74,9 +74,6 @@ const SideNav = () => {
 
   return (
     <div
-      style={{
-        fontFamily: "Poppins",
-      }}
       className={classnames(
         "hidden lg:block bg-black rounded-r-2xl h-screen overflow-x-hidden overflow-y-auto absolute lg:relative z-20",
         "transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)]",
@@ -92,7 +89,7 @@ const SideNav = () => {
           <span
             className={classnames(
               "absolute not-italic capitalize font-serif text-xl font-bold text-white",
-              "hover:text-red-500 transition-all duration-500 ease-in-out",
+              "hover:text-red-500 transition-all duration-500 ease-in-out font-publicSans",
               "transform origin-left ml-3",
               {
                 "opacity-100 scale-x-100": !sidenavState,
@@ -105,7 +102,7 @@ const SideNav = () => {
           <span
             className={classnames(
               "absolute transition-all duration-500 ease-in-out",
-              "transform origin-left ml-3",
+              "transform origin-left ml-3 font-publicSans",
               {
                 "opacity-100 scale-x-100": sidenavState,
                 "opacity-0 scale-x-0": !sidenavState,
@@ -119,7 +116,7 @@ const SideNav = () => {
           style={{ height: "calc(100vh - 6rem)" }}
           className="w-full flex flex-col justify-between py-14 pb-10"
         >
-          <ul className="w-full flex flex-col space-y-3 pb-10 relative">
+          <ul className="w-full flex flex-col space-y-3 pb-10 relative font-publicSans">
             {navItem?.map((i: NavItem, index: number) => {
               return (
                 <li className="capitalize" key={index}>
@@ -183,7 +180,7 @@ const SideNav = () => {
               )}
             >
               <ArrowLeft />
-              <span className="text-ch-lighter-grey text-sm font-poppins pt-1  whitespace-nowrap">
+              <span className="text-ch-lighter-grey text-sm font-publicSans pt-1  whitespace-nowrap">
                 Minimize Menu
               </span>
             </span>
