@@ -11,4 +11,6 @@ export { default as ArrowRight } from "./ArrowRight";
 export { default as Search } from "./Search";
 export { default as Download } from "./Download";
 export { default as Filter } from "./Filter";
-export { default as Dropdown } from "./DropDown";
+export { default as DropdownIcon } from "./DropDownIcon";
+export { default as CaretLeft } from "./CaretLeft";
+export { default as CaretRight } from "./CaretRight";
