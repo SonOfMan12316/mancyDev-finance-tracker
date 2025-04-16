@@ -35,12 +35,6 @@ const Pagination: React.FC<PaginationProps> = ({
         setScreenSize("sm");
       } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
         setScreenSize("md");
-      } else if (window.innerWidth >= 1024 && window.innerWidth < 1200) {
-        setScreenSize("lg");
-      } else if (window.innerWidth >= 1200 && window.innerWidth < 1536) {
-        setScreenSize("xl");
-      } else if (window.innerWidth >= 1536) {
-        setScreenSize("2xl");
       }
     };
     window.addEventListener("resize", handleResize);
@@ -82,8 +76,10 @@ const Pagination: React.FC<PaginationProps> = ({
           pageNumbers.push(
             <Button
               onClick={() => handleClick(i)}
-              className={`${i === currentPage ? "bg-ch-black text-white" : ""}`}
-              size="md"
+              className={`${
+                i === currentPage ? "bg-ch-black text-white" : ""
+              } px-2`}
+              size="sm"
               variant="action"
               key={i}
             >
@@ -92,14 +88,14 @@ const Pagination: React.FC<PaginationProps> = ({
           );
         } else if (i < currentPage - 2 && !dotsStart) {
           pageNumbers.push(
-            <Button key={`dotsStart-${i}`} size="md" variant="action">
+            <Button key={`dotsStart-${i}`} size="sm" variant="action">
               ...
             </Button>
           );
           dotsStart = true;
         } else if (i > currentPage + 2 && !dotsEnd) {
           pageNumbers.push(
-            <Button key={`dotsEnd-${i}`} size="md" variant="action">
+            <Button key={`dotsEnd-${i}`} size="sm" variant="action">
               ...
             </Button>
           );
@@ -109,9 +105,11 @@ const Pagination: React.FC<PaginationProps> = ({
         if (i === 1 || i <= numPages) {
           pageNumbers.push(
             <Button
-              className={`${i === currentPage ? "bg-ch-black text-white" : ""}`}
+              className={`${
+                i === currentPage ? "bg-ch-black text-white" : ""
+              } px-4`}
               onClick={() => handleClick(i)}
-              size="lg"
+              size="sm"
               variant="action"
               key={i}
             >
@@ -126,29 +124,37 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-center gap-x-2">
-        <Button
-          onClick={handlePrevClick}
-          variant="action"
-          size="md"
-          placement="start"
-          icon={<CaretLeft />}
-          disabled={currentPage === 1}
-        >
-          <span className="hidden md:block">Prev</span>
-        </Button>
-        {renderPageNumbers()}
-        <Button
-          onClick={handleNextClick}
-          variant="action"
-          size="md"
-          placement="end"
-          icon={<CaretRight />}
-          disabled={currentPage === numPages}
-        >
-          <span className="hidden md:block">Next</span>
-        </Button>
+    <div className="w-full mt-4 md:mt-8">
+      <div className="flex items-center justify-between gap-x-2">
+        <div className="">
+          <Button
+            onClick={handlePrevClick}
+            className="md:px-4 rounded-lg"
+            variant="action"
+            size="sm"
+            placement="start"
+            icon={<CaretLeft />}
+            disabled={currentPage === 1}
+          >
+            <p className="hidden md:block">Prev</p>
+          </Button>
+        </div>
+        <div className="flex md:w-4/12 xl:w-3/12 md:space-x-2">
+          {renderPageNumbers()}
+        </div>
+        <div className="">
+          <Button
+            onClick={handleNextClick}
+            className="md:px-4 rounded-lg "
+            variant="action"
+            size="sm"
+            placement="end"
+            icon={<CaretRight />}
+            disabled={currentPage === numPages}
+          >
+            <span className="hidden md:block">Next</span>
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -111,47 +111,46 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
         </tr>
       </thead>
       <tbody>
-        {transaction.slice(0, 10).map((transaction, index) => (
+        {transaction.slice(0, 10).map((txn, index) => (
           <tr
             className={`${
-              index !== 9 ? "border-b-1.5 border-ch-light-grey" : ""
+              index !== transaction.length - 1
+                ? "border-b-1.5 border-ch-light-grey"
+                : ""
             }`}
             key={index}
           >
             <td className="w-2/4 items-center py-4 ">
               <div className="flex items-center gap-x-4">
-                <img
-                  className="w-10 h-10 rounded-full"
-                  src={transaction.avatar}
-                />
+                <img className="w-10 h-10 rounded-full" src={txn.avatar} />
                 <h1 className="whitespace-nowrap font-bold text-sm">
-                  {transaction.name}
+                  {txn.name}
                 </h1>
               </div>
             </td>
             <td className="w-1/4 ">
               <span className="text-left text-ch-grey text-sm font-normal font-publicSans">
-                {transaction.category}
+                {txn.category}
               </span>
             </td>
             <td className="w-1/4 ">
               <span className="text-left text-ch-grey text-sm font-normal font-publicSans">
-                {toDMYString(transaction.date)}
+                {toDMYString(txn.date)}
               </span>
             </td>
             <td className="w-1/4">
               <h1
                 className={`${
-                  transaction.amount < 0 ? "text-black" : "text-ch-green"
+                  txn.amount < 0 ? "text-black" : "text-ch-green"
                 } font-bold text-base`}
               >
-                {transaction.amount < 0
-                  ? transaction.amount.toLocaleString("en-US", {
+                {txn.amount < 0
+                  ? txn.amount.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })
                   : "+" +
-                    transaction.amount.toLocaleString("en-US", {
+                    txn.amount.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}

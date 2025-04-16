@@ -27,7 +27,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    // Base classes that apply to all buttons
     const baseClasses = classnames(
       "relative",
       "w-full",
@@ -43,18 +42,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       },
       { "text-base md:text-lg px-6": size === "lg" },
       { "text-sm md:text-base w-10": size === "md" },
-      { "text-sm": size === "sm" },
+      { "text-sm  w-10 ": size === "sm" },
       { "text-xs": size === "xs" }
     );
 
-    // Variant-specific classes
     const variantClasses = {
       primary:
         "bg-black text-white hover:bg-ch-grey hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
       secondary:
         "bg-ch-beige text-black hover:bg-white hover:border-black hover:border hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
       action:
-        "flex items-center justify-center border-1 border-ch-lighter-beige py-2 shadow-sm h-10",
+        "flex items-center justify-center border-1 border-ch-lighter-beige shadow-sm h-10 px-1",
       destroy:
         "bg-ch-red text-white hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
     };
@@ -67,18 +65,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...rest}
       >
-        {icon && (
-          <span
-            className={classnames("absolute -translate-y-1/2 top-1/3", {
-              "font-medium": typeof icon === "string",
-              "ml-4 left-0": placement === "start",
-              "mr-4 right-0": placement === "end",
-            })}
-          >
-            {icon}
-          </span>
+        {placement === "start" && icon && (
+          <span className="mx-2.5 md:mx-0 md:mr-5">{icon}</span>
         )}
+
         {children}
+
+        {placement === "end" && icon && (
+          <span className="mx-2.5 md:mx-0 md:ml-5">{icon}</span>
+        )}
       </button>
     );
   }
