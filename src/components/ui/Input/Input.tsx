@@ -43,7 +43,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
     <label className={classnames(className, "flex flex-col items-start")}>
       <div
         className={classnames("w-full h-fit relative rounded-md", {
-          "bg-white border-1.5 border-ch-lighter-beige focus-within:ring-ch-tertiary/30 focus-within:ring-2":
+          "bg-white border border-ch-lighter-beige focus-within:ring-ch-tertiary/30 focus-within:ring-2":
             variant === "primary",
         })}
       >
@@ -60,7 +60,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
         )}
         <input
           className={classnames(
-            "w-full h-11 px-6 text-ch-lighter-beige text-sm focus:outline-none outline-none placeholder:text-xs rounded-md",
+            "w-full h-11 px-6 text-ch-lighter-beige border text-sm focus:outline-none outline-none placeholder:text-xs rounded-md truncate",
             {
               "!pl-12": icon && placement === "start",
               "!pr-12": icon && placement === "end",

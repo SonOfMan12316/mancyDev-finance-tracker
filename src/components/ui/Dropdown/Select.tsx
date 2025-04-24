@@ -63,7 +63,7 @@ const Dropdown = <T extends string | number>({
 
       {isOpen && (
         <ul
-          className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border-1 bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
           role="listbox"
         >
           {allOptions.map((option) => (
@@ -96,7 +96,7 @@ const DropdownItem = <T extends string | number>({
   isPlaceholder?: boolean;
 }) => (
   <li
-    className={`relative cursor-pointer select-none py-2 pl-6 pr-4${
+    className={`relative cursor-pointer select-none py-2 pl-6 pr-4 text-sm ${
       isPlaceholder ? "text-black font-semibold" : "hover:bg-gray-100"
     } ${isSelected ? "bg-gray-100 font-semibold" : ""} ${className}`}
     role="option"
@@ -109,7 +109,7 @@ const DropdownItem = <T extends string | number>({
         ✓
       </span>
     )}
-    <div className="border-b-1 border-ch-light-grey py-1 w-10/12"></div>
+    <div className="border-b border-ch-light-grey py-1 w-10/12"></div>
   </li>
 );
 

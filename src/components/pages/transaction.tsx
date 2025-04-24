@@ -101,7 +101,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
           {column.map((i, index) => {
             return (
               <th
-                className="text-left text-ch-grey text-sm font-normal font-publicSans border-b-1.5 border-ch-light-grey pb-2"
+                className="text-left text-ch-grey text-sm font-normal font-publicSans border-b border-ch-light-grey pb-2"
                 key={index}
               >
                 {i}
@@ -115,7 +115,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
           <tr
             className={`${
               index !== transaction.length - 1
-                ? "border-b-1.5 border-ch-light-grey"
+                ? "border-b border-ch-light-grey"
                 : ""
             }`}
             key={index}

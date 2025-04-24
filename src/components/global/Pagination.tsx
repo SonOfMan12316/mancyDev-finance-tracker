@@ -35,13 +35,19 @@ const Pagination: React.FC<PaginationProps> = ({
         setScreenSize("sm");
       } else if (window.innerWidth >= 768 && window.innerWidth < 1024) {
         setScreenSize("md");
+      } else if (window.innerWidth >= 1024 && window.innerWidth < 1280) {
+        setScreenSize("lg");
+      } else if (window.innerWidth >= 1280 && window.innerWidth < 1536) {
+        setScreenSize("xl");
+      } else {
+        setScreenSize("2xl");
       }
     };
     window.addEventListener("resize", handleResize);
     handleResize();
 
     return () => window.removeEventListener("resize", handleResize);
-  }, [screenSize]);
+  }, []);
 
   const handleClick = (pageNumber: number) => {
     if (pageNumber >= 1 && pageNumber <= numPages) {
@@ -68,38 +74,124 @@ const Pagination: React.FC<PaginationProps> = ({
 
     for (let i = 1; i <= numPages; i++) {
       if (screenSize === "xs" || screenSize === "sm") {
-        if (
-          i === 1 ||
-          i === numPages ||
-          (i >= currentPage - 2 && i <= currentPage + 2)
-        ) {
-          pageNumbers.push(
-            <Button
-              onClick={() => handleClick(i)}
-              className={`${
-                i === currentPage ? "bg-ch-black text-white" : ""
-              } px-2`}
-              size="sm"
-              variant="action"
-              key={i}
-            >
-              {i}
-            </Button>
-          );
-        } else if (i < currentPage - 2 && !dotsStart) {
-          pageNumbers.push(
-            <Button key={`dotsStart-${i}`} size="sm" variant="action">
-              ...
-            </Button>
-          );
-          dotsStart = true;
-        } else if (i > currentPage + 2 && !dotsEnd) {
-          pageNumbers.push(
-            <Button key={`dotsEnd-${i}`} size="sm" variant="action">
-              ...
-            </Button>
-          );
-          dotsEnd = true;
+        if (currentPage === 1) {
+          if (i === 1 || i === 2 || i === numPages) {
+            pageNumbers.push(
+              <Button
+                onClick={() => handleClick(i)}
+                className={`${
+                  i === currentPage ? "bg-ch-black text-white" : ""
+                } px-3.5`}
+                size="sm"
+                variant="pagination"
+                key={i}
+              >
+                {i}
+              </Button>
+            );
+          } else if (i === 3 && !dotsEnd) {
+            pageNumbers.push(
+              <Button
+                className="px-3"
+                key="dots"
+                size="sm"
+                variant="pagination"
+                disabled
+              >
+                ...
+              </Button>
+            );
+            dotsEnd = true;
+          }
+        } else if (currentPage === 2) {
+          if (i === 1 || i === 2 || i === numPages) {
+            pageNumbers.push(
+              <Button
+                onClick={() => handleClick(i)}
+                className={`${
+                  i === currentPage ? "bg-ch-black text-white" : ""
+                } px-3.5`}
+                size="sm"
+                variant="pagination"
+                key={i}
+              >
+                {i}
+              </Button>
+            );
+          } else if (i === 4 && !dotsEnd) {
+            pageNumbers.push(
+              <Button
+                className="px-3"
+                key="dots"
+                size="sm"
+                variant="pagination"
+                disabled
+              >
+                ...
+              </Button>
+            );
+            dotsEnd = true;
+          }
+        } else if (currentPage === numPages) {
+          // Last page: show 1, ..., secondLast, lastPage
+          if (i === 1 || i === numPages - 1 || i === numPages) {
+            pageNumbers.push(
+              <Button
+                onClick={() => handleClick(i)}
+                className={`${
+                  i === currentPage ? "bg-ch-black text-white" : ""
+                } px-3.5`}
+                size="sm"
+                variant="pagination"
+                key={i}
+              >
+                {i}
+              </Button>
+            );
+          } else if (i === 2 && !dotsStart) {
+            pageNumbers.push(
+              <Button
+                className="px-3"
+                key="dots"
+                size="sm"
+                variant="pagination"
+                disabled
+              >
+                ...
+              </Button>
+            );
+            dotsStart = true;
+          }
+        } else {
+          // Middle pages: show 1, ..., current, lastPage
+          if (i === 1 || i === currentPage || i === numPages) {
+            pageNumbers.push(
+              <Button
+                onClick={() => handleClick(i)}
+                className={`${
+                  i === currentPage ? "bg-ch-black text-white" : ""
+                } px-3.5`}
+                size="sm"
+                variant="pagination"
+                key={i}
+              >
+                {i}
+              </Button>
+            );
+          } else if (i === 2 && !dotsStart) {
+            pageNumbers.push(
+              <Button
+                className="px-3"
+                key="dots"
+                size="sm"
+                variant="pagination"
+                disabled
+              >
+                ...
+              </Button>
+            );
+            dotsStart = true;
+          }
         }
       } else {
         if (i === 1 || i <= numPages) {
@@ -110,7 +202,7 @@ const Pagination: React.FC<PaginationProps> = ({
               } px-4`}
               onClick={() => handleClick(i)}
               size="sm"
-              variant="action"
+              variant="pagination"
               key={i}
             >
               {i}
@@ -130,7 +222,7 @@ const Pagination: React.FC<PaginationProps> = ({
           <Button
             onClick={handlePrevClick}
             className="md:px-4 rounded-lg"
-            variant="action"
+            variant="pagination"
             size="sm"
             placement="start"
             icon={<CaretLeft />}
@@ -139,14 +231,14 @@ const Pagination: React.FC<PaginationProps> = ({
             <p className="hidden md:block">Prev</p>
           </Button>
         </div>
-        <div className="flex md:w-4/12 xl:w-3/12 md:space-x-2">
+        <div className="flex md:w-4/12 xl:w-3/12 space-x-2">
           {renderPageNumbers()}
         </div>
         <div className="">
           <Button
             onClick={handleNextClick}
             className="md:px-4 rounded-lg "
-            variant="action"
+            variant="pagination"
             size="sm"
             placement="end"
             icon={<CaretRight />}

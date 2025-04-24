@@ -1,7 +1,12 @@
 import classnames from "classnames";
 import React from "react";
 
-type ButtonVariant = "primary" | "secondary" | "action" | "destroy";
+type ButtonVariant =
+  | "primary"
+  | "secondary"
+  | "action"
+  | "pagination"
+  | "destroy";
 type ButtonSize = "lg" | "md" | "sm" | "xs";
 type IconPlacement = "start" | "end";
 
@@ -40,7 +45,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "opacity-70 hover:opacity-70 hover:translate-y-0 active:translate-y-0 active:scale-100 cursor-not-allowed":
           disabled,
       },
-      { "text-base md:text-lg px-6": size === "lg" },
+      { "text-sm px-6": size === "lg" },
       { "text-sm md:text-base w-10": size === "md" },
       { "text-sm  w-10 ": size === "sm" },
       { "text-xs": size === "xs" }
@@ -52,7 +57,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       secondary:
         "bg-ch-beige text-black hover:bg-white hover:border-black hover:border hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
       action:
-        "flex items-center justify-center border-1 border-ch-lighter-beige shadow-sm h-10 px-1",
+        "flex items-center justify-center border border-ch-lighter-beige shadow-sm h-11 px-1",
+      pagination:
+        "flex items-center justify-center border border-ch-lighter-beige hover:bg-black hover:text-white shadow-sm h-10 px-1",
       destroy:
         "bg-ch-red text-white hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
     };
@@ -66,13 +73,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         {...rest}
       >
         {placement === "start" && icon && (
-          <span className="mx-2.5 md:mx-0 md:mr-5">{icon}</span>
+          <span className="mx-3 md:mx-0 md:mr-5">{icon}</span>
         )}
 
         {children}
 
         {placement === "end" && icon && (
-          <span className="mx-2.5 md:mx-0 md:ml-5">{icon}</span>
+          <span className="mx-3 md:mx-0 md:ml-5">{icon}</span>
         )}
       </button>
     );

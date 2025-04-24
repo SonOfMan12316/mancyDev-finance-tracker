@@ -49,10 +49,10 @@ module.exports = {
       poppins: ['Poppins', 'ui-sans-serif'],
       publicSans: ['Public Sans', 'ui-sans-serif']
     },
-    borderWidth: {
-      '1': '1px',
-      '1.5': '1.5px'
-    },
+    // borderWidth: {
+    //   '1': '1px',
+    //   '1.5': '1.5px'
+    // },
   },
   variants: {
     extend: {},
