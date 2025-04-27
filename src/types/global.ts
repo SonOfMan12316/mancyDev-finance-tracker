@@ -11,3 +11,10 @@ export interface transactionInterface {
   amount: number;
   recurring: boolean;
 }
+
+export interface budgetInterface {
+  category: string;
+  maximum: number;
+  amount_spent?: number;
+  theme: string;
+}

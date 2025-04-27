@@ -7,6 +7,7 @@ import {
 import OverView from "./components/pages/overview";
 import "./App.css";
 import { Transaction } from "./components/pages/transaction";
+import Budget from "./components/pages/budget";
 
 const App = () => {
   return (
@@ -14,7 +15,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Navigate to="/overview" />} />
         <Route path="/overview" element={<OverView />} />
-        <Route path="/transaction" element={<Transaction />} />
+        <Route path="/transactions" element={<Transaction />} />
+        <Route path="/budgets" element={<Budget />} />
       </Routes>
     </Router>
   );
