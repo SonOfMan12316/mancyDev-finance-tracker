@@ -33,7 +33,7 @@ export const Transaction = () => {
 
   return (
     <div className="w-screen">
-      <Layout title="transaction">
+      <Layout title="transactions">
         <div className="px-4 lg:px-6">
           <div className="bg-white min-h-screen p-4 md:p-8 rounded-md w-full">
             <div className="flex justify-between items-center w-full gap-4">
@@ -111,7 +111,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
         </tr>
       </thead>
       <tbody>
-        {transaction.slice(0, 10).map((txn, index) => (
+        {transaction.map((txn, index) => (
           <tr
             className={`${
               index !== transaction.length - 1
@@ -167,7 +167,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
 const TransactionCard: React.FC<TransactionInterface> = ({ transaction }) => {
   return (
     <div className="md:hidden my-4">
-      {transaction.slice(0, 10).map((transaction, index) => (
+      {transaction.map((transaction, index) => (
         <div key={index} className="flex items-center justify-between py-4">
           <div className="flex items-center gap-x-2">
             <img className="w-10 h-10 rounded-full" src={transaction.avatar} />
