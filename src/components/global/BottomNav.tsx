@@ -32,16 +32,16 @@ const BottomNav = () => {
     },
     {
       icon: <Transaction />,
-      label: "transaction",
+      label: "transactions",
       action: () => {
-        navigate("/transaction");
+        navigate("/transactions");
       },
     },
     {
       icon: <Budget />,
-      label: "budget",
+      label: "budgets",
       action: () => {
-        navigate("/budget");
+        navigate("/budgets");
       },
     },
     {

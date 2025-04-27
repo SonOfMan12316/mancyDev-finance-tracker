@@ -36,16 +36,16 @@ const SideNav = () => {
     },
     {
       icon: <Transaction />,
-      label: "transaction",
+      label: "transactions",
       action: () => {
-        navigate("/transaction");
+        navigate("/transactions");
       },
     },
     {
       icon: <Budget />,
       label: "budgets",
       action: () => {
-        navigate("/budget");
+        navigate("/budgets");
       },
     },
     {

@@ -37,7 +37,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       "w-full",
       "p-2",
       "font-medium",
-      "rounded-md",
+      "rounded-lg",
       "focus:outline-none",
       "outline-none",
       "transition-all",
@@ -47,19 +47,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       },
       { "text-sm px-6": size === "lg" },
       { "text-sm md:text-base w-10": size === "md" },
-      { "text-sm  w-10 ": size === "sm" },
+      { "text-sm": size === "sm" },
       { "text-xs": size === "xs" }
     );
 
     const variantClasses = {
       primary:
-        "bg-black text-white hover:bg-ch-grey hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
+        "bg-black text-white hover:bg-black/50 focus:opacity-80 active:-translate-y-0.5 h-12",
       secondary:
         "bg-ch-beige text-black hover:bg-white hover:border-black hover:border hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
       action:
         "flex items-center justify-center border border-ch-lighter-beige shadow-sm h-11 px-1",
       pagination:
-        "flex items-center justify-center border border-ch-lighter-beige hover:bg-black hover:text-white shadow-sm h-10 px-1",
+        "flex items-center justify-center border border-ch-lighter-beige hover:bg-black hover:text-white shadow-sm h-10 px-1  w-10",
       destroy:
         "bg-ch-red text-white hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
     };
