@@ -11,13 +11,13 @@ interface BudgetProps {
 const Budget: React.FC<BudgetProps> = () => {
   return (
     <Layout title="budgets" displayButton={true} buttonTitle="+ Add New Budget">
-      <div className="px-4 lg:px-6">
-        <div className="bg-white px-6 md:px-8 rounded-xl my-2 pb-1 shadow-sm">
+      <div className="px-6 py-4 flex flex-col lg:grid lg:grid-cols-2 gap-4">
+        <div className="bg-white px-6 rounded-xl my-2 lg:my-0 pb-1 lg:pb-0 md:py-8 lg:py-4 shadow-sm">
           <div className="md:flex md:items-center md:justify-between lg:flex-col lg:justify-center">
-            <div className="my-4 pt-8 mx-auto md:mx-0 md:w-6/12">
-              <PieChart amount={407} limit={975} />
+            <div className="my-4 lg:my-0 pt-8 md:pt-0 mx-auto md:mx-0 lg:mx-auto md:w-6/12 lg:w-7/12">
+              <PieChart amount={338} limit={975} />
             </div>
-            <div className="md:w-6/12">
+            <div className="md:w-6/12 lg:w-full">
               <h1 className="text-base md:text-xl font-bold">
                 Spending Summary
               </h1>
@@ -25,7 +25,9 @@ const Budget: React.FC<BudgetProps> = () => {
                 {budgets.map((budget, index) => (
                   <div
                     key={index}
-                    className="flex justify-between my-2 lg:my-1 border-b border-ch-light-grey py-2 md:py-3"
+                    className={`flex justify-between my-2 ${
+                      index !== 3 ? "border-b border-ch-light-grey" : ""
+                    }  py-2 md:py-3`}
                   >
                     <div className="flex items-center gap-2">
                       <div
@@ -49,7 +51,30 @@ const Budget: React.FC<BudgetProps> = () => {
             </div>
           </div>
         </div>
-        <BudgetCard />
+        <BudgetCard
+          title="Entertainment"
+          progressBarValue={50}
+          progressColor="ch-green"
+        />
+        <BudgetCard
+          title="Bills"
+          progressBarValue={75}
+          progressColor="ch-cyan"
+        />
+        <div>
+          <BudgetCard
+            title="Dining Out"
+            progressBarValue={100}
+            progressColor="ch-yellow"
+          />
+        </div>
+        <div>
+          <BudgetCard
+            title="Personal Care"
+            progressBarValue={60}
+            progressColor="ch-navy"
+          />
+        </div>
       </div>
     </Layout>
   );
