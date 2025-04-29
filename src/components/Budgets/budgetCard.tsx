@@ -1,6 +1,6 @@
 import React from "react";
 import { RightIcon } from "../icons";
-import transactions from "../../data/transaction";
+import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import budgets from "../../data/data";
 

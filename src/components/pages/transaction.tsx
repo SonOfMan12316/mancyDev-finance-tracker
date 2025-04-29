@@ -6,9 +6,9 @@ import Select from "../ui/Dropdown/Select";
 import {
   CategoryOptions,
   SortOptions,
-} from "../../assets/lib/getSelectOptions";
+} from "../../lib/getSelectOptions";
 import { OptionsInterface, transactionInterface } from "../../types/global";
-import transactions from "../../data/transaction";
+import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";

@@ -1,10 +1,19 @@
-import { transactionInterface } from "../types/global";
+import { CategoryOption } from "../types/enum";
 
-const transactions: transactionInterface[] = [
+interface transactionInterface {
+  avatar: string;
+  name: string;
+  category: CategoryOption;
+  date: string;
+  amount: number;
+  recurring: boolean;
+}
+
+export const transactions: transactionInterface[] = [
   {
     avatar: "/images/emma-richardson.jpg",
     name: "Emma Richardson",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-08-19T14:23:11Z",
     amount: 75.5,
     recurring: false,
@@ -12,7 +21,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/savory-bites-bistro.jpg",
     name: "Savory Bites Bistro",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-08-19T20:23:11Z",
     amount: -55.5,
     recurring: false,
@@ -20,7 +29,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/daniel-carter.jpg",
     name: "Daniel Carter",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-08-18T09:45:32Z",
     amount: -42.3,
     recurring: false,
@@ -28,7 +37,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/sun-park.jpg",
     name: "Sun Park",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-08-17T16:12:05Z",
     amount: 120.0,
     recurring: false,
@@ -36,7 +45,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/urban-services-hub.jpg",
     name: "Urban Services Hub",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-08-17T21:08:09Z",
     amount: -65.0,
     recurring: false,
@@ -44,7 +53,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/liam-hughes.jpg",
     name: "Liam Hughes",
-    category: "Groceries",
+    category: CategoryOption.GROCERIES,
     date: "2024-08-15T18:20:33Z",
     amount: 65.75,
     recurring: false,
@@ -52,7 +61,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/lily-ramirez.jpg",
     name: "Lily Ramirez",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-08-14T13:05:27Z",
     amount: 50.0,
     recurring: false,
@@ -60,7 +69,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/ethan-clark.jpg",
     name: "Ethan Clark",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-08-13T20:15:59Z",
     amount: -32.5,
     recurring: false,
@@ -68,7 +77,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/james-thompson.jpg",
     name: "James Thompson",
-    category: "Entertainment",
+    category: CategoryOption.ENTERTAINMENT,
     date: "2024-08-11T15:45:38Z",
     amount: -5.0,
     recurring: false,
@@ -76,7 +85,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/pixel-playground.jpg",
     name: "Pixel Playground",
-    category: "Entertainment",
+    category: CategoryOption.ENTERTAINMENT,
     date: "2024-08-11T18:45:38Z",
     amount: -10.0,
     recurring: true,
@@ -84,7 +93,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/ella-phillips.jpg",
     name: "Ella Phillips",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-08-10T19:22:51Z",
     amount: -45.0,
     recurring: false,
@@ -92,7 +101,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/sofia-peterson.jpg",
     name: "Sofia Peterson",
-    category: "Transportation",
+    category: CategoryOption.TRANSPORTATION,
     date: "2024-08-08T08:55:17Z",
     amount: -15.0,
     recurring: false,
@@ -100,7 +109,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/mason-martinez.jpg",
     name: "Mason Martinez",
-    category: "Lifestyle",
+    category: CategoryOption.LIFESTYLE,
     date: "2024-08-07T17:40:29Z",
     amount: -35.25,
     recurring: false,
@@ -108,7 +117,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/green-plate-eatery.jpg",
     name: "Green Plate Eatery",
-    category: "Groceries",
+    category: CategoryOption.GROCERIES,
     date: "2024-08-06T08:25:44Z",
     amount: -78.5,
     recurring: false,
@@ -116,7 +125,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/sebastian-cook.jpg",
     name: "Sebastian Cook",
-    category: "Transportation",
+    category: CategoryOption.TRANSPORTATION,
     date: "2024-08-06T10:05:44Z",
     amount: -22.5,
     recurring: false,
@@ -124,7 +133,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/william-harris.jpg",
     name: "William Harris",
-    category: "Personal Care",
+    category: CategoryOption.PERSONAL_CARE,
     date: "2024-08-05T14:30:56Z",
     amount: -10.0,
     recurring: false,
@@ -132,7 +141,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/elevate-education.jpg",
     name: "Elevate Education",
-    category: "Education",
+    category: CategoryOption.EDUCATION,
     date: "2024-08-04T11:15:22Z",
     amount: -50.0,
     recurring: true,
@@ -140,7 +149,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/serenity-spa-and-wellness.jpg",
     name: "Serenity Spa & Wellness",
-    category: "Personal Care",
+    category: CategoryOption.PERSONAL_CARE,
     date: "2024-08-03T14:00:37Z",
     amount: -30.0,
     recurring: true,
@@ -148,7 +157,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/spark-electric-solutions.jpg",
     name: "Spark Electric Solutions",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-08-02T09:25:11Z",
     amount: -100.0,
     recurring: true,
@@ -156,7 +165,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/rina-sato.jpg",
     name: "Rina Sato",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-08-02T13:31:11Z",
     amount: -50.0,
     recurring: false,
@@ -164,7 +173,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/swift-ride-share.jpg",
     name: "Swift Ride Share",
-    category: "Transportation",
+    category: CategoryOption.TRANSPORTATION,
     date: "2024-08-01T18:40:33Z",
     amount: -18.75,
     recurring: false,
@@ -172,7 +181,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/aqua-flow-utilities.jpg",
     name: "Aqua Flow Utilities",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-07-30T13:20:14Z",
     amount: -100.0,
     recurring: true,
@@ -180,7 +189,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/ecofuel-energy.jpg",
     name: "EcoFuel Energy",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-07-29T11:55:29Z",
     amount: -35.0,
     recurring: true,
@@ -188,7 +197,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/yuna-kim.jpg",
     name: "Yuna Kim",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-07-29T13:51:29Z",
     amount: -28.5,
     recurring: false,
@@ -196,7 +205,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/flavor-fiesta.jpg",
     name: "Flavor Fiesta",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-07-27T20:15:06Z",
     amount: -42.75,
     recurring: false,
@@ -204,7 +213,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/harper-edwards.jpg",
     name: "Harper Edwards",
-    category: "Shopping",
+    category: CategoryOption.SHOPPING,
     date: "2024-07-26T09:43:23Z",
     amount: -89.99,
     recurring: false,
@@ -212,7 +221,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/buzz-marketing-group.jpg",
     name: "Buzz Marketing Group",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-07-26T14:40:23Z",
     amount: 3358.0,
     recurring: false,
@@ -220,7 +229,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/technova-innovations.jpg",
     name: "TechNova Innovations",
-    category: "Shopping",
+    category: CategoryOption.SHOPPING,
     date: "2024-07-25T16:25:37Z",
     amount: -29.99,
     recurring: false,
@@ -228,7 +237,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/bytewise.jpg",
     name: "ByteWise",
-    category: "Lifestyle",
+    category: CategoryOption.LIFESTYLE,
     date: "2024-07-23T09:35:14Z",
     amount: -49.99,
     recurring: true,
@@ -236,7 +245,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/nimbus-data-storage.jpg",
     name: "Nimbus Data Storage",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-07-21T10:05:42Z",
     amount: -9.99,
     recurring: true,
@@ -244,7 +253,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/emma-richardson.jpg",
     name: "Emma Richardson",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-07-20T17:30:55Z",
     amount: -25.0,
     recurring: false,
@@ -252,7 +261,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/daniel-carter.jpg",
     name: "Daniel Carter",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-07-19T12:45:09Z",
     amount: 50.0,
     recurring: false,
@@ -260,7 +269,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/sun-park.jpg",
     name: "Sun Park",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-07-18T19:20:23Z",
     amount: -38.5,
     recurring: false,
@@ -268,7 +277,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/harper-edwards.jpg",
     name: "Harper Edwards",
-    category: "Shopping",
+    category: CategoryOption.SHOPPING,
     date: "2024-07-17T14:55:37Z",
     amount: -29.99,
     recurring: false,
@@ -276,7 +285,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/liam-hughes.jpg",
     name: "Liam Hughes",
-    category: "Groceries",
+    category: CategoryOption.GROCERIES,
     date: "2024-07-16T10:10:51Z",
     amount: -52.75,
     recurring: false,
@@ -284,7 +293,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/lily-ramirez.jpg",
     name: "Lily Ramirez",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-07-15T16:35:04Z",
     amount: 75.0,
     recurring: false,
@@ -292,7 +301,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/ethan-clark.jpg",
     name: "Ethan Clark",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-07-14T20:50:18Z",
     amount: -41.25,
     recurring: false,
@@ -300,7 +309,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/rina-sato.jpg",
     name: "Rina Sato",
-    category: "Entertainment",
+    category: CategoryOption.ENTERTAINMENT,
     date: "2024-07-13T09:15:32Z",
     amount: -10.0,
     recurring: false,
@@ -308,7 +317,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/james-thompson.jpg",
     name: "James Thompson",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-07-12T13:40:46Z",
     amount: -95.5,
     recurring: false,
@@ -316,7 +325,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/ella-phillips.jpg",
     name: "Ella Phillips",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-07-11T18:05:59Z",
     amount: -33.75,
     recurring: false,
@@ -324,7 +333,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/yuna-kim.jpg",
     name: "Yuna Kim",
-    category: "Dining Out",
+    category: CategoryOption.DINING_OUT,
     date: "2024-07-10T12:30:13Z",
     amount: -27.5,
     recurring: false,
@@ -332,7 +341,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/sofia-peterson.jpg",
     name: "Sofia Peterson",
-    category: "Transportation",
+    category: CategoryOption.TRANSPORTATION,
     date: "2024-07-09T08:55:27Z",
     amount: -12.5,
     recurring: false,
@@ -340,7 +349,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/mason-martinez.jpg",
     name: "Mason Martinez",
-    category: "Lifestyle",
+    category: CategoryOption.LIFESTYLE,
     date: "2024-07-08T15:20:41Z",
     amount: -65.0,
     recurring: false,
@@ -348,7 +357,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/sebastian-cook.jpg",
     name: "Sebastian Cook",
-    category: "Transportation",
+    category: CategoryOption.TRANSPORTATION,
     date: "2024-07-07T11:45:55Z",
     amount: -20.0,
     recurring: false,
@@ -356,7 +365,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/william-harris.jpg",
     name: "William Harris",
-    category: "General",
+    category: CategoryOption.GENERAL,
     date: "2024-07-06T17:10:09Z",
     amount: 20.0,
     recurring: false,
@@ -364,7 +373,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/elevate-education.jpg",
     name: "Elevate Education",
-    category: "Education",
+    category: CategoryOption.EDUCATION,
     date: "2024-07-05T11:15:22Z",
     amount: -50.0,
     recurring: true,
@@ -372,7 +381,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/serenity-spa-and-wellness.jpg",
     name: "Serenity Spa & Wellness",
-    category: "Personal Care",
+    category: CategoryOption.PERSONAL_CARE,
     date: "2024-07-03T14:00:37Z",
     amount: -30.0,
     recurring: true,
@@ -380,7 +389,7 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/spark-electric-solutions.jpg",
     name: "Spark Electric Solutions",
-    category: "Bills",
+    category: CategoryOption.BILLS,
     date: "2024-07-02T09:25:51Z",
     amount: -100.0,
     recurring: true,
@@ -388,11 +397,9 @@ const transactions: transactionInterface[] = [
   {
     avatar: "/images/swift-ride-share.jpg",
     name: "Swift Ride Share",
-    category: "Transportation",
+    category: CategoryOption.TRANSPORTATION,
     date: "2024-07-02T19:50:05Z",
     amount: -16.5,
     recurring: false,
   },
 ];
-
-export default transactions;
