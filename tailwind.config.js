@@ -17,7 +17,8 @@ module.exports = {
         'ch-lighter-grey': '#B3B3B3',
         'ch-red': '#C94736',
         'bg-beige': '#F2F3F7',
-        'ch-black': '#000000'
+        'ch-black': '#000000',
+        'ch-modal': 'rgba(0,0,0,0.7)'
       },
       flexGrow: {
         1.2: '1.2',
@@ -25,6 +26,9 @@ module.exports = {
       minWidth: {
         '14': '14rem',
         '5.5': '5.5rem'
+      },
+      maxWidth: {
+        '95%': '95%'
       },
       width: {
         '5.5': '5.5rem'

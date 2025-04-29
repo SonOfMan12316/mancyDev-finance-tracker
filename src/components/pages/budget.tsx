@@ -1,16 +1,23 @@
-import React from "react";
+import { useState } from "react";
 import { Layout } from "../layout";
 import PieChart from "../ui/PieChart";
 import budgets from "../../data/data";
 import BudgetCard from "../Budgets/budgetCard";
+import Modal from "../global/Modal";
+import Input from "../ui/Input/Input";
+import Dropdown from "../ui/Dropdown/Select";
+import { DropdownIcon } from "../icons";
+import { CategoryOptions } from "../../lib/getSelectOptions";
 
-interface BudgetProps {
-  // Define your props here
-}
-
-const Budget: React.FC<BudgetProps> = () => {
+const Budget = () => {
+  const [BudgetModal, setBudgetModal] = useState<boolean>(false);
   return (
-    <Layout title="budgets" displayButton={true} buttonTitle="+ Add New Budget">
+    <Layout
+      title="budgets"
+      displayButton={true}
+      buttonTitle="+ Add New Budget"
+      onClick={() => setBudgetModal(true)}
+    >
       <div className="px-6 py-4 flex flex-col lg:grid lg:grid-cols-2 gap-4">
         <div className="bg-white px-6 rounded-xl my-2 lg:my-0 pb-1 lg:pb-0 md:py-8 lg:py-4 shadow-sm">
           <div className="md:flex md:items-center md:justify-between lg:flex-col lg:justify-center">
@@ -75,6 +82,25 @@ const Budget: React.FC<BudgetProps> = () => {
             progressColor="ch-navy"
           />
         </div>
+        <Modal
+          isOpen={BudgetModal}
+          title={"Add New Budget"}
+          onClose={() => setBudgetModal(false)}
+        >
+          <div className="my-3.5">
+            <h1 className="text-ch-grey text-xs font-normal">
+              Choose a category to set a spending budget. These categories can
+              help you monitor spending
+            </h1>
+          </div>
+          <form className="my-2">
+            <Dropdown
+              options={CategoryOptions}
+              placeholder="Latest"
+              icon={<DropdownIcon />}
+            />
+          </form>
+        </Modal>
       </div>
     </Layout>
   );
