@@ -5,6 +5,7 @@ import { Button } from "../Button/Button";
 import "./Select.css";
 
 type DropdownProps<T> = {
+  label?: string;
   options: OptionsInterface<T>[];
   selectedOption?: OptionsInterface<T> | null;
   onSelect: (option: OptionsInterface<T> | null) => void;
@@ -24,6 +25,7 @@ const Dropdown = <T extends string | number>({
   className,
   optionClassName,
   includePlaceholderOption = true,
+  label,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -49,6 +51,9 @@ const Dropdown = <T extends string | number>({
 
   return (
     <div ref={dropdownRef} className={`relative ${className}`}>
+      {label && (
+        <label className="text-xs font-bold text-ch-grey">{label}</label>
+      )}
       <Button
         variant="action"
         size="lg"

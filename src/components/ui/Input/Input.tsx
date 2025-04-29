@@ -9,6 +9,7 @@ import PropTypes from "prop-types";
 import { mergeRefs } from "react-merge-refs";
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  label?: string;
   className?: string;
   placeholder?: string;
   icon?: string | ReactNode;
@@ -20,6 +21,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input: React.FC<InputProps> = forwardRef((props, ref) => {
   const {
+    label,
     className,
     placeholder,
     icon = null,
@@ -41,6 +43,11 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
 
   return (
     <label className={classnames(className, "flex flex-col items-start")}>
+      {label && (
+        <label className="text-xs font-bold text-ch-grey capitalize">
+          {label}
+        </label>
+      )}
       <div
         className={classnames("w-full h-fit relative rounded-md", {
           "bg-white border border-ch-lighter-beige focus-within:ring-ch-tertiary/30 focus-within:ring-2":
