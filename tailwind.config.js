@@ -1,6 +1,6 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  purge: [],
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
@@ -21,6 +21,13 @@ module.exports = {
       },
       flexGrow: {
         1.2: '1.2',
+      },
+      minWidth: {
+        '14': '14rem',
+        '5.5': '5.5rem'
+      },
+      width: {
+        '5.5': '5.5rem'
       },
       keyframes: {
         sidebarExpand: {
