@@ -1,7 +1,7 @@
 import { Layout } from "../layout";
 import { addCommasToNumber } from "../../utils/number";
 import { RightIcon, SavingIcon } from "../icons";
-import transactions from "../../data/transaction";
+import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
 
