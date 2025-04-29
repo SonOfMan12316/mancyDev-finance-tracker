@@ -6,12 +6,14 @@ export interface HeaderProps {
   buttonTitle?: string | React.ReactNode;
   className?: string;
   displayButton?: boolean;
+  onClick?: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({
   title,
   buttonTitle,
   displayButton,
+  onClick,
 }) => {
   return (
     <header className={`p-4 lg:px-8 lg:pt-6 w-full`}>
@@ -27,6 +29,7 @@ const Header: React.FC<HeaderProps> = ({
           <Button
             size="xs"
             variant="primary"
+            onClick={onClick}
             className={`${displayButton ? "block" : "hidden"}`}
           >
             {buttonTitle}

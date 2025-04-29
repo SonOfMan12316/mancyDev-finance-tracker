@@ -14,6 +14,7 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
   className,
   buttonTitle,
   displayButton = false,
+  onClick,
 }) => {
   return (
     <div className="w-screen h-screen relative overflow-hidden">
@@ -25,6 +26,7 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
             className={className}
             displayButton={displayButton}
             buttonTitle={buttonTitle}
+            onClick={onClick}
           />
           <div className="pb-4 lg:pb-8">{children}</div>
           <div className="static bottom-0">
