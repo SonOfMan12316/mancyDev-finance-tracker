@@ -17,6 +17,11 @@ module.exports = {
         'ch-lighter-grey': '#B3B3B3',
         'ch-red': '#C94736',
         'bg-beige': '#F2F3F7',
+        'ch-purple': '#826CB0',
+        'ch-magenta': '#934F6F',
+        'ch-torquoise': '#597C7C',
+        'ch-brown': '#93674C',
+        'ch-blue': '3F82B2',
         'ch-black': '#000000',
         'ch-modal': 'rgba(0,0,0,0.7)'
       },
@@ -28,10 +33,11 @@ module.exports = {
         '5.5': '5.5rem'
       },
       maxWidth: {
-        '95%': '95%'
+        '560': '560px'
       },
       width: {
-        '5.5': '5.5rem'
+        '5.5': '5.5rem',
+        '35': '35rem',
       },
       keyframes: {
         sidebarExpand: {

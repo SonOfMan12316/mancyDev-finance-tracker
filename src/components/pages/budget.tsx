@@ -5,12 +5,19 @@ import budgets from "../../data/data";
 import BudgetCard from "../Budgets/budgetCard";
 import Modal from "../global/Modal";
 import Input from "../ui/Input/Input";
+import { OptionsInterface } from "../../types/global";
 import Dropdown from "../ui/Dropdown/Select";
-import { DropdownIcon } from "../icons";
-import { CategoryOptions } from "../../lib/getSelectOptions";
+import { DollarSign, DropdownIcon } from "../icons";
+import { CategoryOptions, ThemeOptions } from "../../lib/getSelectOptions";
+import { Button } from "../ui/Button/Button";
 
 const Budget = () => {
   const [BudgetModal, setBudgetModal] = useState<boolean>(false);
+  const [selectedCategoryOption, setSelectedCategoryOption] =
+    useState<OptionsInterface<string> | null>(null);
+  const [selectedThemeOption, setThemeOption] =
+    useState<OptionsInterface<string> | null>(null);
+
   return (
     <Layout
       title="budgets"
@@ -18,7 +25,7 @@ const Budget = () => {
       buttonTitle="+ Add New Budget"
       onClick={() => setBudgetModal(true)}
     >
-      <div className="px-6 py-4 flex flex-col lg:grid lg:grid-cols-2 gap-4">
+      <div className="p-4 flex flex-col lg:grid lg:grid-cols-2 gap-4">
         <div className="bg-white px-6 rounded-xl my-2 lg:my-0 pb-1 lg:pb-0 md:py-8 lg:py-4 shadow-sm">
           <div className="md:flex md:items-center md:justify-between lg:flex-col lg:justify-center">
             <div className="my-4 lg:my-0 pt-8 md:pt-0 mx-auto md:mx-0 lg:mx-auto md:w-6/12 lg:w-7/12">
@@ -87,18 +94,47 @@ const Budget = () => {
           title={"Add New Budget"}
           onClose={() => setBudgetModal(false)}
         >
-          <div className="my-3.5">
+          <div className="my-3">
             <h1 className="text-ch-grey text-xs font-normal">
               Choose a category to set a spending budget. These categories can
               help you monitor spending
             </h1>
           </div>
-          <form className="my-2">
+          <form className="">
             <Dropdown
+              label="Budget category"
+              onSelect={setSelectedCategoryOption}
+              selectedOption={selectedCategoryOption}
               options={CategoryOptions}
-              placeholder="Latest"
+              includePlaceholderOption={false}
+              placeholder="Entertainment"
               icon={<DropdownIcon />}
+              isModal={true}
             />
+            <div className="mt-3">
+              <Input
+                typeOfInput="modal"
+                variant="primary"
+                label="maximum spend"
+                placeholder="e.g. 2000"
+                icon={<DollarSign />}
+                placement="start"
+              />
+            </div>
+            <div className="my-2">
+              <Dropdown
+                label="Theme"
+                onSelect={setThemeOption}
+                selectedOption={selectedThemeOption}
+                options={ThemeOptions}
+                includePlaceholderOption={false}
+                placeholder="Green"
+                icon={<DropdownIcon />}
+                isModal={true}
+                themeColor={ThemeOptions[0].value}
+              />
+            </div>
+            <Button className="mt-2">Add budget</Button>
           </form>
         </Modal>
       </div>
