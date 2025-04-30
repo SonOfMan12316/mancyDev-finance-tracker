@@ -3,10 +3,7 @@ import { Search, Filter, Download, DropdownIcon } from "../icons";
 import { Layout } from "../layout";
 import Input from "../ui/Input/Input";
 import Select from "../ui/Dropdown/Select";
-import {
-  CategoryOptions,
-  SortOptions,
-} from "../../lib/getSelectOptions";
+import { CategoryOptions, SortOptions } from "../../lib/getSelectOptions";
 import { OptionsInterface, transactionInterface } from "../../types/global";
 import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
@@ -39,6 +36,7 @@ export const Transaction = () => {
             <div className="flex justify-between items-center w-full gap-4">
               <div className="flex-1">
                 <Input
+                  typeOfInput="normal"
                   placeholder="Search transaction"
                   placement="end"
                   icon={<Search />}

@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({
             <section
               className={classNames(
                 classNames,
-                "bg-white w-full max-w-95% sm:max-w-lg md:max-w-xl rounded-lg px-6 py-6"
+                "bg-white max-w-xs sm:max-w-lg md:max-w-xl rounded-lg px-4 md:px-6 py-6"
               )}
             >
               <div className="flex items-center justify-between">
@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({
                     {title}
                   </h2>
                 )}
-                <div onClick={onClose}>
+                <div className="cursor-pointer" onClick={onClose}>
                   <CancelIcon />
                 </div>
               </div>

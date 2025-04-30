@@ -56,10 +56,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "bg-black text-white hover:bg-black/50 focus:opacity-80 active:-translate-y-0.5 h-12",
       secondary:
         "bg-ch-beige text-black hover:bg-white hover:border-black hover:border hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
-      action:
-        "flex items-center justify-center border border-ch-lighter-beige shadow-sm h-11 px-1",
+      action: "border border-ch-lighter-beige shadow-sm h-11 px-1",
       pagination:
-        "flex items-center justify-center border border-ch-lighter-beige hover:bg-black hover:text-white shadow-sm h-10 px-1  w-10",
+        "flex items-center justify-center border border-ch-lighter-beige hover:bg-black hover:text-white shadow-sm h-10 px-1 w-10",
       destroy:
         "bg-ch-red text-white hover:opacity-90 focus:opacity-80 active:-translate-y-0.5",
     };

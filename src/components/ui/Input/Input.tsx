@@ -15,6 +15,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   icon?: string | ReactNode;
   placement?: "start" | "end";
   type?: string;
+  typeOfInput?: "normal" | "modal";
   variant?: "primary";
   onChange?: (...args: any[]) => any;
 }
@@ -28,6 +29,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
     placement = "start",
     onChange,
     type,
+    typeOfInput,
     variant = "primary",
     required,
     ...rest
@@ -44,7 +46,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
   return (
     <label className={classnames(className, "flex flex-col items-start")}>
       {label && (
-        <label className="text-xs font-bold text-ch-grey capitalize">
+        <label className="text-xs font-bold text-ch-grey capitalize pb-1">
           {label}
         </label>
       )}
@@ -58,8 +60,8 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
           <span
             className={classnames("absolute -translate-y-1/2 top-1/3", {
               "font-medium": typeof icon === "string",
-              "ml-4 left-0": placement === "start",
-              "mr-4 right-0": placement === "end",
+              "ml-6 left-0": placement === "start",
+              "mr-6 right-0": placement === "end",
             })}
           >
             {icon}
@@ -67,7 +69,9 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
         )}
         <input
           className={classnames(
-            "w-full h-11 px-6 text-ch-lighter-beige border text-sm focus:outline-none outline-none placeholder:text-xs rounded-md truncate",
+            `w-full h-11 ${
+              typeOfInput === "normal" ? "pl-5 pr-9" : "pl-10 pr-2"
+            } flex items-center text-black border text-sm focus:outline-none outline-none placeholder:text-sm rounded-md truncate`,
             {
               "!pl-12": icon && placement === "start",
               "!pr-12": icon && placement === "end",
