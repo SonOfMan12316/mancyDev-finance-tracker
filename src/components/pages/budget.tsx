@@ -10,6 +10,7 @@ import Dropdown from "../ui/Dropdown/Select";
 import { DollarSign, DropdownIcon } from "../icons";
 import { CategoryOptions, ThemeOptions } from "../../lib/getSelectOptions";
 import { Button } from "../ui/Button/Button";
+import ConfirmDialog from "../global/ConfrimDialog";
 
 const Budget = () => {
   const [BudgetModal, setBudgetModal] = useState<boolean>(false);
@@ -134,9 +135,16 @@ const Budget = () => {
                 themeColor={ThemeOptions[0].value}
               />
             </div>
-            <Button className="mt-2">Add budget</Button>
+            <Button className="mt-2">Add Budget</Button>
           </form>
         </Modal>
+        <ConfirmDialog
+          // isOpen={BudgetModal}
+          title="Delete Savings?"
+          message="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+          cancelText="Yes, Confirm Deletion"
+          confirmText="No, Go Back"
+        />
       </div>
     </Layout>
   );
