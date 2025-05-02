@@ -29,12 +29,12 @@ const Modal: React.FC<ModalProps> = ({
             aria-modal="true"
             aria-labelledby="modal-title"
             className="fixed w-full h-full top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-ch-modal transition ease-in-out duration-300"
-            style={{ zIndex }}
+            style={{ zIndex: 30 }}
           >
             <section
               className={classNames(
                 classNames,
-                "bg-white max-w-xs sm:max-w-md rounded-lg px-4 md:px-6 py-6"
+                "bg-white max-w-xs sm:max-w-md md:max-w-lg rounded-lg px-4 py-6 md:px-8"
               )}
             >
               <div className="flex items-center justify-between">

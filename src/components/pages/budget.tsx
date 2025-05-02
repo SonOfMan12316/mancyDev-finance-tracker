@@ -10,14 +10,52 @@ import Dropdown from "../ui/Dropdown/Select";
 import { DollarSign, DropdownIcon } from "../icons";
 import { CategoryOptions, ThemeOptions } from "../../lib/getSelectOptions";
 import { Button } from "../ui/Button/Button";
-import ConfirmDialog from "../global/ConfrimDialog";
+import ConfirmDialog from "../global/ConfirmDialog";
 
 const Budget = () => {
   const [BudgetModal, setBudgetModal] = useState<boolean>(false);
+
+  const [showEditModal, setShowEditModal] = useState<boolean>(false);
+  const [categoryToDelete, setCategoryToDelete] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+  const [handlePopOver, setHandlePopOver] = useState<boolean>(false);
   const [selectedCategoryOption, setSelectedCategoryOption] =
     useState<OptionsInterface<string> | null>(null);
   const [selectedThemeOption, setThemeOption] =
     useState<OptionsInterface<string> | null>(null);
+
+  const budgetItems = [
+    {
+      title: "Entertainment",
+      progressBarValue: 50,
+      progressColor: "ch-green",
+      onClick: () => setHandlePopOver(true),
+    },
+    {
+      title: "Bills",
+      progressBarValue: 75,
+      progressColor: "ch-cyan",
+    },
+    {
+      title: "Dining Out",
+      progressBarValue: 100,
+      progressColor: "ch-yellow",
+    },
+    {
+      title: "Personal Care",
+      progressBarValue: 60,
+      progressColor: "ch-navy",
+    },
+  ];
+
+  const handleDelete = (title: string) => {
+    setCategoryToDelete(title);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleEdit = () => {
+    setShowEditModal(true);
+  };
 
   return (
     <Layout
@@ -66,37 +104,28 @@ const Budget = () => {
             </div>
           </div>
         </div>
-        <BudgetCard
-          title="Entertainment"
-          progressBarValue={50}
-          progressColor="ch-green"
-        />
-        <BudgetCard
-          title="Bills"
-          progressBarValue={75}
-          progressColor="ch-cyan"
-        />
-        <div>
-          <BudgetCard
-            title="Dining Out"
-            progressBarValue={100}
-            progressColor="ch-yellow"
-          />
-        </div>
-        <div>
-          <BudgetCard
-            title="Personal Care"
-            progressBarValue={60}
-            progressColor="ch-navy"
-          />
-        </div>
+        <>
+          {budgetItems.map(
+            ({ title, progressBarValue, progressColor, onClick }) => (
+              <BudgetCard
+                key={title}
+                title={title}
+                progressBarValue={progressBarValue}
+                progressColor={progressColor}
+                onClick={onClick}
+                onDelete={() => handleDelete(title)}
+                onEdit={handleEdit}
+              />
+            )
+          )}
+        </>
         <Modal
           isOpen={BudgetModal}
           title={"Add New Budget"}
           onClose={() => setBudgetModal(false)}
         >
           <div className="my-3">
-            <h1 className="text-ch-grey text-xs font-normal">
+            <h1 className="text-ch-grey text-sm font-normal">
               Choose a category to set a spending budget. These categories can
               help you monitor spending
             </h1>
@@ -138,13 +167,18 @@ const Budget = () => {
             <Button className="mt-2">Add Budget</Button>
           </form>
         </Modal>
-        <ConfirmDialog
-          // isOpen={BudgetModal}
-          title="Delete Savings?"
-          message="Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
-          cancelText="Yes, Confirm Deletion"
-          confirmText="No, Go Back"
-        />
+        {showDeleteConfirm && (
+          <ConfirmDialog
+            title={`Delete '${categoryToDelete}'`}
+            isOpen={showDeleteConfirm}
+            onCancel={() => setShowDeleteConfirm(false)}
+            message={
+              "Are you sure you want to delete this budget? This action cannot be reversed, and all the data inside it will be removed forever."
+            }
+            cancelText="Yes Confirm Deletion"
+            confirmText="No, Go Back"
+          />
+        )}
       </div>
     </Layout>
   );
