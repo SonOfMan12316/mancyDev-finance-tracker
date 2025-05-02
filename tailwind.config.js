@@ -21,7 +21,7 @@ module.exports = {
         'ch-magenta': '#934F6F',
         'ch-torquoise': '#597C7C',
         'ch-brown': '#93674C',
-        'ch-blue': '3F82B2',
+        'ch-blue': '#3F82B2',
         'ch-black': '#000000',
         'ch-modal': 'rgba(0,0,0,0.7)'
       },
@@ -38,6 +38,9 @@ module.exports = {
       width: {
         '5.5': '5.5rem',
         '35': '35rem',
+      },
+      boxShadow: {
+        'budget-popover': '0px 4px 24px rgba(0, 0, 0, 0.25)'
       },
       keyframes: {
         sidebarExpand: {

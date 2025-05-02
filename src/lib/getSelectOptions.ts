@@ -29,6 +29,6 @@ export const ThemeOptions = [
   { label: "Turquoise", value: "ch-torquoise" },
   { label: "Brown", value: "ch-brown" },
   { label: "Magenta", value: "ch-magenta" },
-  { label: "Blue", value: "Blue" },
+  { label: "Blue", value: "ch-blue" },
   { label: "Grey", value: "ch-grey" },
 ];
