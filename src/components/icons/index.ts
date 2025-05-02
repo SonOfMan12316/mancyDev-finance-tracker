@@ -16,3 +16,4 @@ export { default as CaretLeft } from "./CaretLeft";
 export { default as CaretRight } from "./CaretRight";
 export { default as DollarSign } from "./DollarSign";
 export { default as Checkmark } from "./Checkmark";
+export { default as Ellipsis } from "./Ellipsis";
