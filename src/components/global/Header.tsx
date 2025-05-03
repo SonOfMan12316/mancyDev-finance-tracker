@@ -16,7 +16,7 @@ const Header: React.FC<HeaderProps> = ({
   onClick,
 }) => {
   return (
-    <header className={`p-4 lg:px-8 lg:pt-6 w-full`}>
+    <header className={`p-4 lg:px-6 lg:pt-6 w-full`}>
       <div className="text-black flex justify-between items-center">
         <div>
           {title && (

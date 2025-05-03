@@ -23,8 +23,8 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
       onClose={onCancel}
     >
       <div className="">
-        <div className="my-3">
-          <h1 className="text-ch-grey text-xs font-normal">{message}</h1>
+        <div className="mt-5 mb-3">
+          <h1 className="text-ch-grey text-sm font-normal">{message}</h1>
         </div>
         <div className="flex flex-col items-center mt-5">
           <Button
@@ -38,8 +38,9 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
           <Button
             size="sm"
             variant="tertiary"
-            className="font-normal md:pt-4"
+            className="font-normal"
             aria-label="confirm dialog"
+            onClick={onCancel}
           >
             {confirmText}
           </Button>
