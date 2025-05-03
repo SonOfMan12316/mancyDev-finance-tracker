@@ -34,7 +34,7 @@ const Modal: React.FC<ModalProps> = ({
             <section
               className={classNames(
                 classNames,
-                "bg-white max-w-xs sm:max-w-md md:max-w-lg rounded-lg px-4 py-6 md:px-8"
+                "bg-white max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl rounded-lg px-4 pt-6 md:pb-4 md:px-8 lg:pt-7"
               )}
             >
               <div className="flex items-center justify-between">

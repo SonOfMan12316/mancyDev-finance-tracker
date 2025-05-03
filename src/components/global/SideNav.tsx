@@ -10,7 +10,7 @@ import {
   ArrowRight,
 } from "../icons";
 import classnames from "classnames";
-import useUIStore from "../../store/sidenavStore";
+import useUIStore from "../../store/ui-store";
 import Logo from "./Logo";
 
 interface NavItem {
@@ -77,8 +77,8 @@ const SideNav = () => {
       className={classnames(
         "hidden lg:block  bg-black rounded-r-2xl h-screen overflow-x-hidden overflow-y-auto absolute lg:relative z-20",
         "transition-all duration-300 ease-in-out",
-        { 'min-w-14 w-1/6': sidenavState },
-        { 'min-w-5.5 w-5.5': !sidenavState }
+        { "min-w-14 w-1/6": sidenavState },
+        { "min-w-5.5 w-5.5": !sidenavState }
       )}
     >
       <div className="w-full h-full py-6 relative flex flex-col">
