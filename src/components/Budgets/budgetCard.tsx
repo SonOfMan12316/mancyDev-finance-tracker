@@ -11,32 +11,24 @@ interface BudgetCardProps {
   progressBarValue: number;
   progressColor: string;
   onClick?: () => void;
-  onDelete: () => void;
-  onEdit: () => void;
 }
 
-const BudgetCard: React.FC<BudgetCardProps> = ({
-  title,
-  progressColor,
-  onEdit,
-  onDelete,
-}) => {
+const BudgetCard: React.FC<BudgetCardProps> = ({ title, progressColor }) => {
   const budget = budgets.find((budget) => budget.category === title);
 
   const [popOpen, setPopOpen] = useState<boolean>(false);
   return (
-    <div className="bg-white p-6 rounded-xl lg:my-0 pb-1 shadow-sm">
+    <div className="bg-white px-6 rounded-xl lg:my-0 shadow-sm">
       <CardHeader
         progressColor={progressColor}
         title={title}
         popOpen={popOpen}
         setPopOpen={setPopOpen}
-        onEdit={onEdit}
-        onDelete={onDelete}
+        budget={budget ? [budget] : []}
       />
       {budget && (
         <>
-          <div className="my-4">
+          <div className="mb-2.5">
             <h2 className="text-ch-grey text-sm font-normal">
               Maximum of {"$" + budget.maximum?.toFixed(2)}
             </h2>
