@@ -3,6 +3,7 @@ import { Button } from "../ui/Button/Button";
 import { ButtonVariant } from "../ui/Button/Button/Button";
 import classnames from "classnames";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import useUIStore from "../../store/ui-store";
 
 interface PopoverProps {
   isOpen?: boolean;
@@ -29,8 +30,11 @@ const Popover: React.FC<PopoverProps> = ({
   bg,
   hover,
 }) => {
+  const { openModal } = useUIStore();
   const popoverRef = useClickOutside(() => {
-    setIsOpen(false);
+    if (!openModal) {
+      setIsOpen(false);
+    }
   });
   return (
     <div className={`w-fit relative ${className}`} ref={popoverRef}>
@@ -51,7 +55,7 @@ const Popover: React.FC<PopoverProps> = ({
               "right-0": contentPositionX === "left",
               "left-0": contentPositionX === "right",
               "top-8": contentPositionY === "bottom",
-              "h-fit w-max max-w-[14rem] md:max-w-[16rem] pt-0 ": isOpen,
+              "h-fit w-max max-w-[8.375rem] pt-0 ": isOpen,
               "h-0 w-0 overflow-hidden": !isOpen,
               "shadow-budget-popover": !hover,
             }
