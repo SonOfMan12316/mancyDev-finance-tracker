@@ -33,7 +33,8 @@ module.exports = {
         '5.5': '5.5rem'
       },
       maxWidth: {
-        '560': '560px'
+        'xl': '35rem',
+        '8.375': '8.375rem'
       },
       width: {
         '5.5': '5.5rem',

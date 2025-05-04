@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "../layout";
 import budgets from "../../data/data";
 import BudgetCard from "../Budgets/budgetCard";
@@ -19,7 +19,7 @@ const Budget = () => {
   const [selectedThemeOption, setThemeOption] =
     useState<OptionsInterface<string> | null>(null);
 
-  const { openModal, setOpenModal } = useUIStore();
+  const { openModal, setOpenModal, selectedBudget } = useUIStore();
   const categoryToDelete = openModal?.type === "delete" ? openModal.data : null;
 
   const budgetItems = [
@@ -79,7 +79,16 @@ const Budget = () => {
             <Dropdown
               label="Budget category"
               onSelect={setSelectedCategoryOption}
-              selectedOption={selectedCategoryOption}
+              selectedOption={
+                openModal?.type === "add"
+                  ? selectedCategoryOption
+                  : selectedBudget
+                    ? {
+                        label: selectedBudget.category,
+                        value: selectedBudget.category,
+                      }
+                    : null
+              }
               options={CategoryOptions}
               includePlaceholderOption={false}
               placeholder="Entertainment"
@@ -91,6 +100,7 @@ const Budget = () => {
                 typeOfInput="modal"
                 variant="primary"
                 label="maximum spend"
+                value={openModal?.type === "add" ? "" : selectedBudget?.maximum}
                 placeholder="e.g. 2000"
                 icon={<DollarSign />}
                 placement="start"
@@ -100,7 +110,16 @@ const Budget = () => {
               <Dropdown
                 label="Theme"
                 onSelect={setThemeOption}
-                selectedOption={selectedThemeOption}
+                selectedOption={
+                  openModal?.type === "add"
+                    ? selectedThemeOption
+                    : selectedBudget
+                      ? {
+                          label: selectedBudget.theme,
+                          value: selectedBudget.theme,
+                        }
+                      : null
+                }
                 options={ThemeOptions}
                 includePlaceholderOption={false}
                 placeholder="Green"
@@ -109,7 +128,9 @@ const Budget = () => {
                 themeColor={ThemeOptions[0].value}
               />
             </div>
-            <Button className="mt-2">Add Budget</Button>
+            <Button className="mt-2">
+              {openModal?.type === "add" ? "Add Budget" : "Save Changes"}
+            </Button>
           </form>
         </Modal>
         {/* )} */}
