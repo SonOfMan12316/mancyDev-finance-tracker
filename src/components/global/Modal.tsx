@@ -13,7 +13,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({
   title,
-  zIndex,
+  zIndex = 30,
   children,
   onClose,
   isOpen,
@@ -28,8 +28,7 @@ const Modal: React.FC<ModalProps> = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
-            className="fixed w-full h-full top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-ch-modal transition ease-in-out duration-300"
-            style={{ zIndex: 30 }}
+            className={`fixed w-full h-full top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-ch-modal transition-all ease-in-out duration-300 z-${zIndex}`}
           >
             <section
               className={classNames(
