@@ -72,8 +72,8 @@ const Dropdown = <T extends string | number>({
         <span className="truncate flex items-center font-normal">
           {themeColor && (
             <div
-              className={`h-4 w-4 rounded-full bg-${
-                selectedOption?.value ? selectedOption?.value : "ch-green"
+              className={`h-4 w-4 rounded-full bg-ch-${
+                selectedOption?.value ? selectedOption?.value : ""
               } `}
             ></div>
           )}{" "}
@@ -140,7 +140,9 @@ const DropdownItem = <T extends string | number>({
   >
     <span className="truncate flex items-center font-normal text-sm">
       {themeColor && (
-        <div className={`h-4 w-4 rounded-full bg-${option.value} pl-2`}></div>
+        <div
+          className={`h-4 w-4 rounded-full bg-ch-${option.value} pl-2`}
+        ></div>
       )}{" "}
       <span className={themeColor ? "pl-2" : ""}>{option.label}</span>
     </span>

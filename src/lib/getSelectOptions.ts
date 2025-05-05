@@ -20,15 +20,15 @@ export const SortOptions = [
 ];
 
 export const ThemeOptions = [
-  { label: "Green", value: "ch-green" },
-  { label: "Yellow", value: "ch-yellow" },
-  { label: "Cyan", value: "ch-cyan" },
-  { label: "Navy", value: "ch-navy" },
-  { label: "Red", value: "ch-red" },
-  { label: "Purple", value: "ch-purple" },
-  { label: "Turquoise", value: "ch-torquoise" },
-  { label: "Brown", value: "ch-brown" },
-  { label: "Magenta", value: "ch-magenta" },
-  { label: "Blue", value: "ch-blue" },
-  { label: "Grey", value: "ch-grey" },
+  { label: "Green", value: "green" },
+  { label: "Yellow", value: "yellow" },
+  { label: "Cyan", value: "cyan" },
+  { label: "Navy", value: "navy" },
+  { label: "Red", value: "red" },
+  { label: "Purple", value: "purple" },
+  { label: "Turquoise", value: "torquoise" },
+  { label: "Brown", value: "brown" },
+  { label: "Magenta", value: "magenta" },
+  { label: "Blue", value: "blue" },
+  { label: "Grey", value: "grey" },
 ];
