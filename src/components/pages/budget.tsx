@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Layout } from "../layout";
 import budgets from "../../data/data";
 import BudgetCard from "../Budgets/budgetCard";
@@ -13,14 +14,14 @@ import ConfirmDialog from "../global/ConfirmDialog";
 import BudgetSpendingSummaryCard from "../Budgets/BudgetSpendingSummaryCard";
 import useUIStore from "../../store/ui-store";
 
-const Budget = () => {
-  const [selectedCategoryOption, setSelectedCategoryOption] =
-    useState<OptionsInterface<string> | null>(null);
-  const [selectedThemeOption, setThemeOption] =
-    useState<OptionsInterface<string> | null>(null);
+type BudgetValues = {
+  category: OptionsInterface<string> | null;
+  maximum: number;
+  theme: OptionsInterface<string> | null;
+};
 
+const Budget = () => {
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
-  const categoryToDelete = openModal?.type === "delete" ? openModal.data : null;
 
   const budgetItems = [
     {
@@ -44,6 +45,41 @@ const Budget = () => {
       progressColor: "ch-navy",
     },
   ];
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+    setValue,
+    reset,
+  } = useForm<BudgetValues>({
+    defaultValues: {
+      category: null,
+      maximum: 0,
+      theme: ThemeOptions[0],
+    },
+  });
+
+  useEffect(() => {
+    if (openModal?.type === "edit" && selectedBudget) {
+      const matchedCategory = CategoryOptions.find(
+        (opt) => opt.value === selectedBudget.category
+      );
+
+      const matchedTheme = ThemeOptions.find(
+        (opt) => opt.value === selectedBudget.theme
+      );
+
+      reset({
+        category: matchedCategory ?? null,
+        maximum: selectedBudget.maximum,
+        theme: matchedTheme,
+      });
+    }
+  }, [openModal, selectedBudget, reset]);
+
+  const onSubmit = () => {};
 
   return (
     <Layout
@@ -75,68 +111,69 @@ const Budget = () => {
               help you monitor spending
             </h1>
           </div>
-          <form className="">
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Dropdown
               label="Budget category"
-              onSelect={setSelectedCategoryOption}
-              selectedOption={
-                openModal?.type === "add"
-                  ? selectedCategoryOption
-                  : selectedBudget
-                    ? {
-                        label: selectedBudget.category,
-                        value: selectedBudget.category,
-                      }
-                    : null
-              }
+              onSelect={(option) => setValue("category", option)}
+              selectedOption={watch("category")}
               options={CategoryOptions}
               includePlaceholderOption={false}
               placeholder="Entertainment"
               icon={<DropdownIcon />}
               isModal={true}
+              {...register("category", { required: "category is required" })}
             />
+            {errors.category && (
+              <span role="alert" className="text-xs text-ch-danger">
+                {errors.category?.message}
+              </span>
+            )}
             <div className="mt-3">
               <Input
                 typeOfInput="modal"
                 variant="primary"
                 label="maximum spend"
-                value={openModal?.type === "add" ? "" : selectedBudget?.maximum}
                 placeholder="e.g. 2000"
                 icon={<DollarSign />}
                 placement="start"
+                {...register("maximum", {
+                  valueAsNumber: true,
+                  required: "Maximum spend is required",
+                  min: { value: 1, message: "Amount must be positive" },
+                })}
               />
+              {errors.maximum && (
+                <span role="alert" className="text-xs text-ch-danger">
+                  {errors.maximum?.message}
+                </span>
+              )}
             </div>
             <div className="my-2">
               <Dropdown
                 label="Theme"
-                onSelect={setThemeOption}
-                selectedOption={
-                  openModal?.type === "add"
-                    ? selectedThemeOption
-                    : selectedBudget
-                      ? {
-                          label: selectedBudget.theme,
-                          value: selectedBudget.theme,
-                        }
-                      : null
-                }
+                onSelect={(option) => setValue("theme", option)}
+                selectedOption={watch("theme")}
                 options={ThemeOptions}
                 includePlaceholderOption={false}
                 placeholder="Green"
                 icon={<DropdownIcon />}
                 isModal={true}
-                themeColor={ThemeOptions[0].value}
+                themeColor={watch("theme")?.value}
+                {...register("theme", { required: "theme is required" })}
               />
+              {errors.theme && (
+                <span role="alert" className="text-xs text-ch-danger">
+                  {errors.theme?.message}
+                </span>
+              )}
             </div>
-            <Button className="mt-2">
+            <Button onClick={() => setOpenModal(null)} className="mt-2">
               {openModal?.type === "add" ? "Add Budget" : "Save Changes"}
             </Button>
           </form>
         </Modal>
-        {/* )} */}
-        {/* {openModal?.type === "delete" && ( */}
         <ConfirmDialog
-          title={`Delete '${categoryToDelete}'?`}
+          title={`Delete '${openModal?.data}'?`}
           isOpen={openModal?.type === "delete"}
           onCancel={() => setOpenModal(null)}
           message={
@@ -145,7 +182,6 @@ const Budget = () => {
           cancelText="Yes Confirm Deletion"
           confirmText="No, Go Back"
         />
-        {/* )} */}
       </div>
     </Layout>
   );
