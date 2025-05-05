@@ -16,7 +16,7 @@ import useUIStore from "../../store/ui-store";
 
 type BudgetValues = {
   category: OptionsInterface<string> | null;
-  maximum: number;
+  maximum: string;
   theme: OptionsInterface<string> | null;
 };
 
@@ -56,8 +56,8 @@ const Budget = () => {
   } = useForm<BudgetValues>({
     defaultValues: {
       category: null,
-      maximum: 0,
-      theme: ThemeOptions[0],
+      maximum: "",
+      theme: null,
     },
   });
 
@@ -73,12 +73,17 @@ const Budget = () => {
 
       reset({
         category: matchedCategory ?? null,
-        maximum: selectedBudget.maximum,
+        maximum: selectedBudget.maximum.toString() ?? "",
         theme: matchedTheme,
+      });
+    } else if (openModal?.type === "add") {
+      reset({
+        category: null,
+        maximum: "",
+        theme: { value: ThemeOptions[0].value },
       });
     }
   }, [openModal, selectedBudget, reset]);
-
   const onSubmit = () => {};
 
   return (
@@ -118,13 +123,13 @@ const Budget = () => {
               selectedOption={watch("category")}
               options={CategoryOptions}
               includePlaceholderOption={false}
-              placeholder="Entertainment"
+              placeholder={openModal?.type === "edit" ? "" : "Entertainment"}
               icon={<DropdownIcon />}
               isModal={true}
               {...register("category", { required: "category is required" })}
             />
             {errors.category && (
-              <span role="alert" className="text-xs text-ch-danger">
+              <span role="alert" className="text-xs text-ch-red">
                 {errors.category?.message}
               </span>
             )}
@@ -141,9 +146,17 @@ const Budget = () => {
                   required: "Maximum spend is required",
                   min: { value: 1, message: "Amount must be positive" },
                 })}
+                onChange={(e) => {
+                  const rawValue = e.target.value.replace(/\D/g, "");
+                  setValue("maximum", rawValue, {
+                    shouldValidate: true,
+                  });
+                  e.target.value = rawValue;
+                }}
+                defaultValue={watch("maximum")}
               />
               {errors.maximum && (
-                <span role="alert" className="text-xs text-ch-danger">
+                <span role="alert" className="text-xs text-ch-red">
                   {errors.maximum?.message}
                 </span>
               )}
@@ -162,7 +175,7 @@ const Budget = () => {
                 {...register("theme", { required: "theme is required" })}
               />
               {errors.theme && (
-                <span role="alert" className="text-xs text-ch-danger">
+                <span role="alert" className="text-xs text-ch-red">
                   {errors.theme?.message}
                 </span>
               )}
