@@ -50,9 +50,9 @@ const SideNav = () => {
     },
     {
       icon: <Saving />,
-      label: "savings",
+      label: "pots",
       action: () => {
-        navigate("/saving");
+        navigate("/pots");
       },
     },
     {
