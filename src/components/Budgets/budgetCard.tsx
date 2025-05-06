@@ -5,6 +5,8 @@ import { toDMYString } from "../../utils/date";
 import { CardHeader } from "../layout";
 import useUIStore from "../../store/ui-store";
 import { budgetInterface } from "../../types/global";
+import { ProgressBar } from "../global";
+// import Progress
 
 interface BudgetCardProps {
   title: string;
@@ -53,6 +55,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             value={Math.ceil((amountSpent / maximum) * 100)}
             progressColor={progressColor}
             height="h-8"
+            innerHeight="h-6"
             backgroundColor="bg-ch-beige"
           />
         </div>
@@ -121,31 +124,6 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             </div>
           ))}
       </div>
-    </div>
-  );
-};
-
-interface ProgressBarProps {
-  value: number;
-  height?: string;
-  backgroundColor?: string;
-  progressColor?: string;
-}
-
-const ProgressBar: React.FC<ProgressBarProps> = ({
-  value,
-  height = "",
-  backgroundColor = "bg-ch-yellow",
-  progressColor = "green",
-}) => {
-  return (
-    <div
-      className={`w-full ${height} ${backgroundColor} py-1 rounded-lg overflow-hidden px-1`}
-    >
-      <div
-        className={`bg-ch-${progressColor} h-6 rounded-lg transition-all duration-300`}
-        style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }}
-      ></div>
     </div>
   );
 };
