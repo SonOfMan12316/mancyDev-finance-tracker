@@ -23,29 +23,6 @@ type BudgetValues = {
 const Budget = () => {
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
 
-  const budgetItems = [
-    {
-      title: "Entertainment",
-      progressBarValue: 50,
-      progressColor: "ch-green",
-    },
-    {
-      title: "Bills",
-      progressBarValue: 75,
-      progressColor: "ch-cyan",
-    },
-    {
-      title: "Dining Out",
-      progressBarValue: 100,
-      progressColor: "ch-yellow",
-    },
-    {
-      title: "Personal Care",
-      progressBarValue: 60,
-      progressColor: "ch-navy",
-    },
-  ];
-
   const {
     register,
     handleSubmit,
@@ -84,6 +61,7 @@ const Budget = () => {
       });
     }
   }, [openModal, selectedBudget, reset]);
+
   const onSubmit = () => {};
 
   return (
@@ -96,12 +74,17 @@ const Budget = () => {
       <div className="p-4  lg:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-4">
         <BudgetSpendingSummaryCard budgets={budgets} />
         <>
-          {budgetItems.map(({ title, progressBarValue, progressColor }) => (
+          {budgets.map(({ category, maximum, amount_spent, theme }) => (
             <BudgetCard
-              key={title}
-              title={title}
-              progressBarValue={progressBarValue}
-              progressColor={progressColor}
+              key={category}
+              title={category}
+              progressBarValue={(amount_spent / maximum) * 100}
+              progressColor={theme}
+              amountSpent={amount_spent}
+              maximum={maximum}
+              budget={
+                budgets.find((budget) => budget.category === category) || null
+              }
             />
           ))}
         </>
