@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { CardHeader } from "../layout";
 import { ProgressBar } from "../global";
+import { Button } from "../ui/Button/Button";
 
 interface PotCardProps {
   title: string;
@@ -44,7 +45,7 @@ const PotCard: React.FC<PotCardProps> = ({
           progressColor={progressColor}
           backgroundColor="bg-ch-beige"
         />
-        <div className="flex justify-between items-center mt-3">
+        <div className="flex justify-between items-center my-3">
           <div>
             <h3 className="text-xs font-bold text-ch-grey">
               {title === "Savings"
@@ -57,6 +58,10 @@ const PotCard: React.FC<PotCardProps> = ({
               Target of {"$" + target}
             </h4>
           </div>
+        </div>
+        <div className="flex justify-between items-center space-x-3 my-10">
+          <Button className="font-bold" size="sm" variant='secondary'>+ Add Money</Button>
+          <Button className="font-bold" size="sm" variant='secondary'>Withdraw</Button>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@ import pots from "../../data/pots";
 const Pots = () => {
   return (
     <Layout title="pots" displayButton={true} buttonTitle="+ Add New Pots">
-      <div className="px-4 lg:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-2">
+      <div className="px-4 lg:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-2 lg:gap-4">
         <>
           {pots.map(({ name, target, total, theme }) => (
             <PotCard
