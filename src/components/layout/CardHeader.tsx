@@ -29,24 +29,28 @@ const CardHeader: React.FC<CardHeaderProps> = ({
       </div>
       <Popover trigger={<Ellipsis />} isOpen={popOpen} setIsOpen={setPopOpen}>
         <ul className="py-3.5">
-          {type === "budget" && (
-            <>
-              <li
-                onClick={() => {
-                  onEdit();
-                }}
-                className="border-b border-ch-light-grey text-sm font-normal text-black cursor-pointer pb-2.5"
-              >
-                Edit Budget
-              </li>
-              <li
-                onClick={() => onDelete()}
-                className="text-sm font-normal text-ch-red cursor-pointer pt-2.5"
-              >
-                Delete Budget
-              </li>
-            </>
-          )}
+          <li
+            onClick={() => {
+              onEdit();
+            }}
+            className="border-b border-ch-light-grey text-sm font-normal text-black cursor-pointer pb-2.5"
+          >
+            {type === "budget"
+              ? "Edit Budget"
+              : type === "pot"
+                ? "Edit Pots"
+                : ""}
+          </li>
+          <li
+            onClick={() => onDelete()}
+            className="text-sm font-normal text-ch-red cursor-pointer pt-2.5"
+          >
+            {type === "budget"
+              ? "Delete Budget"
+              : type === "pot"
+                ? "Delete Pots"
+                : ""}
+          </li>
         </ul>
       </Popover>
     </div>
