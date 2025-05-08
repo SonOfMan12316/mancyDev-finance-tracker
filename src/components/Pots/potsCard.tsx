@@ -2,12 +2,15 @@ import { useState } from "react";
 import { CardHeader } from "../layout";
 import { ProgressBar } from "../global";
 import { Button } from "../ui/Button/Button";
+import useUIStore from "../../store/ui-store";
+import { potInterface } from "../../types/global";
 
 interface PotCardProps {
   title: string;
   progressColor: string;
   target: number;
   total: number;
+  pot: potInterface | null;
 }
 
 const PotCard: React.FC<PotCardProps> = ({
@@ -15,19 +18,25 @@ const PotCard: React.FC<PotCardProps> = ({
   progressColor,
   target,
   total,
+  pot,
 }) => {
   const [popOpen, setPopOpen] = useState<boolean>(false);
   const percentage = (total / target) * 100;
+
+  const { setOpenModal, setSelectedPot } = useUIStore();
   return (
-    <div className="bg-white px-6 rounded-xl my-2 lg:my-0 pb-1 lg:pb-0 md:py-8 lg:py-4 shadow-sm">
+    <div className="bg-white px-6 rounded-xl my-2 lg:my-0 pb-1 md:py-8 lg:pt-0 shadow-sm">
       <CardHeader
         progressColor={progressColor}
         title={title}
         popOpen={popOpen}
         setPopOpen={setPopOpen}
         type="pot"
-        onEdit={() => {}}
-        onDelete={() => {}}
+        onEdit={() => {
+          setOpenModal({ type: "edit", data: title });
+          setSelectedPot(pot);
+        }}
+        onDelete={() => setOpenModal({ type: "delete", data: title })}
       />
       <div className="mt-3">
         <div className="flex justify-between items-center mb-3">
@@ -59,9 +68,13 @@ const PotCard: React.FC<PotCardProps> = ({
             </h4>
           </div>
         </div>
-        <div className="flex justify-between items-center space-x-3 my-10">
-          <Button className="font-bold" size="sm" variant='secondary'>+ Add Money</Button>
-          <Button className="font-bold" size="sm" variant='secondary'>Withdraw</Button>
+        <div className="flex justify-between items-center space-x-3 mt-8">
+          <Button className="font-bold" size="sm" variant="secondary">
+            + Add Money
+          </Button>
+          <Button className="font-bold" size="sm" variant="secondary">
+            Withdraw
+          </Button>
         </div>
       </div>
     </div>
