@@ -4,10 +4,10 @@ import CancelIcon from "../icons/CancelIcon";
 import classNames from "classnames";
 
 interface ModalProps {
-  isOpen?: boolean;
-  children?: ReactNode;
-  title?: string | ReactElement;
-  onClose?: () => void;
+  isOpen: boolean;
+  children: ReactNode;
+  title: string | ReactElement;
+  onClose: () => void;
   zIndex?: 30 | 40;
 }
 
