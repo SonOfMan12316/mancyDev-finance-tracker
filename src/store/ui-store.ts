@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { budgetInterface } from "../types/global";
+import { budgetInterface, potInterface } from "../types/global";
 
 type ModalType = "add" | "delete" | "edit";
 
@@ -14,6 +14,7 @@ type UI = {
   openModal: ModalState;
   popoverState: boolean;
   selectedBudget: budgetInterface | null;
+  selectedPot: potInterface | null;
 };
 
 type Actions = {
@@ -22,6 +23,7 @@ type Actions = {
   setOpenModal: (state: UI["openModal"]) => void;
   setPopOverState: (state: UI["popoverState"]) => void;
   setSelectedBudget: (state: UI["selectedBudget"]) => void;
+  setSelectedPot: (state: UI["selectedPot"]) => void;
 };
 
 export type UIActions = UI & Actions;
@@ -32,6 +34,7 @@ const useUIStore = create<UIActions>((set) => ({
   openModal: null,
   popoverState: false,
   selectedBudget: null,
+  selectedPot: null,
   updateSidenavState: () =>
     set((state) => ({ sidenavState: !state.sidenavState })),
   updateActiveNavItem: () =>
@@ -39,6 +42,7 @@ const useUIStore = create<UIActions>((set) => ({
   setOpenModal: (modal: ModalState) => set({ openModal: modal }),
   setPopOverState: (state) => set({ popoverState: state }),
   setSelectedBudget: (budget) => set({ selectedBudget: budget }),
+  setSelectedPot: (pot) => set({ selectedPot: pot }),
 }));
 
 export default useUIStore;
