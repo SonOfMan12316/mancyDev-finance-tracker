@@ -56,11 +56,21 @@ module.exports = {
           '0%': { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        slideUp: {
+          '0%': { transform: 'translateY(100%)', opacity: 0 },
+          '100%': { transform: 'translateY(0)', opacity: 1 },
+        },
+        slideDown: {
+          '0%': { transform: 'translateY(0)', opacity: 1 },
+          '100%': { transform: 'translateY(100%)', opacity: 0 },
+        },
       },
       animation: {
         'sidebar-expand': 'sidebarExpand 0.5s ease-in-out forwards',
         'sidebar-collapse': 'sidebarCollapse 0.3s ease-in-out forwards',
-        'fade-in': 'fadeIn 0.5s ease-in'
+        'fade-in': 'fadeIn 0.5s ease-in',
+        slideUp: 'slideUp 0.15s ease-out forwards',
+        slideDown: 'slideDown 0.15s ease-in forwards',
       },
       screens: {
         'xl': '1200px',
