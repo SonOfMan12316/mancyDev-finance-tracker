@@ -92,13 +92,12 @@ const Budget = () => {
           isOpen={openModal?.type === "add" || openModal?.type === "edit"}
           title={openModal?.type === "add" ? "Add Budget" : "Edit Budget"}
           onClose={() => setOpenModal(null)}
+          modalHeader={
+            openModal?.type === "add"
+              ? "Choose a category to set a spending budget. These categories can help you monitor spending"
+              : "As your budgets change, feel free to update your spending limits."
+          }
         >
-          <div className="my-3">
-            <h1 className="text-ch-grey text-sm font-normal">
-              Choose a category to set a spending budget. These categories can
-              help you monitor spending
-            </h1>
-          </div>
           <form onSubmit={handleSubmit(onSubmit)}>
             <Dropdown
               label="Budget category"
@@ -136,7 +135,7 @@ const Budget = () => {
                   });
                   e.target.value = rawValue;
                 }}
-                defaultValue={watch("maximum")}
+                value={watch("maximum")}
               />
               {errors.maximum && (
                 <span role="alert" className="text-xs text-ch-red">
@@ -163,7 +162,7 @@ const Budget = () => {
                 </span>
               )}
             </div>
-            <Button onClick={() => setOpenModal(null)} className="mt-2">
+            <Button onClick={() => setOpenModal(null)} className="mt-3 mb-4">
               {openModal?.type === "add" ? "Add Budget" : "Save Changes"}
             </Button>
           </form>
