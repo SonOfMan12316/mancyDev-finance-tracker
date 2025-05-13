@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { CardHeader } from "../layout";
-import { ProgressBar } from "../global";
 import { Button } from "../ui/Button/Button";
 import useUIStore from "../../store/ui-store";
 import { potInterface } from "../../types/global";
+import PotManagement from "./potManagement";
 
 interface PotCardProps {
   title: string;
@@ -39,40 +39,34 @@ const PotCard: React.FC<PotCardProps> = ({
         onDelete={() => setOpenModal({ type: "delete", data: title })}
       />
       <div className="mt-3">
-        <div className="flex justify-between items-center mb-3">
-          <div>
-            <h1 className="text-sm text-ch-grey font-normal">Total Saved</h1>
-          </div>
-          <div>
-            <h2 className="text-3xl font-bold">{"$" + total.toFixed(2)}</h2>
-          </div>
-        </div>
-        <ProgressBar
-          value={percentage}
-          innerHeight="h-2"
-          height="h-2"
+        <PotManagement
+          title={title}
+          total={total}
+          target={target}
           progressColor={progressColor}
-          backgroundColor="bg-ch-beige"
+          percentage={percentage}
         />
-        <div className="flex justify-between items-center my-3">
-          <div>
-            <h3 className="text-xs font-bold text-ch-grey">
-              {title === "Savings"
-                ? percentage.toFixed(2)
-                : percentage.toFixed(1) + "%"}
-            </h3>
-          </div>
-          <div>
-            <h4 className="text-xs font-normal text-ch-grey">
-              Target of {"$" + target}
-            </h4>
-          </div>
-        </div>
-        <div className="flex justify-between items-center space-x-3 mt-8">
-          <Button className="font-bold" size="sm" variant="secondary">
+        <div className="flex justify-between items-center space-x-3 mt-8 md:mb-0 mb-8">
+          <Button
+            onClick={() => {
+              setOpenModal({ type: "addMoney", data: title });
+              setSelectedPot(pot);
+            }}
+            className="font-bold"
+            size="sm"
+            variant="secondary"
+          >
             + Add Money
           </Button>
-          <Button className="font-bold" size="sm" variant="secondary">
+          <Button
+            onClick={() => {
+              setOpenModal({ type: "withdraw", data: title });
+              setSelectedPot(pot);
+            }}
+            className="font-bold"
+            size="sm"
+            variant="secondary"
+          >
             Withdraw
           </Button>
         </div>
