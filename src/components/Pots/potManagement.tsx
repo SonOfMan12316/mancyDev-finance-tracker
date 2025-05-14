@@ -1,43 +1,60 @@
 import { ProgressBar } from "../global";
+import { useMemo } from "react";
 
 interface potManagementProps {
   title: string;
   total: number;
   target: number;
-  percentage: number;
+  targetReachedPercentage: number;
+  percentageChange?: number;
   progressColor: string;
+  calculatedProgressColor?: string;
+  modalCardHeader?: string;
 }
 
 const PotManagement: React.FC<potManagementProps> = ({
   title,
   total,
   target,
-  percentage,
+  targetReachedPercentage,
+  percentageChange,
   progressColor,
+  calculatedProgressColor,
+  modalCardHeader,
 }) => {
+  const totalPercentage = useMemo(() => {
+    if (percentageChange) {
+      return targetReachedPercentage + percentageChange;
+    }
+    return targetReachedPercentage;
+  }, [targetReachedPercentage, percentageChange]);
   return (
     <>
-      <div className="flex justify-between items-center mb-3">
+      <div className="flex justify-between items-center mt-6 mb-3">
         <div>
-          <h1 className="text-sm text-ch-grey font-normal">Total Saved</h1>
+          <h1 className="text-sm text-ch-grey font-medium">
+            {modalCardHeader ? modalCardHeader : "Total Saved"}
+          </h1>
         </div>
         <div>
           <h2 className="text-3xl font-bold">{"$" + total.toFixed(2)}</h2>
         </div>
       </div>
       <ProgressBar
-        value={percentage}
+        value={targetReachedPercentage}
+        secondValue={percentageChange || 0}
         innerHeight="h-2"
         height="h-2"
         progressColor={progressColor}
+        calculatedProgressColor={calculatedProgressColor}
         backgroundColor="bg-ch-beige"
       />
       <div className="flex justify-between items-center my-3">
         <div>
           <h3 className="text-xs font-bold text-ch-grey">
             {title === "Savings"
-              ? percentage.toFixed(2)
-              : percentage.toFixed(1) + "%"}
+              ? totalPercentage?.toFixed(2) + "%"
+              : totalPercentage?.toFixed(1) + "%"}
           </h3>
         </div>
         <div>

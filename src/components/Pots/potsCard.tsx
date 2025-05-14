@@ -44,7 +44,7 @@ const PotCard: React.FC<PotCardProps> = ({
           total={total}
           target={target}
           progressColor={progressColor}
-          percentage={percentage}
+          targetReachedPercentage={percentage}
         />
         <div className="flex justify-between items-center space-x-3 mt-8 md:mb-0 mb-8">
           <Button
