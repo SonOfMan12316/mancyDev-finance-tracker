@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { budgetInterface, potInterface } from "../types/global";
 
-type ModalType = "add" | "delete" | "edit";
+type ModalType = "add" | "delete" | "edit" | "addMoney" | "withdraw";
 
 type ModalState = {
   type: ModalType;
