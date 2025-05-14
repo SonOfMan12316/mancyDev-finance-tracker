@@ -124,7 +124,6 @@ const Budget = () => {
                 icon={<DollarSign />}
                 placement="start"
                 {...register("maximum", {
-                  valueAsNumber: true,
                   required: "Maximum spend is required",
                   min: { value: 1, message: "Amount must be positive" },
                 })}
@@ -135,7 +134,6 @@ const Budget = () => {
                   });
                   e.target.value = rawValue;
                 }}
-                value={watch("maximum")}
               />
               {errors.maximum && (
                 <span role="alert" className="text-xs text-ch-red">
