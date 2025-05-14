@@ -18,6 +18,7 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   typeOfInput?: "normal" | "modal";
   variant?: "primary";
   onChange?: (...args: any[]) => any;
+  extraRef?: React.Ref<HTMLInputElement>;
 }
 
 const Input: React.FC<InputProps> = forwardRef((props, ref) => {
@@ -31,7 +32,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
     type,
     typeOfInput,
     variant = "primary",
-    required,
+    extraRef,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -85,6 +86,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
           autoCorrect="off"
           autoCapitalize="off"
           spellCheck="false"
+          ref={mergeRefs([ref, inputRef, extraRef ? extraRef : null])}
           {...rest}
         />
       </div>
