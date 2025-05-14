@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { Layout } from "../layout";
@@ -18,10 +18,13 @@ type PotValues = {
   potName: string;
   amountTarget: string;
   theme: OptionsInterface<string> | null;
+  amountToAdd: string;
+  amountToWithdraw: string;
 };
 
 const Pots = () => {
   const { openModal, setOpenModal, selectedPot } = useUIStore();
+  const [totalAmount, setTotalAmount] = useState(selectedPot?.total || 0);
 
   const {
     register,
@@ -29,35 +32,45 @@ const Pots = () => {
     watch,
     formState: { errors },
     setValue,
-    reset,
   } = useForm<PotValues>({
     defaultValues: {
       potName: "",
       amountTarget: "",
       theme: null,
+      amountToAdd: "",
+      amountToWithdraw: "",
     },
   });
+  const amountToAdd = parseInt(watch("amountToAdd"));
+  const amountToWithdraw = parseInt(watch("amountToWithdraw"));
 
   useEffect(() => {
     if (openModal?.type === "edit" && selectedPot) {
       const matchedTheme = ThemeOptions.find(
         (opt) => opt.value === selectedPot.theme
       );
-
-      reset({
-        potName: selectedPot.name,
-        amountTarget: selectedPot.target.toString(),
-        theme: matchedTheme,
-      });
+      setValue("potName", selectedPot.name ?? "");
+      setValue("amountTarget", selectedPot.target.toString() ?? "");
+      setValue("theme", matchedTheme ?? ThemeOptions[0]);
     } else if (openModal?.type === "add") {
-      reset({
-        potName: "",
-        amountTarget: "",
-        theme: { value: ThemeOptions[0].value },
+      setValue("potName", "");
+      setValue("amountTarget", "");
+      setValue("theme", {
+        label: ThemeOptions[0].label,
+        value: ThemeOptions[0].value,
       });
-    } else {
     }
-  }, [openModal, selectedPot, reset]);
+  }, [openModal, selectedPot, setValue]);
+
+  useEffect(() => {
+    const addedAmount = amountToAdd || 0;
+    setTotalAmount((selectedPot?.total || 0) + addedAmount);
+  }, [amountToAdd, selectedPot?.total]);
+
+  useEffect(() => {
+    const withdrawnAmount = amountToWithdraw || 0;
+    setTotalAmount((selectedPot?.total || 0) - withdrawnAmount);
+  }, [amountToWithdraw, selectedPot?.total]);
 
   const onSubmit = () => {};
   return (
@@ -93,10 +106,15 @@ const Pots = () => {
               : openModal?.type === "edit"
                 ? "Edit Pot"
                 : openModal?.type === "addMoney"
-                  ? `Add to '${openModal?.data}'?`
-                  : ""
+                  ? `Add to '${openModal?.data}'`
+                  : openModal?.type === "withdraw"
+                    ? `Withdraw from '${openModal?.data}'`
+                    : ""
           }
-          onClose={() => setOpenModal(null)}
+          onClose={() => {
+            setOpenModal(null);
+            setValue("amountToAdd", "");
+          }}
           modalHeader={
             openModal?.type === "add"
               ? "Create a pot to set savings targets. These can help keep you on track as you save for special purchases."
@@ -104,7 +122,9 @@ const Pots = () => {
                 ? "If your saving targets change, feel free to update your pots."
                 : openModal?.type === "addMoney"
                   ? "Add money to your pot to keep it seperate from your main balance. As soon as you add this money, it will be deducted from your current balance"
-                  : ""
+                  : openModal?.type === "withdraw"
+                    ? "Withdraw from your pot to put money back in your main balance. This will reduce the amount you have in this pot."
+                    : ""
           }
         >
           {openModal?.type === "add" || openModal?.type === "edit" ? (
@@ -117,10 +137,8 @@ const Pots = () => {
                     label="Pot Name"
                     placeholder="e.g. Rainy Days"
                     {...register("potName", {
-                      valueAsNumber: true,
                       required: "Pot Name is required",
                     })}
-                    value={watch("potName")}
                   />
                   {errors.potName && (
                     <span role="alert" className="text-xs text-ch-red">
@@ -137,7 +155,6 @@ const Pots = () => {
                     icon={<DollarSign />}
                     placement="start"
                     {...register("amountTarget", {
-                      valueAsNumber: true,
                       required: "Target amount is required",
                       min: { value: 1, message: "Amount must be positive" },
                     })}
@@ -148,7 +165,6 @@ const Pots = () => {
                       });
                       e.target.value = rawValue;
                     }}
-                    value={watch("amountTarget")}
                   />
                   {errors.amountTarget && (
                     <span role="alert" className="text-xs text-ch-red">
@@ -183,27 +199,74 @@ const Pots = () => {
                 </Button>
               </form>
             </>
-          ) : openModal?.type === "addMoney" && selectedPot ? (
+          ) : (openModal?.type === "addMoney" ||
+              openModal?.type === "withdraw") &&
+            selectedPot ? (
             <>
               <PotManagement
                 title={selectedPot.name}
-                total={selectedPot.total}
+                total={totalAmount}
                 target={selectedPot.target}
-                progressColor={selectedPot.theme}
-                percentage={(selectedPot.total / selectedPot.target) * 100}
+                progressColor="black"
+                targetReachedPercentage={
+                  (selectedPot.total / selectedPot.target) * 100
+                }
+                percentageChange={(amountToAdd / selectedPot.target) * 100}
+                calculatedProgressColor={selectedPot.theme}
+                modalCardHeader="New Amount"
               />
-              <div className="my-2">
-                <Input
-                  typeOfInput="modal"
-                  variant="primary"
-                  label="Amount To Add"
-                  icon={<DollarSign />}
-                  placeholder="400"
-                />
+              <div className="mt-6 mb-2">
+                {openModal?.type === "addMoney" ? (
+                  <>
+                    <Input
+                      typeOfInput="modal"
+                      variant="primary"
+                      label="Amount To Add"
+                      icon={<DollarSign />}
+                      placeholder="400"
+                      {...register("amountToAdd", {
+                        required: "Amount to add is required",
+                      })}
+                    />
+                    {errors?.amountToAdd && (
+                      <span role="alert" className="text-xs text-ch-red">
+                        {errors.amountToAdd?.message}
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Input
+                      typeOfInput="modal"
+                      variant="primary"
+                      label="Amount To Withdraw"
+                      icon={<DollarSign />}
+                      placeholder="400"
+                      {...register("amountToWithdraw", {
+                        required: "Amount to withdraw is required",
+                      })}
+                    />
+                    {errors?.amountToWithdraw && (
+                      <span role="alert" className="text-xs text-ch-red">
+                        {errors.amountToWithdraw?.message}
+                      </span>
+                    )}
+                  </>
+                )}
               </div>
+              <Button
+                onClick={() => setOpenModal(null)}
+                disabled={
+                  (amountToAdd || selectedPot?.total) >= selectedPot?.target
+                }
+                className="mt-3 mb-4"
+              >
+                {openModal?.type === "addMoney"
+                  ? "Confirm Addition"
+                  : "Confirm Withdrawal"}
+              </Button>
             </>
           ) : (
-            // <></>
             <></>
           )}
         </Modal>
