@@ -23,7 +23,8 @@ module.exports = {
         'ch-brown': '#93674C',
         'ch-blue': '#3F82B2',
         'ch-black': '#000000',
-        'ch-modal': 'rgba(0,0,0,0.7)'
+        'ch-modal': 'rgba(0,0,0,0.7)',
+        'ch-red': '#C94736'
       },
       flexGrow: {
         1.2: '1.2',
@@ -86,7 +87,9 @@ module.exports = {
     // },
   },
   variants: {
-    extend: {},
+    extend: {
+      borderWidth: ['hover', 'focus'],
+    },
   },
   plugins: [
     function ({ addVariant }) {
