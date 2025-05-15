@@ -1,5 +1,5 @@
 import { ProgressBar } from "../global";
-import { useMemo } from "react";
+import { useMemo, useEffect } from "react";
 
 interface potManagementProps {
   title: string;
@@ -7,6 +7,8 @@ interface potManagementProps {
   target: number;
   targetReachedPercentage: number;
   percentageChange?: number;
+  amountToAdd?: number;
+  amountToWithdraw?: number;
   progressColor: string;
   calculatedProgressColor?: string;
   modalCardHeader?: string;
@@ -18,13 +20,17 @@ const PotManagement: React.FC<potManagementProps> = ({
   target,
   targetReachedPercentage,
   percentageChange,
+  amountToAdd,
+  amountToWithdraw,
   progressColor,
   calculatedProgressColor,
   modalCardHeader,
 }) => {
   const totalPercentage = useMemo(() => {
-    if (percentageChange) {
+    if (amountToAdd && percentageChange) {
       return targetReachedPercentage + percentageChange;
+    } else if (amountToWithdraw && percentageChange) {
+      return targetReachedPercentage - percentageChange;
     }
     return targetReachedPercentage;
   }, [targetReachedPercentage, percentageChange]);
@@ -41,7 +47,11 @@ const PotManagement: React.FC<potManagementProps> = ({
         </div>
       </div>
       <ProgressBar
-        value={targetReachedPercentage}
+        value={
+          amountToAdd
+            ? targetReachedPercentage
+            : targetReachedPercentage - (percentageChange ?? 0)
+        }
         secondValue={percentageChange || 0}
         innerHeight="h-2"
         height="h-2"
@@ -51,7 +61,11 @@ const PotManagement: React.FC<potManagementProps> = ({
       />
       <div className="flex justify-between items-center my-3">
         <div>
-          <h3 className="text-xs font-bold text-ch-grey">
+          <h3
+            className={`text-xs font-bold ${
+              amountToWithdraw && "text-ch-red"
+            } text-ch-grey`}
+          >
             {title === "Savings"
               ? totalPercentage?.toFixed(2) + "%"
               : totalPercentage?.toFixed(1) + "%"}

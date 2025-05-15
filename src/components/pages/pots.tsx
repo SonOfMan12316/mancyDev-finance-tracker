@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
 
 import { Layout } from "../layout";
@@ -41,8 +41,15 @@ const Pots = () => {
       amountToWithdraw: "",
     },
   });
-  const amountToAdd = parseInt(watch("amountToAdd"));
-  const amountToWithdraw = parseInt(watch("amountToWithdraw"));
+  const amountToAdd = useMemo(() => {
+    const watchedValue = watch("amountToAdd");
+    return watchedValue ? parseFloat(watchedValue) || 0 : 0;
+  }, [watch("amountToAdd")]);
+
+  const amountToWithdraw = useMemo(() => {
+    const watchedValue = watch("amountToWithdraw");
+    return watchedValue ? parseFloat(watchedValue) || 0 : 0;
+  }, [watch("amountToWithdraw")]);
 
   useEffect(() => {
     if (openModal?.type === "edit" && selectedPot) {
@@ -114,6 +121,7 @@ const Pots = () => {
           onClose={() => {
             setOpenModal(null);
             setValue("amountToAdd", "");
+            setValue("amountToWithdraw", "");
           }}
           modalHeader={
             openModal?.type === "add"
@@ -211,8 +219,20 @@ const Pots = () => {
                 targetReachedPercentage={
                   (selectedPot.total / selectedPot.target) * 100
                 }
-                percentageChange={(amountToAdd / selectedPot.target) * 100}
-                calculatedProgressColor={selectedPot.theme}
+                amountToAdd={amountToAdd}
+                amountToWithdraw={amountToWithdraw}
+                percentageChange={
+                  amountToAdd
+                    ? amountToAdd
+                      ? (amountToAdd / selectedPot.target) * 100
+                      : 0
+                    : amountToWithdraw
+                      ? (amountToWithdraw / selectedPot.target) * 100
+                      : 0
+                }
+                calculatedProgressColor={
+                  amountToAdd ? selectedPot.theme : "red"
+                }
                 modalCardHeader="New Amount"
               />
               <div className="mt-6 mb-2">
