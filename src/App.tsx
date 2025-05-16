@@ -4,6 +4,8 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
+
 import OverView from "./components/pages/overview";
 import "./App.css";
 import { Transaction } from "./components/pages/transaction";
@@ -13,6 +15,22 @@ import Pots from "./components/pages/pots";
 const App = () => {
   return (
     <Router>
+      <Toaster
+        toastOptions={{
+          error: {
+            style: {
+              background: "#ffcccc",
+              color: "#fe0808",
+            },
+          },
+          success: {
+            style: {
+              background: "#d8ffc5",
+              color: "#1e5b00",
+            },
+          },
+        }}
+      />
       <Routes>
         <Route path="/" element={<Navigate to="/overview" />} />
         <Route path="/overview" element={<OverView />} />
