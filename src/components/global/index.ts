@@ -3,3 +3,7 @@ export { default as SideNav } from "./SideNav";
 export { default as Header } from "./Header";
 export { default as Logo } from "./Logo";
 export { default as ProgressBar } from "./ProgressBar";
+export { default as ConfirmDialog } from "./ConfirmDialog";
+export { default as Modal } from "./Modal";
+export { default as Pagination } from "./Pagination";
+export { default as Popover } from "./Popover";
