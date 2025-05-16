@@ -19,6 +19,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   variant?: "primary";
   onChange?: (...args: any[]) => any;
   extraRef?: React.Ref<HTMLInputElement>;
+  showAmountOfCharacterAllowed?: boolean;
+  amountOfCharactersAllowed?: number;
 }
 
 const Input: React.FC<InputProps> = forwardRef((props, ref) => {
@@ -33,6 +35,8 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
     typeOfInput,
     variant = "primary",
     extraRef,
+    showAmountOfCharacterAllowed = false,
+    amountOfCharactersAllowed = 0,
     ...rest
   } = props;
   const inputRef = useRef<HTMLInputElement>(null);
@@ -90,6 +94,15 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
           {...rest}
         />
       </div>
+      {showAmountOfCharacterAllowed && (
+        <div className="flex justify-end w-full mt-1">
+          <span className="text-ch-grey text-xs font-medium">
+            {amountOfCharactersAllowed +
+              " " +
+              `character${amountOfCharactersAllowed > 1 ? "s" : ""} left`}
+          </span>
+        </div>
+      )}
     </label>
   );
 });
