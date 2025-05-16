@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import { Layout } from "../layout";
 import { addCommasToNumber } from "../../utils/number";
 import { RightIcon, SavingIcon } from "../icons";
@@ -6,6 +8,8 @@ import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
 
 const OverView = () => {
+  const navigate = useNavigate();
+
   const figure = [
     {
       name: "Current Balance",
@@ -118,7 +122,10 @@ const OverView = () => {
                   <div>
                     <h1 className="text-lg font-bold">Pots</h1>
                   </div>
-                  <div className="flex items-center space-x-3">
+                  <div
+                    onClick={() => navigate("/pots")}
+                    className="flex items-center space-x-3 cursor-pointer"
+                  >
                     <h1 className="text-xs text-ch-grey">See details</h1>
                     <RightIcon color="#696868" />
                   </div>
@@ -159,10 +166,11 @@ const OverView = () => {
                   <div>
                     <h1 className="text-lg font-bold">Transactions</h1>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <h1 className="text-sm text-ch-grey capitalize">
-                      view all
-                    </h1>
+                  <div
+                    onClick={() => navigate("/transactions")}
+                    className="flex items-center space-x-3 cursor-pointer"
+                  >
+                    <h1 className="text-xs text-ch-grey">See details</h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -213,10 +221,11 @@ const OverView = () => {
                   <div>
                     <h1 className="text-lg font-bold">Budgets</h1>
                   </div>
-                  <div className="flex items-center space-x-3 lg:space-x-2">
-                    <h1 className="text-sm text-ch-grey capitalize">
-                      see details
-                    </h1>
+                  <div
+                    onClick={() => navigate("/budgets")}
+                    className="flex items-center space-x-3 lg:space-x-2 cursor-pointer"
+                  >
+                    <h1 className="text-xs text-ch-grey">See details</h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -252,10 +261,11 @@ const OverView = () => {
                   <div>
                     <h1 className="text-lg font-bold">Recurring Bills</h1>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <h1 className="text-sm text-ch-grey capitalize">
-                      see details
-                    </h1>
+                  <div
+                    onClick={() => navigate("/recurring-bills")}
+                    className="flex items-center space-x-3 cursor-pointer"
+                  >
+                    <h1 className="text-xs text-ch-grey">See details</h1>
                     <RightIcon />
                   </div>
                 </div>
