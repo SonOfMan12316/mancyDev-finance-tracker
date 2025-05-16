@@ -61,8 +61,8 @@ const Pots = () => {
     if (selectedPot) {
       const maxAmountAllowed = selectedPot.target - selectedPot.total;
       if (newValue > maxAmountAllowed) {
-        toast.error(`Maximum quantity allowed is ${maxAmountAllowed}`, {
-          id: "max-added-quantity-exceed",
+        toast.error(`Maximum amount allowed is ${maxAmountAllowed}`, {
+          id: "max-added-amount-exceed",
         });
         setValue("amountToAdd", maxAmountAllowed.toString());
       } else {
@@ -75,8 +75,8 @@ const Pots = () => {
     if (selectedPot) {
       const maxAmountAllowed = selectedPot.total;
       if (newValue > maxAmountAllowed) {
-        toast.error(`Maximum quantity allowed is ${maxAmountAllowed}`, {
-          id: "max-withdrawn-quantity-exceed",
+        toast.error(`Maximum amount allowed is ${maxAmountAllowed}`, {
+          id: "max-withdrawn-amount-exceed",
         });
         setValue("amountToWithdraw", maxAmountAllowed.toString());
       } else {
