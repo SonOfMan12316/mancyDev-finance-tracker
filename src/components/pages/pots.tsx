@@ -1,5 +1,6 @@
 import { useEffect, useState, useMemo } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 import { Layout } from "../layout";
 import PotCard from "../Pots/potsCard";
@@ -25,6 +26,10 @@ type PotValues = {
 const Pots = () => {
   const { openModal, setOpenModal, selectedPot } = useUIStore();
   const [totalAmount, setTotalAmount] = useState(selectedPot?.total || 0);
+  const amountOfCharactersAllowed = 30;
+  const [characterLeft, setCharacterLeft] = useState<number>(
+    amountOfCharactersAllowed
+  );
 
   const {
     register,
@@ -41,6 +46,7 @@ const Pots = () => {
       amountToWithdraw: "",
     },
   });
+
   const amountToAdd = useMemo(() => {
     const watchedValue = watch("amountToAdd");
     return watchedValue ? parseFloat(watchedValue) || 0 : 0;
@@ -50,6 +56,34 @@ const Pots = () => {
     const watchedValue = watch("amountToWithdraw");
     return watchedValue ? parseFloat(watchedValue) || 0 : 0;
   }, [watch("amountToWithdraw")]);
+
+  const handleAddMoneyOnChange = (newValue: number) => {
+    if (selectedPot) {
+      const maxAmountAllowed = selectedPot.target - selectedPot.total;
+      if (newValue > maxAmountAllowed) {
+        toast.error(`Maximum quantity allowed is ${maxAmountAllowed}`, {
+          id: "max-added-quantity-exceed",
+        });
+        setValue("amountToAdd", maxAmountAllowed.toString());
+      } else {
+        setValue("amountToAdd", newValue.toString().replace(/\D/g, ""));
+      }
+    }
+  };
+
+  const handleWithdrawMoneyOnChange = (newValue: number) => {
+    if (selectedPot) {
+      const maxAmountAllowed = selectedPot.total;
+      if (newValue > maxAmountAllowed) {
+        toast.error(`Maximum quantity allowed is ${maxAmountAllowed}`, {
+          id: "max-withdrawn-quantity-exceed",
+        });
+        setValue("amountToWithdraw", maxAmountAllowed.toString());
+      } else {
+        setValue("amountToWithdraw", newValue.toString().replace(/\D/g, ""));
+      }
+    }
+  };
 
   useEffect(() => {
     if (openModal?.type === "edit" && selectedPot) {
@@ -147,6 +181,21 @@ const Pots = () => {
                     {...register("potName", {
                       required: "Pot Name is required",
                     })}
+                    onChange={(e) => {
+                      let value = e.target.value;
+                      if (value.length > amountOfCharactersAllowed) {
+                        value = value.slice(0, amountOfCharactersAllowed);
+                      }
+                      setValue("potName", value);
+                      setCharacterLeft(
+                        amountOfCharactersAllowed - value.length
+                      );
+                      if (value.length === amountOfCharactersAllowed) {
+                        setCharacterLeft(0);
+                      }
+                    }}
+                    showAmountOfCharacterAllowed={true}
+                    amountOfCharactersAllowed={characterLeft}
                   />
                   {errors.potName && (
                     <span role="alert" className="text-xs text-ch-red">
@@ -166,13 +215,6 @@ const Pots = () => {
                       required: "Target amount is required",
                       min: { value: 1, message: "Amount must be positive" },
                     })}
-                    onChange={(e) => {
-                      const rawValue = e.target.value.replace(/\D/g, "");
-                      setValue("amountTarget", rawValue, {
-                        shouldValidate: true,
-                      });
-                      e.target.value = rawValue;
-                    }}
                   />
                   {errors.amountTarget && (
                     <span role="alert" className="text-xs text-ch-red">
@@ -237,41 +279,31 @@ const Pots = () => {
               />
               <div className="mt-6 mb-2">
                 {openModal?.type === "addMoney" ? (
-                  <>
-                    <Input
-                      typeOfInput="modal"
-                      variant="primary"
-                      label="Amount To Add"
-                      icon={<DollarSign />}
-                      placeholder="400"
-                      {...register("amountToAdd", {
-                        required: "Amount to add is required",
-                      })}
-                    />
-                    {errors?.amountToAdd && (
-                      <span role="alert" className="text-xs text-ch-red">
-                        {errors.amountToAdd?.message}
-                      </span>
-                    )}
-                  </>
+                  <Input
+                    typeOfInput="modal"
+                    variant="primary"
+                    label="Amount To Add"
+                    icon={<DollarSign />}
+                    placeholder="400"
+                    {...register("amountToAdd", {
+                      required: "Amount to add is required",
+                    })}
+                    onChange={(e) => handleAddMoneyOnChange(e.target.value)}
+                  />
                 ) : (
-                  <>
-                    <Input
-                      typeOfInput="modal"
-                      variant="primary"
-                      label="Amount To Withdraw"
-                      icon={<DollarSign />}
-                      placeholder="400"
-                      {...register("amountToWithdraw", {
-                        required: "Amount to withdraw is required",
-                      })}
-                    />
-                    {errors?.amountToWithdraw && (
-                      <span role="alert" className="text-xs text-ch-red">
-                        {errors.amountToWithdraw?.message}
-                      </span>
-                    )}
-                  </>
+                  <Input
+                    typeOfInput="modal"
+                    variant="primary"
+                    label="Amount To Withdraw"
+                    icon={<DollarSign />}
+                    placeholder="400"
+                    {...register("amountToWithdraw", {
+                      required: "Amount to withdraw is required",
+                    })}
+                    onChange={(e) =>
+                      handleWithdrawMoneyOnChange(e.target.value)
+                    }
+                  />
                 )}
               </div>
               <Button
