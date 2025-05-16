@@ -59,7 +59,7 @@ const SideNav = () => {
       icon: <Bill />,
       label: "recurring bills",
       action: () => {
-        navigate("/recurring-bill");
+        navigate("/recurring-bills");
       },
     },
   ];

@@ -46,16 +46,16 @@ const BottomNav = () => {
     },
     {
       icon: <Saving />,
-      label: "saving",
+      label: "pots",
       action: () => {
-        navigate("/saving");
+        navigate("/pots");
       },
     },
     {
       icon: <Bill />,
       label: "recurring bills",
       action: () => {
-        navigate("/recurring-bill");
+        navigate("/recurring-bills");
       },
     },
   ];
