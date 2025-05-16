@@ -1,6 +1,6 @@
 interface ProgressBarProps {
   value: number;
-  secondValue: number;
+  secondValue?: number;
   height?: string;
   innerHeight: string;
   backgroundColor?: string;
@@ -28,7 +28,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       {calculatedProgressColor && (
         <div
           className={`bg-ch-${calculatedProgressColor} ${innerHeight} rounded-r transition-all duration-300`}
-          style={{ width: `${Math.min(Math.max(secondValue, 0), 100)}%` }}
+          style={{ width: `${Math.min(Math.max(secondValue || 0, 0), 100)}%` }}
         ></div>
       )}
     </div>
