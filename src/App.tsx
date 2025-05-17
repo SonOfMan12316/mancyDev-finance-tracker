@@ -11,6 +11,7 @@ import "./App.css";
 import { Transaction } from "./components/pages/transaction";
 import Budget from "./components/pages/budget";
 import Pots from "./components/pages/pots";
+import RecurringBill from "./components/pages/recurring-bill";
 
 const App = () => {
   return (
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/transactions" element={<Transaction />} />
         <Route path="/budgets" element={<Budget />} />
         <Route path="pots" element={<Pots />} />
+        <Route path="recurring-bills" element={<RecurringBill />} />
       </Routes>
     </Router>
   );
