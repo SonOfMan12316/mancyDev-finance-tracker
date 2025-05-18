@@ -1,6 +1,16 @@
+import { useState } from "react";
+
+import { Search, DropdownIcon, Download } from "../icons";
 import { Layout } from "../layout";
+import Input from "../ui/Input/Input";
+import Select from "../ui/Dropdown/Select";
+import { OptionsInterface } from "../../types/global";
+import { SortOptions } from "../../lib/getSelectOptions";
+import bills from "../../data/bills";
 
 const RecurringBill = () => {
+  const [selectedCategoryOption, setSelectedCategoryOption] =
+    useState<OptionsInterface<string> | null>(null);
   const summaryData = [
     {
       header: "Paid Bills",
@@ -15,45 +25,113 @@ const RecurringBill = () => {
       amount: "2($40.00)",
     },
   ];
+
   return (
     <Layout title="recurring bills">
       <div className="px-4 lg:px-6">
-        <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6">
-          <div className="w-full bg-black flex items-center space-x-4 px-5 h-28 md:h-52 rounded-lg">
-            <LightBillIcon />
-            <div className="flex flex-col space-y-2">
-              <h1 className="text-white text-sm font-normal">Total bills</h1>
-              <h2 className="text-white font-bold text-3xl">$384.98</h2>
+        <div>
+          <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6">
+            <div className="w-full bg-black flex items-center space-x-4 px-5 h-28 md:h-52 rounded-lg">
+              <LightBillIcon />
+              <div className="flex flex-col space-y-2">
+                <h1 className="text-white text-sm font-normal">Total bills</h1>
+                <h2 className="text-white font-bold text-3xl">$384.98</h2>
+              </div>
+            </div>
+            <div className="w-full bg-white rounded-lg mt-3 md:mt-0 p-5">
+              <h1 className="font-bold text-base">Summary</h1>
+              {summaryData.map((summary, index) => (
+                <div
+                  className={`${
+                    index !== 2
+                      ? " border-b border-ch-grey/0.15 pb-3.5"
+                      : "py-0.5"
+                  } mt-4 flex justify-between items-center`}
+                  key={index}
+                >
+                  <div
+                    className={`${
+                      index === 2 ? "text-ch-red" : "text-ch-grey"
+                    } font-normal text-sm`}
+                  >
+                    {summary.header}
+                  </div>
+                  <div
+                    className={`${
+                      index === 2 ? "text-ch-red" : "text-ch-dark-grey"
+                    } font-bold text-xs`}
+                  >
+                    {summary.amount}
+                  </div>
+                  {/* <div className></div> */}
+                </div>
+              ))}
             </div>
           </div>
-          <div className="w-full bg-white rounded-lg mt-3 md:mt-0 p-5">
-            <h1 className="font-bold text-base">Summary</h1>
-            {summaryData.map((summary, index) => (
-              <div
-                className={`${
-                  index !== 2
-                    ? " border-b border-ch-grey/0.15 pb-3.5"
-                    : "py-0.5"
-                } mt-4 flex justify-between items-center`}
-                key={index}
-              >
-                <div
-                  className={`${
-                    index === 2 ? "text-ch-red" : "text-ch-grey"
-                  } font-normal text-sm`}
-                >
-                  {summary.header}
-                </div>
-                <div
-                  className={`${
-                    index === 2 ? "text-ch-red" : "text-ch-dark-grey"
-                  } font-bold text-xs`}
-                >
-                  {summary.amount}
-                </div>
-                {/* <div className></div> */}
+          <div className="bg-white rounded-lg mt-5 p-5">
+            <div className="flex justify-between items-center w-full gap-4">
+              <div className="flex-1">
+                <Input
+                  typeOfInput="normal"
+                  placeholder="Search bills"
+                  placement="end"
+                  icon={<Search />}
+                  className="w-full sm:w-7/12 md:w-10/12 xl:w-8/12"
+                />
               </div>
-            ))}
+              <div className="flex-[0.5] flex justify-end gap-2 md:hidden">
+                <Download />
+              </div>
+              <div className="hidden md:flex flex-[1.2] items-center justify-between md:gap-x-6">
+                <div className="flex items-center gap-2">
+                  <span className="text-ch-grey text-sm font-medium">
+                    Sort by
+                  </span>
+                  <Select
+                    options={SortOptions}
+                    onSelect={setSelectedCategoryOption}
+                    selectedOption={selectedCategoryOption}
+                    placeholder="Latest"
+                    icon={<DropdownIcon />}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="mt-2">
+              {bills.map((bill, index) => (
+                <div
+                  key={index}
+                  className={`${
+                    index !== 2
+                      ? " border-b border-ch-grey/0.15 py-3.5"
+                      : "py-0.5"
+                  } flex flex-col`}
+                >
+                  <div className="flex space-x-2 pb-1.5">
+                    <div className="flex items-center space-x-2">
+                      <img className="w-8 h-8 rounded-full" src={bill.avatar} />
+                      <div>
+                        <h1 className="font-bold text-sm whitespace-nowrap">
+                          {bill.header}
+                        </h1>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-2">
+                      <h2 className="font-normal text-xs text-ch-green">
+                        {bill.Duration}{" "}
+                      </h2>
+                      {/* <{bill.icon} /> */}
+                    </div>
+                    <div>
+                      <h2 className="text-sm font-bold">{bill.amount}</h2>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
