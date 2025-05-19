@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { shallow } from "zustand/shallow";
 import classnames from "classnames";
@@ -15,11 +15,18 @@ const BottomNav = () => {
   const navigate = useNavigate();
 
   const [activeNavItem, setActiveNavItem] = useState<string>(
-    location.pathname.split("/")?.filter((part) => part !== "")[0]
+    location.pathname
+      .split("/")
+      ?.filter((part) => part !== "")[0]
+      .replace("-", " ")
   );
 
+  useEffect(() => {
+    console.log(activeNavItem);
+  }, [activeNavItem]);
+
   const handleNavClick = (label: string) => {
-    setActiveNavItem(label);
+    setActiveNavItem(label.replace("-", " "));
   };
 
   const NavItem: Array<NavItem> = [

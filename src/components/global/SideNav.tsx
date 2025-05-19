@@ -65,7 +65,10 @@ const SideNav = () => {
   ];
 
   const [activeNavItem, setActiveNavItem] = useState<string>(
-    location.pathname.split("/")?.filter((part) => part !== "")[0]
+    location.pathname
+      .split("/")
+      ?.filter((part) => part !== "")[0]
+      .replace("-", " ")
   );
 
   const handleNavClick = (label: string) => {
