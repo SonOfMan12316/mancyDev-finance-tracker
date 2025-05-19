@@ -25,3 +25,10 @@ export interface potInterface {
   total: number;
   theme: string;
 }
+
+export interface recurringbillInterface {
+  avatar: string;
+  header: string;
+  amount: number;
+  Duration: string;
+}
