@@ -3,7 +3,7 @@ import { OptionsInterface } from "../../../types/global";
 import { useClickOutside } from "../../../hooks/useClickOutside";
 import { Button } from "../Button/Button";
 import "./Select.css";
-import { Checkmark } from "../../icons";
+import { Checkmark, Download, Filter } from "../../icons";
 
 type DropdownProps<T> = {
   label?: string;
@@ -17,6 +17,7 @@ type DropdownProps<T> = {
   includePlaceholderOption?: boolean;
   isModal?: boolean;
   themeColor?: string;
+  showSecondSelect?: boolean;
 };
 
 const Dropdown = <T extends string | number>({
@@ -31,6 +32,7 @@ const Dropdown = <T extends string | number>({
   label,
   isModal = false,
   themeColor,
+  showSecondSelect = false,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -61,33 +63,43 @@ const Dropdown = <T extends string | number>({
           {label}
         </label>
       )}
-      <Button
-        variant="action"
-        size="lg"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        className={`flex items-center ${isModal ? "justify-between" : ""}`}
-      >
-        <span className="truncate flex items-center font-normal">
-          {themeColor && (
-            <div
-              className={`h-4 w-4 rounded-full bg-ch-${
-                selectedOption?.value ? selectedOption?.value : ""
-              } `}
-            ></div>
-          )}{" "}
-          <span className={themeColor ? "pl-2" : ""}>
-            {selectedOption?.label || placeholder}
-          </span>
-        </span>
+      <div>
+        <div onClick={() => setIsOpen(!isOpen)}>
+          <Button
+            variant="action"
+            size="lg"
+            aria-haspopup="listbox"
+            aria-expanded={isOpen}
+            className={`flex items-center ${
+              isModal ? "justify-between" : ""
+            } hidden md:flex`}
+          >
+            <span className="truncate flex items-center font-normal">
+              {themeColor && (
+                <div
+                  className={`h-4 w-4 rounded-full bg-ch-${
+                    selectedOption?.value ? selectedOption?.value : ""
+                  } `}
+                ></div>
+              )}{" "}
+              <span className={themeColor ? "pl-2" : ""}>
+                {selectedOption?.label || placeholder}
+              </span>
+            </span>
 
-        {icon && <span className="ml-4">{icon}</span>}
-      </Button>
+            {icon && <span className="ml-4">{icon}</span>}
+          </Button>
+        </div>
+        <div className="block md:hidden" onClick={() => setIsOpen(!isOpen)}>
+          {showSecondSelect ? <Filter /> : <Download />}
+        </div>
+      </div>
 
       {isOpen && (
         <ul
-          className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md border bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          className={`absolute right-0 z-10 mt-1.5 max-h-60 ${
+            showSecondSelect ? "min-w-11.063" : "min-w-7.125"
+          }  w-full overflow-auto rounded-md border bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
           role="listbox"
         >
           {allOptions.map((option, index) => (
@@ -130,7 +142,7 @@ const DropdownItem = <T extends string | number>({
 }) => (
   <li
     className={`relative cursor-pointer select-none py-3 mx-4 text-sm flex items-center justify-between ${
-      isLast ? "" : "border-b border-ch-light-grey"
+      isLast ? "" : "border-b border-ch-grey/0.15"
     } ${
       isPlaceholder ? "text-black font-semibold" : "hover:bg-gray-100"
     } ${className}`}
