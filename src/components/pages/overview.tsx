@@ -208,7 +208,7 @@ const OverView = () => {
                     </div>
                     {index !== 4 && (
                       <div className="absolute left-0 w-full bottom-0">
-                        <div className=" border-b border-ch-light-grey" />
+                        <div className=" border-b border-ch-grey/0.15" />
                       </div>
                     )}
                   </div>

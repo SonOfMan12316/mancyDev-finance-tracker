@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Search, DropdownIcon, Download, LightCheckmark } from "../icons";
+import { Search, DropdownIcon, LightCheckmark } from "../icons";
 import { Layout } from "../layout";
 import Input from "../ui/Input/Input";
 import Select from "../ui/Dropdown/Select";
@@ -34,10 +34,10 @@ const RecurringBill = () => {
 
   return (
     <Layout title="recurring bills">
-      <div className="px-4 md:px-8">
+      <div className="px-4 md:px-10">
         <div>
           <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6">
-            <div className="w-full bg-black flex md:flex-col items-center md:items-start space-x-4 md:space-x-0 px-5 pt-8 h-28 md:h-48 rounded-lg">
+            <div className="w-full bg-black flex md:flex-col items-center md:items-start space-x-4 md:space-x-0 p-5 md:pt-8 h-28 md:h-48 rounded-lg">
               <LightBillIcon />
               <div className="flex flex-col space-y-2 md:pt-8">
                 <h1 className="text-white text-sm font-normal">Total bills</h1>
@@ -84,12 +84,9 @@ const RecurringBill = () => {
                   className="w-full sm:w-7/12 xl:w-8/12"
                 />
               </div>
-              <div className="flex-[0.5] flex justify-end gap-2 md:hidden">
-                <Download />
-              </div>
-              <div className="hidden md:flex flex-[1.2] items-center justify-between ">
+              <div className="flex flex-[1.2] items-center justify-between ">
                 <div className="flex items-center gap-2">
-                  <span className="text-ch-grey text-sm font-medium whitespace-nowrap">
+                  <span className="text-ch-grey text-sm font-medium whitespace-nowrap hidden md:block">
                     Sort by
                   </span>
                   <Select
@@ -120,7 +117,7 @@ const RecurringBillTable: React.FC<RecurringBillInterface> = ({ bills }) => {
           {column.map((i, index) => {
             return (
               <th
-                className="text-left capitalize text-ch-grey text-sm font-normal font-publicSans border-b border-ch-light-grey pb-2"
+                className="text-left capitalize text-ch-grey text-sm font-normal font-publicSans border-b border-ch-grey/0.15 pb-2"
                 key={index}
               >
                 {i}
@@ -133,7 +130,7 @@ const RecurringBillTable: React.FC<RecurringBillInterface> = ({ bills }) => {
         {bills.map((bill, index) => (
           <tr
             className={`${
-              index < bills.length - 1 ? "border-b border-ch-light-grey" : ""
+              index < bills.length - 1 ? "border-b border-ch-grey/0.15" : ""
             }`}
             key={index}
           >
@@ -168,7 +165,7 @@ const RecurringBillTable: React.FC<RecurringBillInterface> = ({ bills }) => {
                 {"$" + bill.amount.toFixed(2)}
               </span>
             </td>
-            <td className="border-b-1.5 border-ch-light-grey"></td>
+            <td className="border-b border-ch-grey/0.15"></td>
           </tr>
         ))}
       </tbody>

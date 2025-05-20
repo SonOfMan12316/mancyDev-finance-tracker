@@ -21,7 +21,7 @@ const BudgetSpendingSummaryCard: React.FC<BudgetSpendingSummaryCardProp> = ({
               <div
                 key={index}
                 className={`flex justify-between my-2 ${
-                  index !== 3 ? "border-b border-ch-light-grey" : ""
+                  index !== 3 ? "border-b border-ch-grey/0.15" : ""
                 }  py-2 md:py-3`}
               >
                 <div className="flex items-center gap-2">

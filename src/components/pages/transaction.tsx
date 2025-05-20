@@ -43,13 +43,9 @@ export const Transaction = () => {
                   className="w-full sm:w-7/12 md:w-10/12 xl:w-8/12"
                 />
               </div>
-              <div className="flex-[0.5] flex justify-end gap-2 md:hidden">
-                <Download />
-                <Filter />
-              </div>
-              <div className="hidden md:flex flex-[1.2] items-center justify-between md:gap-x-6">
+              <div className="flex flex-[1.2] items-center justify-between md:gap-x-6">
                 <div className="flex items-center gap-2">
-                  <span className="text-ch-grey text-sm font-medium whitespace-nowrap">
+                  <span className="text-ch-grey text-sm font-medium whitespace-nowrap hidden md:block">
                     Sort by
                   </span>
                   <Select
@@ -58,11 +54,11 @@ export const Transaction = () => {
                     onSelect={setSelectedSortOption}
                     placeholder="Latest"
                     icon={<DropdownIcon />}
-                    className="md:w-full"
+                    className="w-full"
                   />
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-ch-grey text-sm font-medium">
+                  <span className="text-ch-grey text-sm font-medium hidden md:block">
                     Category
                   </span>
                   <Select
@@ -71,6 +67,7 @@ export const Transaction = () => {
                     selectedOption={selectedCategoryOption}
                     placeholder="All transactions"
                     icon={<DropdownIcon />}
+                    showSecondSelect={true}
                     className="w-full"
                   />
                 </div>
@@ -99,7 +96,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
           {column.map((i, index) => {
             return (
               <th
-                className="text-left text-ch-grey text-sm font-normal font-publicSans border-b border-ch-light-grey pb-2"
+                className="text-left text-ch-grey text-sm font-normal font-publicSans border-b border-ch-grey/0.15 pb-2"
                 key={index}
               >
                 {i}
@@ -113,7 +110,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
           <tr
             className={`${
               index !== transaction.length - 1
-                ? "border-b border-ch-light-grey"
+                ? "border-b border-ch-grey/0.15"
                 : ""
             }`}
             key={index}
@@ -154,7 +151,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({ transaction }) => {
                     })}
               </h1>
             </td>
-            <td className="border-b-1.5 border-ch-light-grey"></td>
+            <td className="border-b-1.5 border-ch-grey/0.15"></td>
           </tr>
         ))}
       </tbody>

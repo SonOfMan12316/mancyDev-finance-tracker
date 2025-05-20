@@ -33,7 +33,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({
             onClick={() => {
               onEdit();
             }}
-            className="border-b border-ch-light-grey text-sm font-normal text-black cursor-pointer pb-2.5"
+            className="border-b border-ch-grey/0.15 text-sm font-normal text-black cursor-pointer pb-2.5"
           >
             {type === "budget"
               ? "Edit Budget"
