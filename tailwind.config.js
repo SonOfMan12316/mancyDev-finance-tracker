@@ -31,7 +31,9 @@ module.exports = {
       },
       minWidth: {
         '14': '14rem',
-        '5.5': '5.5rem'
+        '5.5': '5.5rem',
+        '7.125': '7.125rem',
+        '11.063': '11.063rem'
       },
       maxWidth: {
         'xl': '35rem',
