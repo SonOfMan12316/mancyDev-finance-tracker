@@ -216,7 +216,7 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="w-full mt-4 md:mt-8">
+    <div className="w-full mt-8 mb-1">
       <div className="flex items-center justify-between gap-x-2">
         <div className="">
           <Button

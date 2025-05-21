@@ -90,8 +90,19 @@ const Dropdown = <T extends string | number>({
             {icon && <span className="ml-4">{icon}</span>}
           </Button>
         </div>
-        <div className="block md:hidden" onClick={() => setIsOpen(!isOpen)}>
-          {showSecondSelect ? <Filter /> : <Download />}
+        <div
+          className="flex justify-between md:hidden"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          {showSecondSelect ? (
+            <div>
+              <Filter />
+            </div>
+          ) : (
+            <div>
+              <Download />
+            </div>
+          )}
         </div>
       </div>
 

@@ -89,8 +89,8 @@ const OverView = () => {
   return (
     <div className="">
       <Layout title="overview">
-        <div className="px-4 lg:px-6">
-          <div className="md:flex lg:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
+        <div className="px-4 md:px-8">
+          <div className="md:flex md:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
             {figure.map((item, index) => (
               <div
                 key={index}
@@ -99,7 +99,7 @@ const OverView = () => {
                 }`}
               >
                 <h1
-                  className={`font-light text-xs md:text-sm ${
+                  className={`font-normal text-xs md:text-sm ${
                     index === 0 ? "text-white" : "text-black"
                   }`}
                 >
@@ -120,13 +120,13 @@ const OverView = () => {
               <div className="bg-white my-8 px-4 md:px-8 lg:px-6 py-5 md:py-3 lg:my-0 lg:py-6 rounded-xl lg:w-full">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h1 className="text-lg font-bold">Pots</h1>
+                    <h1 className="text-xl font-bold">Pots</h1>
                   </div>
                   <div
                     onClick={() => navigate("/pots")}
                     className="flex items-center space-x-3 cursor-pointer"
                   >
-                    <h1 className="text-xs text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey">See details</h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -162,15 +162,15 @@ const OverView = () => {
                 </div>
               </div>
               <div className="bg-white my-8 px-4 lg:px-6 md:px-8 pt-6 lg:my-0 relative rounded-xl overflow-hidden">
-                <div className="flex justify-between">
+                <div className="flex justify-between items-center">
                   <div>
-                    <h1 className="text-lg font-bold">Transactions</h1>
+                    <h1 className="text-xl font-bold">Transactions</h1>
                   </div>
                   <div
                     onClick={() => navigate("/transactions")}
                     className="flex items-center space-x-3 cursor-pointer"
                   >
-                    <h1 className="text-xs text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey">See details</h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -219,13 +219,13 @@ const OverView = () => {
               <div className="bg-white my-8 px-4 md:px-8 lg:px-6 pt-6 pb-4 lg:my-0 rounded-xl">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h1 className="text-lg font-bold">Budgets</h1>
+                    <h1 className="text-xl font-bold">Budgets</h1>
                   </div>
                   <div
                     onClick={() => navigate("/budgets")}
                     className="flex items-center space-x-3 lg:space-x-2 cursor-pointer"
                   >
-                    <h1 className="text-xs text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey">See details</h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -259,13 +259,13 @@ const OverView = () => {
               <div className="bg-white mt-8 mb-4 px-4 md:px-8 lg:px-6 py-5 lg:my-0 rounded-xl">
                 <div className="flex justify-between items-center">
                   <div>
-                    <h1 className="text-lg font-bold">Recurring Bills</h1>
+                    <h1 className="text-xl font-bold">Recurring Bills</h1>
                   </div>
                   <div
                     onClick={() => navigate("/recurring-bills")}
                     className="flex items-center space-x-3 cursor-pointer"
                   >
-                    <h1 className="text-xs text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey">See details</h1>
                     <RightIcon />
                   </div>
                 </div>
@@ -281,7 +281,7 @@ const OverView = () => {
                           <span className="text-ch-grey font-normal text-sm">
                             {bill.name}
                           </span>
-                          <span className="font-bold">
+                          <span className="font-bold text-sm">
                             {" "}
                             {"$" + bill.amount.toFixed(2)}
                           </span>

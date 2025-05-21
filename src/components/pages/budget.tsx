@@ -71,7 +71,7 @@ const Budget = () => {
       buttonTitle="+ Add New Budget"
       onClick={() => setOpenModal({ type: "add" })}
     >
-      <div className="p-4  lg:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-4">
+      <div className="p-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-4">
         <BudgetSpendingSummaryCard budgets={budgets} />
         <>
           {budgets.map(({ category, maximum, amount_spent, theme }) => (

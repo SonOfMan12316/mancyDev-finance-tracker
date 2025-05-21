@@ -121,7 +121,7 @@ const Pots = () => {
       buttonTitle="+ Add New Pots"
       onClick={() => setOpenModal({ type: "add" })}
     >
-      <div className="px-4 lg:px-6 flex flex-col lg:grid lg:grid-cols-2 gap-2 lg:gap-4">
+      <div className="px-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-2 lg:gap-4">
         <>
           {pots.map(({ name, target, total, theme }) => (
             <PotCard

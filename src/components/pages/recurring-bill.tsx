@@ -34,7 +34,7 @@ const RecurringBill = () => {
 
   return (
     <Layout title="recurring bills">
-      <div className="px-4 md:px-10">
+      <div className="px-4 md:px-8">
         <div>
           <div className="w-full flex flex-col md:flex-row md:items-center md:space-x-6">
             <div className="w-full bg-black flex md:flex-col items-center md:items-start space-x-4 md:space-x-0 p-5 md:pt-8 h-28 md:h-48 rounded-lg">
