@@ -119,12 +119,12 @@ const SideNav = () => {
           <ul className="w-full flex flex-col space-y-3 pb-10 relative font-publicSans">
             {navItem?.map((i: NavItem, index: number) => {
               return (
-                <li className="capitalize" key={index}>
+                <li className="capitalize " key={index}>
                   <div
                     className={classnames(
                       "py-3 pl-5 flex cursor-pointer transition-all duration-300 ease-in-out",
                       {
-                        "inset-0 bg-ch-beige text-black h-12 w-12 lg:w-11/12 rounded-r-xl border-ch-green border-l-4 transform":
+                        "inset-0 bg-ch-beige text-black h-12 w-12 lg:w-11/12 rounded-r-lg border-ch-green border-l-4 transform":
                           activeNavItem === i?.label,
                       }
                     )}
@@ -134,9 +134,9 @@ const SideNav = () => {
                     }}
                   >
                     <div className="flex items-center relative z-10 overflow-hidden ml-3">
-                      <div
+                      <span
                         className={classnames(
-                          "w-5 flex items-center justify-center",
+                          "w-5 flex items-center hover:text-white justify-center",
                           {
                             "text-ch-green": activeNavItem === i?.label,
                             "text-ch-lighter-grey": activeNavItem !== i?.label,
@@ -144,10 +144,10 @@ const SideNav = () => {
                         )}
                       >
                         {i?.icon && <>{i?.icon}</>}
-                      </div>
+                      </span>
                       <span
                         className={classnames(
-                          "text-sm font-bold tracking-[-0.04em] pt-1 pl-4 transform origin-left transition-all duration-500 ease-in-out overflow-hidden whitespace-nowrap",
+                          "text-sm font-publicSans font-bold hover:text-white tracking-[-0.04em] pt-1 pl-4 transform origin-left transition-all duration-500 ease-in-out overflow-hidden whitespace-nowrap",
                           {
                             "scale-x-0 opacity-0 w-0": !sidenavState,
                             "scale-x-100 opacity-100": sidenavState,
@@ -172,7 +172,7 @@ const SideNav = () => {
           >
             <span
               className={classnames(
-                "flex space-x-2 transition-all duration-300 ease-in-out ",
+                "flex space-x-2 transition-all text-ch-lighter-grey hover:text-white duration-300 ease-in-out ",
                 {
                   "opacity-0 w-0": !sidenavState,
                   "opacity-100 w-auto": sidenavState,
@@ -180,15 +180,18 @@ const SideNav = () => {
               )}
             >
               <ArrowLeft />
-              <span className="text-ch-lighter-grey text-sm font-publicSans pt-1  whitespace-nowrap">
+              <span className="text-ch-lighter-grey text-sm font-publicSans pt-1 hover:text-white whitespace-nowrap">
                 Minimize Menu
               </span>
             </span>
             <span
-              className={classnames("transition-all duration-300 ease-in-out", {
-                "opacity-0 w-0": sidenavState,
-                "opacity-100": !sidenavState,
-              })}
+              className={classnames(
+                "transition-all duration-300 hover:text-white ease-in-out",
+                {
+                  "opacity-0 w-0": sidenavState,
+                  "opacity-100": !sidenavState,
+                }
+              )}
             >
               <ArrowRight />
             </span>

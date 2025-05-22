@@ -57,7 +57,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
       )}
       <div
         className={classnames("w-full h-fit relative rounded-md", {
-          "bg-white border border-ch-lighter-beige focus-within:ring-ch-tertiary/30 focus-within:ring-2":
+          "bg-white border border-ch-lighter-beige focus-within:ring-ch-ligher-beige/30 focus-within:ring-ch-beige":
             variant === "primary",
         })}
       >
@@ -76,7 +76,7 @@ const Input: React.FC<InputProps> = forwardRef((props, ref) => {
           className={classnames(
             `w-full h-11 ${
               typeOfInput === "normal" ? "pl-5 pr-9" : "pl-10 pr-2"
-            } flex items-center text-black border text-sm focus:outline-none outline-none placeholder:text-sm rounded-md truncate`,
+            } flex items-center text-black border text-sm focus:outline-none hover:border-black cursor-pointer outline-none placeholder:text-sm rounded-md truncate`,
             {
               "!pl-12": icon && placement === "start",
               "!pr-12": icon && placement === "end",

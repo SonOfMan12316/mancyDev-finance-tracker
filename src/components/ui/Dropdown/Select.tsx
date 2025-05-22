@@ -110,7 +110,7 @@ const Dropdown = <T extends string | number>({
         <ul
           className={`absolute right-0 z-10 mt-1.5 max-h-60 ${
             showSecondSelect ? "min-w-11.063" : "min-w-7.125"
-          }  w-full overflow-auto rounded-md border bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
+          }  w-full overflow-auto rounded-md border  bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
           role="listbox"
         >
           {allOptions.map((option, index) => (

@@ -126,7 +126,9 @@ const OverView = () => {
                     onClick={() => navigate("/pots")}
                     className="flex items-center space-x-3 cursor-pointer"
                   >
-                    <h1 className="text-sm text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey hover:text-black">
+                      See details
+                    </h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -170,7 +172,9 @@ const OverView = () => {
                     onClick={() => navigate("/transactions")}
                     className="flex items-center space-x-3 cursor-pointer"
                   >
-                    <h1 className="text-sm text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey hover:text-black">
+                      See details
+                    </h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -225,7 +229,9 @@ const OverView = () => {
                     onClick={() => navigate("/budgets")}
                     className="flex items-center space-x-3 lg:space-x-2 cursor-pointer"
                   >
-                    <h1 className="text-sm text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey hover:text-black">
+                      See details
+                    </h1>
                     <RightIcon color="#696868" />
                   </div>
                 </div>
@@ -265,7 +271,9 @@ const OverView = () => {
                     onClick={() => navigate("/recurring-bills")}
                     className="flex items-center space-x-3 cursor-pointer"
                   >
-                    <h1 className="text-sm text-ch-grey">See details</h1>
+                    <h1 className="text-sm text-ch-grey hover:text-black">
+                      See details
+                    </h1>
                     <RightIcon />
                   </div>
                 </div>

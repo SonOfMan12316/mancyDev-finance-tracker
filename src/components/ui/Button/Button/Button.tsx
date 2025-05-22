@@ -54,14 +54,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variantClasses = {
       primary:
-        "bg-black text-white hover:bg-black/50 focus:opacity-80 active:-translate-y-0.5 h-12",
+        "bg-black text-white hover:bg-ch-grey focus:opacity-80 active:-translate-y-0.5 h-12",
       secondary:
         "bg-ch-beige text-black hover:bg-white hover:border-ch-grey hover:border active:-translate-y-0.5 h-12",
       tertiary:
         "text-ch-grey hover:text-black border-none !w-auto h-14 bg-transparent border-none shadow-none outline-none py-0 px-0",
-      action: "border border-ch-lighter-beige shadow-sm h-11 px-1",
+      action:
+        "border border-ch-lighter-beige hover:border-black shadow-sm h-11 px-1 ",
       pagination:
-        "flex items-center justify-center border border-ch-lighter-beige hover:bg-black hover:text-white shadow-sm h-10 px-1 w-10",
+        "flex items-center justify-center border border-ch-lighter-beige hover:bg-ch-lighter-beige hover:text-white shadow-sm h-10 px-1 w-10",
       destroy:
         "bg-ch-red text-white hover:opacity-90 focus:opacity-80 active:-translate-y-0.5 h-14",
     };
