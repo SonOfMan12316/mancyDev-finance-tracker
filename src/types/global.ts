@@ -5,6 +5,7 @@ export interface OptionsInterface<T> {
 
 export interface transactionInterface {
   avatar: string;
+  id?: string;
   name: string;
   category: string;
   date: string;

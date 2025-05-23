@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { db } from "../../firebase";
+import { collection, getDocs } from "firebase/firestore";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+
 import { Search, DropdownIcon } from "../icons";
 import { Layout } from "../layout";
 import Input from "../ui/Input/Input";
 import Select from "../ui/Dropdown/Select";
 import { CategoryOptions, SortOptions } from "../../lib/getSelectOptions";
 import { OptionsInterface, transactionInterface } from "../../types/global";
-import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";
@@ -23,10 +26,33 @@ export const Transaction = () => {
     useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
   const [pageSize, setPageSize] = useState<number>(PAGE.SIZE);
+  const [transactions, setTransactions] = useState<transactionInterface[]>([]);
 
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
   const currentItems = transactions.slice(indexOfFirstItem, indexOfLastItem);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const transactionCollectionRef = collection(db, "transactions");
+
+  const getTransactions = async () => {
+    try {
+      setIsLoading(true);
+      const data = await getDocs(transactionCollectionRef);
+      const filteredData = data.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id,
+      })) as transactionInterface[];
+      setTransactions(filteredData);
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getTransactions();
+  }, []);
 
   return (
     <div className="w-screen">
@@ -73,14 +99,30 @@ export const Transaction = () => {
                 </div>
               </div>
             </div>
-            <TransactionTable transaction={currentItems} />
-            <TransactionCard transaction={currentItems} />
-            <Pagination
-              currentPage={pageNumber}
-              pageSize={pageSize}
-              totalItems={transactions.length}
-              onPageChange={setPageNumber}
-            />
+            {isLoading ? (
+              <div className="absolute w-full top-0 left-0 right-0 bottom-0 flex justify-center items-center z-50">
+                <div className="h-1/4 w-1/4">
+                  <DotLottieReact
+                    src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
+                    loop
+                    autoplay
+                  />
+                </div>
+              </div>
+            ) : (
+              <>
+                <TransactionTable transaction={currentItems} />
+                <TransactionCard transaction={currentItems} />
+              </>
+            )}
+            {transactions.length > 0 && (
+              <Pagination
+                currentPage={pageNumber}
+                pageSize={pageSize}
+                totalItems={transactions.length}
+                onPageChange={setPageNumber}
+              />
+            )}
           </div>
         </div>
       </Layout>
