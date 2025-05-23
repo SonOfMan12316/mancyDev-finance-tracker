@@ -38,7 +38,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({
             {type === "budget"
               ? "Edit Budget"
               : type === "pot"
-                ? "Edit Pots"
+                ? "Edit Pot"
                 : ""}
           </li>
           <li
@@ -48,7 +48,7 @@ const CardHeader: React.FC<CardHeaderProps> = ({
             {type === "budget"
               ? "Delete Budget"
               : type === "pot"
-                ? "Delete Pots"
+                ? "Delete Pot"
                 : ""}
           </li>
         </ul>

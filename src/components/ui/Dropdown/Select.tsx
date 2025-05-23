@@ -87,7 +87,15 @@ const Dropdown = <T extends string | number>({
               </span>
             </span>
 
-            {icon && <span className="ml-4">{icon}</span>}
+            {icon && (
+              <span
+                className={`ml-4 transition-transform duration-500 ${
+                  isOpen ? "transform rotate-180" : ""
+                }`}
+              >
+                {icon}
+              </span>
+            )}
           </Button>
         </div>
         <div
@@ -109,7 +117,7 @@ const Dropdown = <T extends string | number>({
       {isOpen && (
         <ul
           className={`absolute right-0 z-10 mt-1.5 max-h-60 ${
-            showSecondSelect ? "min-w-11.063" : "min-w-7.125"
+            showSecondSelect ? "min-w-11.063 md:min-w-full" : "min-w-7.125"
           }  w-full overflow-auto rounded-md border  bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
           role="listbox"
         >
@@ -136,7 +144,6 @@ const DropdownItem = <T extends string | number>({
   option,
   isSelected,
   onClick,
-  className = "",
   isPlaceholder = false,
   themeColor,
   isLast = false,
@@ -154,9 +161,7 @@ const DropdownItem = <T extends string | number>({
   <li
     className={`relative cursor-pointer select-none py-3 mx-4 text-sm flex items-center justify-between ${
       isLast ? "" : "border-b border-ch-grey/0.15"
-    } ${
-      isPlaceholder ? "text-black font-semibold" : "hover:bg-gray-100"
-    } ${className}`}
+    }`}
     role="option"
     aria-selected={isSelected}
     onClick={() => onClick(option)}
@@ -167,7 +172,13 @@ const DropdownItem = <T extends string | number>({
           className={`h-4 w-4 rounded-full bg-ch-${option.value} pl-2`}
         ></div>
       )}{" "}
-      <span className={themeColor ? "pl-2" : ""}>{option.label}</span>
+      <span
+        className={
+          themeColor ? "pl-2" : option.label === placeholder ? "font-bold" : ""
+        }
+      >
+        {option.label}
+      </span>
     </span>
     {(isSelected || (isPlaceholder && option.value === placeholder)) && (
       <span className="">
