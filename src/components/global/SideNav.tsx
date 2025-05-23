@@ -88,16 +88,26 @@ const SideNav = () => {
         <div className="flex items-center ml-5 mt-4">
           <span
             className={classnames(
-              "absolute not-italic capitalize font-serif text-xl font-bold text-white",
-              "hover:text-red-500 transition-all duration-500 ease-in-out font-publicSans",
-              "transform origin-left ml-3",
+              "transition-all duration-500 ease-in-out",
+              "transform origin-left ml-4",
               {
                 "opacity-100 scale-x-100": !sidenavState,
                 "opacity-0 scale-x-0": sidenavState,
               }
             )}
           >
-            j
+            <svg
+              width="14"
+              height="22"
+              viewBox="0 0 14 22"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M8.95201 21.44H2.93601V10.24H0.76001V5.312H3.06401C3.70401 2.272 6.68001 0 11.96 0H13.24V4.288H11C9.33601 4.288 8.53601 4.448 8.56801 5.312H13.24V10.24H8.95201V21.44Z"
+                fill="white"
+              />
+            </svg>
           </span>
           <span
             className={classnames(
