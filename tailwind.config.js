@@ -35,6 +35,9 @@ module.exports = {
         '7.125': '7.125rem',
         '11.063': '11.063rem'
       },
+      minHeight: {
+        '90': '70vh',
+      },
       maxWidth: {
         'xl': '35rem',
         '8.375': '8.375rem'

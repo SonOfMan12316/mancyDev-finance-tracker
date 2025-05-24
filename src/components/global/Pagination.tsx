@@ -231,9 +231,7 @@ const Pagination: React.FC<PaginationProps> = ({
             <p className="hidden md:block">Prev</p>
           </Button>
         </div>
-        <div className="flex md:w-4/12 xl:w-3/12 space-x-2">
-          {renderPageNumbers()}
-        </div>
+        <div className="flex  space-x-2">{renderPageNumbers()}</div>
         <div className="">
           <Button
             onClick={handleNextClick}
