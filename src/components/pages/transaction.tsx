@@ -29,7 +29,10 @@ const column = ["Recipient / Sender", "Category", "Transaction Date", "Amount"];
 
 export const Transaction = () => {
   const [selectedSortOption, setSelectedSortOption] =
-    useState<OptionsInterface<string> | null>(null);
+    useState<OptionsInterface<string> | null>({
+      label: "Latest",
+      value: "Latest",
+    });
   const [selectedCategoryOption, setSelectedCategoryOption] =
     useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
@@ -95,7 +98,33 @@ export const Transaction = () => {
     );
 
     return () => unsubscribe();
-  }, [selectedCategoryOption, selectedSortOption]);
+  }, [selectedCategoryOption]);
+
+  useEffect(() => {
+    if (!transactions.length) return;
+
+    const sorted = [...transactions].sort((a, b) => {
+      const sortBy = selectedSortOption?.value || "Latest";
+      switch (sortBy) {
+        case "Oldest":
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        case "Latest":
+          return new Date(b.date).getTime() - new Date(a.date).getTime();
+        case "A to Z":
+          return a.name.localeCompare(b.name);
+        case "Z to A":
+          return b.name.localeCompare(a.name);
+        case "Highest":
+          return b.amount - a.amount;
+        case "Lowest":
+          return a.amount - b.amount;
+        default:
+          return 0;
+      }
+    });
+
+    setTransactions(sorted);
+  }, [selectedSortOption]);
 
   return (
     <div className="w-screen">
@@ -119,8 +148,16 @@ export const Transaction = () => {
                   </span>
                   <Select
                     options={SortOptions}
-                    selectedOption={selectedSortOption}
-                    onSelect={setSelectedSortOption}
+                    selectedOption={
+                      selectedSortOption?.value === "Latest"
+                        ? null
+                        : selectedSortOption
+                    }
+                    onSelect={(option) => {
+                      setSelectedSortOption(
+                        option || { label: "Latest", value: "Latest" }
+                      );
+                    }}
                     placeholder="Latest"
                     icon={<DropdownIcon />}
                     className="w-full"
@@ -148,7 +185,7 @@ export const Transaction = () => {
               isLoading={isLoading}
             />
             <TransactionCard transaction={currentItems} />
-            {transactions && transactions.length > 0 && (
+            {transactions && transactions.length > 0 && !isLoading && (
               <Pagination
                 currentPage={pageNumber}
                 pageSize={pageSize}
