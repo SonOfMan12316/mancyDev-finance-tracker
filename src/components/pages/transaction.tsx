@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { db } from "../../firebase";
 import {
   collection,
-  getDocs,
   query,
   onSnapshot,
   where,
   Query,
+  orderBy,
 } from "firebase/firestore";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
@@ -36,50 +36,33 @@ export const Transaction = () => {
   const [selectedCategoryOption, setSelectedCategoryOption] =
     useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
-  const [pageSize, setPageSize] = useState<number>(PAGE.SIZE);
+  const [pageSize] = useState<number>(PAGE.SIZE);
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
+  const [displayedTransactions, setDisplayedTransactions] = useState<
+    transactionInterface[]
+  >([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [baseQuery, setBaseQuery] = useState<Query>(
+    query(collection(db, "transactions"), orderBy("date", "desc"))
+  );
 
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
   const currentItems = transactions.slice(indexOfFirstItem, indexOfLastItem);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-
-  const transactionCollectionRef = collection(db, "transactions");
 
   useEffect(() => {
-    const getTransaction = async () => {
-      try {
-        setIsLoading(true);
-        const snapshot = await getDocs(transactionCollectionRef);
-        const data = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        })) as transactionInterface[];
-        setTransactions(data);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Initial load error:", error);
-        setIsLoading(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+    let queryRef = baseQuery;
 
-    getTransaction();
-  }, []);
-
-  useEffect(() => {
-    let queryRef: Query = transactionCollectionRef;
-
-    const categoryValue =
-      selectedCategoryOption?.value || selectedCategoryOption;
-
-    if (categoryValue && categoryValue !== "All transactions") {
+    if (
+      selectedCategoryOption?.value &&
+      selectedCategoryOption.value !== "All transactions"
+    ) {
       queryRef = query(
-        transactionCollectionRef,
-        where("category", "==", categoryValue)
+        baseQuery,
+        where("category", "==", selectedCategoryOption.value)
       );
     }
+
     setIsLoading(true);
     const unsubscribe = onSnapshot(
       queryRef,
@@ -89,6 +72,8 @@ export const Transaction = () => {
           id: doc.id,
         })) as transactionInterface[];
         setTransactions(data);
+        console.log("Real-time transactions:", data);
+        setDisplayedTransactions(data);
         setIsLoading(false);
       },
       (error) => {
@@ -98,32 +83,41 @@ export const Transaction = () => {
     );
 
     return () => unsubscribe();
-  }, [selectedCategoryOption]);
+  }, [baseQuery, selectedCategoryOption]);
 
   useEffect(() => {
-    if (!transactions.length) return;
-
-    const sorted = [...transactions].sort((a, b) => {
-      const sortBy = selectedSortOption?.value || "Latest";
-      switch (sortBy) {
-        case "Oldest":
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        case "Latest":
-          return new Date(b.date).getTime() - new Date(a.date).getTime();
-        case "A to Z":
-          return a.name.localeCompare(b.name);
-        case "Z to A":
-          return b.name.localeCompare(a.name);
-        case "Highest":
-          return b.amount - a.amount;
-        case "Lowest":
-          return a.amount - b.amount;
-        default:
-          return 0;
-      }
-    });
-
-    setTransactions(sorted);
+    let queryRef = query(
+      collection(db, "transactions"),
+      orderBy(
+        selectedSortOption?.value === "Oldest"
+          ? "date"
+          : selectedSortOption?.value === "Latest"
+            ? "date"
+            : selectedSortOption?.value === "A to Z"
+              ? "name"
+              : selectedSortOption?.value === "Z to A"
+                ? "name"
+                : selectedSortOption?.value === "Highest"
+                  ? "amount"
+                  : selectedSortOption?.value === "Lowest"
+                    ? "amount"
+                    : "date",
+        selectedSortOption?.value === "Oldest"
+          ? "asc"
+          : selectedSortOption?.value === "Latest"
+            ? "desc"
+            : selectedSortOption?.value === "A to Z"
+              ? "asc"
+              : selectedSortOption?.value === "Z to A"
+                ? "desc"
+                : selectedSortOption?.value === "Highest"
+                  ? "desc"
+                  : selectedSortOption?.value === "Lowest"
+                    ? "asc"
+                    : "desc"
+      )
+    );
+    setBaseQuery(queryRef);
   }, [selectedSortOption]);
 
   return (
@@ -185,14 +179,16 @@ export const Transaction = () => {
               isLoading={isLoading}
             />
             <TransactionCard transaction={currentItems} />
-            {transactions && transactions.length > 0 && !isLoading && (
-              <Pagination
-                currentPage={pageNumber}
-                pageSize={pageSize}
-                totalItems={transactions.length}
-                onPageChange={setPageNumber}
-              />
-            )}
+            {displayedTransactions &&
+              displayedTransactions.length > 0 &&
+              !isLoading && (
+                <Pagination
+                  currentPage={pageNumber}
+                  pageSize={pageSize}
+                  totalItems={transactions.length}
+                  onPageChange={setPageNumber}
+                />
+              )}
           </div>
         </div>
       </Layout>
