@@ -19,10 +19,12 @@ import { OptionsInterface, transactionInterface } from "../../types/global";
 import { toDMYString } from "../../utils/date";
 import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";
+import useDebounce from "../../hooks/useDebounce";
 
 interface TransactionInterface {
   transaction: transactionInterface[];
   isLoading?: boolean;
+  transactionSearch?: string;
 }
 
 const column = ["Recipient / Sender", "Category", "Transaction Date", "Amount"];
@@ -45,6 +47,8 @@ export const Transaction = () => {
   const [baseQuery, setBaseQuery] = useState<Query>(
     query(collection(db, "transactions"), orderBy("date", "desc"))
   );
+  const [transactionSearch, setTransactionSearch] = useState<string>("");
+  const delaySearch = useDebounce(transactionSearch, 1500);
 
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
@@ -63,6 +67,23 @@ export const Transaction = () => {
       );
     }
 
+    if (delaySearch.trim()) {
+      const end = delaySearch;
+
+      queryRef = query(
+        queryRef,
+        where("name", ">=", delaySearch),
+        where("name", "<=", end)
+      );
+    }
+
+    if (delaySearch && !delaySearch.trim()) {
+      setTransactions([]);
+      setDisplayedTransactions([]);
+      setIsLoading(false);
+      return;
+    }
+
     setIsLoading(true);
     const unsubscribe = onSnapshot(
       queryRef,
@@ -72,18 +93,21 @@ export const Transaction = () => {
           id: doc.id,
         })) as transactionInterface[];
         setTransactions(data);
-        console.log("Real-time transactions:", data);
         setDisplayedTransactions(data);
         setIsLoading(false);
       },
       (error) => {
-        console.error("Real-time error:", error);
+        if (error.code === "failed-precondition") {
+          console.error("Missing index - please create:", error.message);
+        } else {
+          console.error("Real-time error:", error);
+        }
         setIsLoading(false);
       }
     );
 
     return () => unsubscribe();
-  }, [baseQuery, selectedCategoryOption]);
+  }, [baseQuery, selectedCategoryOption, delaySearch]);
 
   useEffect(() => {
     let queryRef = query(
@@ -131,6 +155,7 @@ export const Transaction = () => {
                   typeOfInput="normal"
                   placeholder="Search transaction"
                   placement="end"
+                  onChange={(e) => setTransactionSearch(e.target.value)}
                   icon={<Search />}
                   className="w-11/12 sm:w-7/12 md:w-10/12 xl:w-8/12"
                 />
@@ -177,6 +202,7 @@ export const Transaction = () => {
             <TransactionTable
               transaction={currentItems}
               isLoading={isLoading}
+              transactionSearch={transactionSearch}
             />
             <TransactionCard transaction={currentItems} />
             {displayedTransactions &&
@@ -199,6 +225,7 @@ export const Transaction = () => {
 const TransactionTable: React.FC<TransactionInterface> = ({
   transaction,
   isLoading,
+  transactionSearch,
 }) => {
   return (
     <div>
@@ -295,7 +322,8 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                   className="w-2/3 h-2/3 mx-auto"
                 />
                 <p className="text-ch-black text-base font-norma">
-                  No transactions found.
+                  No transaction{" "}
+                  {transactionSearch !== "" ? "with such name" : ""} found.
                 </p>
               </td>
             </tr>
@@ -306,52 +334,83 @@ const TransactionTable: React.FC<TransactionInterface> = ({
   );
 };
 
-const TransactionCard: React.FC<TransactionInterface> = ({ transaction }) => {
+const TransactionCard: React.FC<TransactionInterface> = ({
+  transaction,
+  isLoading,
+  transactionSearch,
+}) => {
   return (
     <div className="md:hidden">
-      {transaction.map((txn, index) => (
-        <div
-          key={index}
-          className={`${
-            index !== transaction.length - 1
-              ? "border-b border-ch-grey/0.15"
-              : ""
-          } flex items-center justify-between py-4`}
-        >
-          <div className="flex items-center gap-x-2">
-            <img className="w-8 h-8 rounded-full" src={txn.avatar} />
+      {isLoading ? (
+        <tr>
+          <td colSpan={4} className="text-center py-4">
+            <DotLottieReact
+              src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
+              loop
+              autoplay
+              className="w-2/3 h-2/3 mx-auto"
+            />
+            <p className="text-ch-black text-lg font-normal">Loading ...</p>
+          </td>
+        </tr>
+      ) : transaction && transaction.length > 0 && !isLoading ? (
+        transaction.map((txn, index) => (
+          <div
+            key={index}
+            className={`${
+              index !== transaction.length - 1
+                ? "border-b border-ch-grey/0.15"
+                : ""
+            } flex items-center justify-between py-4 mt-1`}
+          >
+            <div className="flex items-center gap-x-2">
+              <img className="w-8 h-8 rounded-full" src={txn.avatar} />
+              <div className="space-y-1">
+                <h1 className="whitespace-nowrap font-bold text-sm">
+                  {txn.name}
+                </h1>
+                <p className="text-left text-ch-grey text-xs font-medium font-publicSans">
+                  {txn.category}
+                </p>
+              </div>
+            </div>
             <div className="space-y-1">
-              <h1 className="whitespace-nowrap font-bold text-sm">
-                {txn.name}
+              <h1
+                className={`${
+                  txn.amount < 0 ? "text-black" : "text-ch-green"
+                } font-bold text-sm`}
+              >
+                {txn.amount < 0
+                  ? txn.amount.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })
+                  : "+" +
+                    txn.amount.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
               </h1>
               <p className="text-left text-ch-grey text-xs font-normal font-publicSans">
-                {txn.category}
+                {toDMYString(txn.date)}
               </p>
             </div>
           </div>
-          <div className="space-y-1">
-            <h1
-              className={`${
-                txn.amount < 0 ? "text-black" : "text-ch-green"
-              } font-bold text-sm`}
-            >
-              {txn.amount < 0
-                ? txn.amount.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })
-                : "+" +
-                  txn.amount.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "USD",
-                  })}
-            </h1>
-            <p className="text-left text-ch-grey text-xs font-normal font-publicSans">
-              {toDMYString(txn.date)}
-            </p>
-          </div>
+        ))
+      ) : (
+        <div className="text-center py-4">
+          <DotLottieReact
+            src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
+            loop
+            autoplay
+            className="w-2/3 h-2/3 mx-auto"
+          />
+          <p className="text-ch-black text-base font-norma">
+            No transaction {transactionSearch !== "" ? "with this name" : ""}{" "}
+            found.
+          </p>
         </div>
-      ))}
+      )}
     </div>
   );
 };
