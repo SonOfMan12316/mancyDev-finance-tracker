@@ -1,14 +1,19 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { collection, orderBy, query, Query } from "firebase/firestore";
+import {  db } from "../../firebase";
 
 import { Layout } from "../layout";
 import { addCommasToNumber } from "../../utils/number";
 import { RightIcon, SavingIcon } from "../icons";
-import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
+import useUIStore from "../../store/ui-store";
+import useTransactions from "../../hooks/useTransactions";
 
 const OverView = () => {
   const navigate = useNavigate();
+    const { transactions } = useUIStore()
 
   const figure = [
     {
@@ -85,6 +90,10 @@ const OverView = () => {
       color: "ch-navy",
     },
   ];
+
+  useTransactions(query(collection(db, "transactions"), orderBy("date", "desc")));
+
+
 
   return (
     <div className="">
@@ -181,7 +190,7 @@ const OverView = () => {
                 {transactions.slice(0, 5).map((transaction, index) => (
                   <div
                     key={index}
-                    className="relative flex justify-between w-full my-3.5"
+                    className="relative flex justify-between w-full my-3"
                   >
                     <div className="flex space-x-5 items-center">
                       <div className="w-8">
