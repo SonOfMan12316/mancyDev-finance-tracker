@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { budgetInterface, potInterface } from "../types/global";
+import { budgetInterface, potInterface, transactionInterface } from "../types/global";
 
 type ModalType = "add" | "delete" | "edit" | "addMoney" | "withdraw";
 
@@ -15,6 +15,7 @@ type UI = {
   popoverState: boolean;
   selectedBudget: budgetInterface | null;
   selectedPot: potInterface | null;
+  transactions: transactionInterface[] | [];
 };
 
 type Actions = {
@@ -24,6 +25,7 @@ type Actions = {
   setPopOverState: (state: UI["popoverState"]) => void;
   setSelectedBudget: (state: UI["selectedBudget"]) => void;
   setSelectedPot: (state: UI["selectedPot"]) => void;
+  setTransactions: (state: UI["transactions"]) => void;
 };
 
 export type UIActions = UI & Actions;
@@ -35,6 +37,7 @@ const useUIStore = create<UIActions>((set) => ({
   popoverState: false,
   selectedBudget: null,
   selectedPot: null,
+  transactions: [],
   updateSidenavState: () =>
     set((state) => ({ sidenavState: !state.sidenavState })),
   updateActiveNavItem: () =>
@@ -43,6 +46,7 @@ const useUIStore = create<UIActions>((set) => ({
   setPopOverState: (state) => set({ popoverState: state }),
   setSelectedBudget: (budget) => set({ selectedBudget: budget }),
   setSelectedPot: (pot) => set({ selectedPot: pot }),
+  setTransactions: (transaction) => set({ transactions: transaction }),
 }));
 
 export default useUIStore;
