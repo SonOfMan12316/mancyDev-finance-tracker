@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { db } from "../../firebase";
 import {
   collection,
   query,
-  onSnapshot,
   where,
   Query,
   orderBy,
@@ -20,10 +19,12 @@ import { toDMYString } from "../../utils/date";
 import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";
 import useDebounce from "../../hooks/useDebounce";
+import  useUIStore  from "../../store/ui-store"
+import useTransactions from "../../hooks/useTransactions";
 
 interface TransactionInterface {
   transaction: transactionInterface[];
-  isLoading?: boolean;
+  isLoading: boolean;
   transactionSearch?: string;
 }
 
@@ -39,10 +40,6 @@ export const Transaction = () => {
     useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
   const [pageSize] = useState<number>(PAGE.SIZE);
-  const [transactions, setTransactions] = useState<transactionInterface[]>([]);
-  const [displayedTransactions, setDisplayedTransactions] = useState<
-    transactionInterface[]
-  >([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [baseQuery, setBaseQuery] = useState<Query>(
     query(collection(db, "transactions"), orderBy("date", "desc"))
@@ -50,64 +47,41 @@ export const Transaction = () => {
   const [transactionSearch, setTransactionSearch] = useState<string>("");
   const delaySearch = useDebounce(transactionSearch, 1500);
 
+  const { transactions } = useUIStore();
+
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
   const currentItems = transactions.slice(indexOfFirstItem, indexOfLastItem);
 
-  useEffect(() => {
-    let queryRef = baseQuery;
 
-    if (
-      selectedCategoryOption?.value &&
-      selectedCategoryOption.value !== "All transactions"
-    ) {
-      queryRef = query(
-        baseQuery,
-        where("category", "==", selectedCategoryOption.value)
-      );
-    }
+  // useEffect(() => {
+  //   let queryRef = baseQuery;
 
-    if (delaySearch.trim()) {
-      const end = delaySearch;
+  //   if (
+  //     selectedCategoryOption?.value &&
+  //     selectedCategoryOption.value !== "All transactions"
+  //   ) {
+  //     queryRef = query(
+  //       baseQuery,
+  //       where("category", "==", selectedCategoryOption.value)
+  //     );
+  //   }
 
-      queryRef = query(
-        queryRef,
-        where("name", ">=", delaySearch),
-        where("name", "<=", end)
-      );
-    }
+  //   if (delaySearch.trim()) {
+  //     const end = delaySearch + "\uf8ff"; // Adding a high Unicode character to include all possible matches
 
-    if (delaySearch && !delaySearch.trim()) {
-      setTransactions([]);
-      setDisplayedTransactions([]);
-      setIsLoading(false);
-      return;
-    }
+  //     queryRef = query(
+  //       queryRef,
+  //       where("name", ">=", delaySearch),
+  //       where("name", "<=", end)
+  //     );
+  //   }
 
-    setIsLoading(true);
-    const unsubscribe = onSnapshot(
-      queryRef,
-      (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        })) as transactionInterface[];
-        setTransactions(data);
-        setDisplayedTransactions(data);
-        setIsLoading(false);
-      },
-      (error) => {
-        if (error.code === "failed-precondition") {
-          console.error("Missing index - please create:", error.message);
-        } else {
-          console.error("Real-time error:", error);
-        }
-        setIsLoading(false);
-      }
-    );
-
-    return () => unsubscribe();
-  }, [baseQuery, selectedCategoryOption, delaySearch]);
+  //   setIsLoading(true);
+  //   useTransactions({ queryRef: baseQuery });
+  //   setDisplayedTransactions(transactions);
+  //   setIsLoading(false);
+  // }, [baseQuery, selectedCategoryOption, delaySearch]);
 
   useEffect(() => {
     let queryRef = query(
@@ -143,6 +117,28 @@ export const Transaction = () => {
     );
     setBaseQuery(queryRef);
   }, [selectedSortOption]);
+
+  const activeQuery = useMemo(() => {
+    let q = baseQuery;
+    
+    if (selectedCategoryOption?.value &&
+          selectedCategoryOption.value !== "All transactions") {
+      q = query(q, where('category', '==', selectedCategoryOption.value));
+    }
+    
+    if (delaySearch) {
+      const end = delaySearch + '\uf8ff';
+      q = query(
+        q,
+        where('name', '>=', delaySearch),
+        where('name', '<=', end)
+      );
+    }
+    
+    return q;
+  }, [baseQuery, selectedCategoryOption, delaySearch]);
+
+  useTransactions(activeQuery);
 
   return (
     <div className="w-screen">
@@ -204,9 +200,9 @@ export const Transaction = () => {
               isLoading={isLoading}
               transactionSearch={transactionSearch}
             />
-            <TransactionCard transaction={currentItems} />
-            {displayedTransactions &&
-              displayedTransactions.length > 0 &&
+            <TransactionCard isLoading={isLoading} transaction={currentItems} />
+            {transactions &&
+              transactions.length > 0 &&
               !isLoading && (
                 <Pagination
                   currentPage={pageNumber}
@@ -248,12 +244,12 @@ const TransactionTable: React.FC<TransactionInterface> = ({
         <tbody className="w-full relative">
           {isLoading ? (
             <tr>
-              <td colSpan={4} className="text-center py-4">
+              <td colSpan={6} className="text-center py-10">
                 <DotLottieReact
-                  src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
+                  src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
                   loop
                   autoplay
-                  className="w-2/3 h-2/3 mx-auto"
+                  className="w-3/5 h-3/5 mx-auto"
                 />
                 <p className="text-ch-black text-lg font-normal">Loading ...</p>
               </td>
@@ -314,14 +310,14 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             })
           ) : (
             <tr>
-              <td colSpan={4} className="text-center py-4">
+              <td colSpan={6} className="text-center py-10">
                 <DotLottieReact
-                  src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
+                  src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
                   loop
                   autoplay
-                  className="w-2/3 h-2/3 mx-auto"
+                  className="w-3/5 h-3/5 mx-auto"
                 />
-                <p className="text-ch-black text-base font-norma">
+                <p className="text-ch-black text-base font-normal">
                   No transaction{" "}
                   {transactionSearch !== "" ? "with such name" : ""} found.
                 </p>
@@ -342,17 +338,16 @@ const TransactionCard: React.FC<TransactionInterface> = ({
   return (
     <div className="md:hidden">
       {isLoading ? (
-        <tr>
-          <td colSpan={4} className="text-center py-4">
+        <div className="w-full h-80 flex flex-col items-center justify-center">
+          <div className="text-center mt-4">
             <DotLottieReact
-              src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
+              src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
               loop
               autoplay
-              className="w-2/3 h-2/3 mx-auto"
             />
-            <p className="text-ch-black text-lg font-normal">Loading ...</p>
-          </td>
-        </tr>
+          </div>
+          <p className="text-ch-black text-lg font-normal">Loading ...</p>
+        </div>
       ) : transaction && transaction.length > 0 && !isLoading ? (
         transaction.map((txn, index) => (
           <div
@@ -398,15 +393,16 @@ const TransactionCard: React.FC<TransactionInterface> = ({
           </div>
         ))
       ) : (
-        <div className="text-center py-4">
-          <DotLottieReact
-            src="https://lottie.host/dfbd7ad5-7401-4b5f-8e39-f57f325c38c9/myKWeEicAa.lottie"
-            loop
-            autoplay
-            className="w-2/3 h-2/3 mx-auto"
-          />
-          <p className="text-ch-black text-base font-norma">
-            No transaction {transactionSearch !== "" ? "with this name" : ""}{" "}
+        <div className="w-full h-80 flex flex-col items-center justify-center">
+          <div className="text-center mt-4">
+            <DotLottieReact
+              src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
+              loop
+              autoplay
+            />
+          </div>
+          <p className="text-ch-black text-center text-base font-normal">
+            No transaction {transactionSearch !== "" ? "with such name" : ""}{" "}
             found.
           </p>
         </div>
