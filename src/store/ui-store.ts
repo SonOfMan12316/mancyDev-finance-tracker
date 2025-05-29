@@ -16,6 +16,7 @@ type UI = {
   selectedBudget: budgetInterface | null;
   selectedPot: potInterface | null;
   transactions: transactionInterface[] | [];
+  loading: boolean;
 };
 
 type Actions = {
@@ -26,6 +27,7 @@ type Actions = {
   setSelectedBudget: (state: UI["selectedBudget"]) => void;
   setSelectedPot: (state: UI["selectedPot"]) => void;
   setTransactions: (state: UI["transactions"]) => void;
+  setIsLoading: (State: UI["loading"]) => void;
 };
 
 export type UIActions = UI & Actions;
@@ -38,6 +40,7 @@ const useUIStore = create<UIActions>((set) => ({
   selectedBudget: null,
   selectedPot: null,
   transactions: [],
+  loading: false,
   updateSidenavState: () =>
     set((state) => ({ sidenavState: !state.sidenavState })),
   updateActiveNavItem: () =>
@@ -47,6 +50,7 @@ const useUIStore = create<UIActions>((set) => ({
   setSelectedBudget: (budget) => set({ selectedBudget: budget }),
   setSelectedPot: (pot) => set({ selectedPot: pot }),
   setTransactions: (transaction) => set({ transactions: transaction }),
+  setIsLoading: (state) => set({ loading: state }),
 }));
 
 export default useUIStore;

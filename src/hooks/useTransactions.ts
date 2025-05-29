@@ -43,7 +43,6 @@ const useTransactions = (queryRef: Query) => {
 
   useEffect(() => {
     unsubscribeRef.current?.();
-
     const unsubscribe = onSnapshot(
       queryRef,
       (snapshot) => {
@@ -53,7 +52,8 @@ const useTransactions = (queryRef: Query) => {
         })) as transactionInterface[];
         setTransactions(transactions);
       },
-      (error) => console.error('Firestore error:', error)
+      (error) => {
+        console.error('Firestore error:', error)}
     );
 
     unsubscribeRef.current = unsubscribe;
