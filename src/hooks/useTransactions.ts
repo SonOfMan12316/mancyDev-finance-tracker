@@ -1,65 +1,60 @@
-// import { useEffect } from "react";
-// import { onSnapshot, Query } from "firebase/firestore";
-// import { transactionInterface } from "../types/global";
-// import useUIStore from "../store/ui-store";
+import { useEffect, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { Query, onSnapshot } from "firebase/firestore";
+import { transactionInterface } from "../types/global";
 
-// interface UseTransactionProps {
-//   queryRef: Query;
-// }
+interface UseTransactionsProps {
+  queryRef: Query;
+  onSuccess?: (data: transactionInterface[]) => void;
+  onError?: (error: Error) => void;
+}
 
-// const useTransactions = ({ queryRef }: UseTransactionProps) => {
-//   const { setTransactions } = useUIStore();
+const useTransactions = ({
+  queryRef,
+  onSuccess,
+  onError,
+}: UseTransactionsProps) => {
+  const queryClient = useQueryClient();
+  const queryKey = ["transactions", queryRef];
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
-//   useEffect(() => {
-//     const unsubscribe = onSnapshot(
-//       queryRef,
-//       (snapshot) => {
-//         const data = snapshot.docs.map((doc) => ({
-//           ...doc.data(),
-//           id: doc.id,
-//         })) as transactionInterface[];
-//         setTransactions(data);
-//       },
-//       (error) => {
-//         console.error("Firestore error:", error);
-//       }
-//     );
-
-//     return () => unsubscribe();
-//   }, [queryRef, setTransactions]);
-// };
-
-// export default useTransactions;
-
-// hooks/useTransactions.ts
-import { useEffect, useRef } from 'react';
-import { Query, onSnapshot } from 'firebase/firestore';
-import useUIStore from '../store/ui-store';
-import { transactionInterface } from '../types/global';
-
-const useTransactions = (queryRef: Query) => {
-  const { setTransactions } = useUIStore();
-  const unsubscribeRef = useRef<() => void>(null);
+  const query = useQuery<transactionInterface[], Error>({
+    queryKey,
+    queryFn: () => [],
+    staleTime: Infinity,
+    refetchOnWindowFocus: false,
+  });
 
   useEffect(() => {
-    unsubscribeRef.current?.();
+    setIsInitialLoad(true);
+
     const unsubscribe = onSnapshot(
       queryRef,
       (snapshot) => {
-        const transactions = snapshot.docs.map(doc => ({
+        const data = snapshot.docs.map((doc) => ({
           ...doc.data(),
-          id: doc.id
+          id: doc.id,
         })) as transactionInterface[];
-        setTransactions(transactions);
+
+        queryClient.setQueryData(queryKey, data);
+        setIsInitialLoad(false);
+
+        onSuccess?.(data);
       },
       (error) => {
-        console.error('Firestore error:', error)}
+        setIsInitialLoad(false);
+        onError?.(error);
+      }
     );
-
-    unsubscribeRef.current = unsubscribe;
 
     return () => unsubscribe();
   }, [queryRef]);
+
+  return {
+    data: query.data,
+    isLoading: isInitialLoad,
+    error: !!query.error,
+  };
 };
 
 export default useTransactions;

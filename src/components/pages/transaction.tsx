@@ -1,12 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { db } from "../../firebase";
-import {
-  collection,
-  query,
-  where,
-  Query,
-  orderBy,
-} from "firebase/firestore";
+import { collection, query, where, Query, orderBy } from "firebase/firestore";
+import toast from "react-hot-toast";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 import { Search, DropdownIcon } from "../icons";
@@ -19,7 +14,6 @@ import { toDMYString } from "../../utils/date";
 import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";
 import useDebounce from "../../hooks/useDebounce";
-import  useUIStore  from "../../store/ui-store"
 import useTransactions from "../../hooks/useTransactions";
 
 interface TransactionInterface {
@@ -40,48 +34,16 @@ export const Transaction = () => {
     useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
   const [pageSize] = useState<number>(PAGE.SIZE);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const [baseQuery, setBaseQuery] = useState<Query>(
     query(collection(db, "transactions"), orderBy("date", "desc"))
   );
   const [transactionSearch, setTransactionSearch] = useState<string>("");
   const delaySearch = useDebounce(transactionSearch, 1500);
 
-  const { transactions } = useUIStore();
-
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
   const currentItems = transactions.slice(indexOfFirstItem, indexOfLastItem);
-
-
-  // useEffect(() => {
-  //   let queryRef = baseQuery;
-
-  //   if (
-  //     selectedCategoryOption?.value &&
-  //     selectedCategoryOption.value !== "All transactions"
-  //   ) {
-  //     queryRef = query(
-  //       baseQuery,
-  //       where("category", "==", selectedCategoryOption.value)
-  //     );
-  //   }
-
-  //   if (delaySearch.trim()) {
-  //     const end = delaySearch + "\uf8ff"; // Adding a high Unicode character to include all possible matches
-
-  //     queryRef = query(
-  //       queryRef,
-  //       where("name", ">=", delaySearch),
-  //       where("name", "<=", end)
-  //     );
-  //   }
-
-  //   setIsLoading(true);
-  //   useTransactions({ queryRef: baseQuery });
-  //   setDisplayedTransactions(transactions);
-  //   setIsLoading(false);
-  // }, [baseQuery, selectedCategoryOption, delaySearch]);
 
   useEffect(() => {
     let queryRef = query(
@@ -120,25 +82,26 @@ export const Transaction = () => {
 
   const activeQuery = useMemo(() => {
     let q = baseQuery;
-    
-    if (selectedCategoryOption?.value &&
-          selectedCategoryOption.value !== "All transactions") {
-      q = query(q, where('category', '==', selectedCategoryOption.value));
+
+    if (
+      selectedCategoryOption?.value &&
+      selectedCategoryOption.value !== "All transactions"
+    ) {
+      q = query(q, where("category", "==", selectedCategoryOption.value));
     }
-    
+
     if (delaySearch) {
-      const end = delaySearch + '\uf8ff';
-      q = query(
-        q,
-        where('name', '>=', delaySearch),
-        where('name', '<=', end)
-      );
+      const end = delaySearch + "\uf8ff";
+      q = query(q, where("name", ">=", delaySearch), where("name", "<=", end));
     }
-    
     return q;
   }, [baseQuery, selectedCategoryOption, delaySearch]);
 
-  useTransactions(activeQuery);
+  const { isLoading } = useTransactions({
+    queryRef: activeQuery,
+    onSuccess: (data) => setTransactions(data),
+    onError: (error) => toast.error(`${error.message}`),
+  });
 
   return (
     <div className="w-screen">
@@ -201,16 +164,14 @@ export const Transaction = () => {
               transactionSearch={transactionSearch}
             />
             <TransactionCard isLoading={isLoading} transaction={currentItems} />
-            {transactions &&
-              transactions.length > 0 &&
-              !isLoading && (
-                <Pagination
-                  currentPage={pageNumber}
-                  pageSize={pageSize}
-                  totalItems={transactions.length}
-                  onPageChange={setPageNumber}
-                />
-              )}
+            {transactions && transactions.length > 0 && !isLoading && (
+              <Pagination
+                currentPage={pageNumber}
+                pageSize={pageSize}
+                totalItems={transactions.length}
+                onPageChange={setPageNumber}
+              />
+            )}
           </div>
         </div>
       </Layout>
