@@ -163,8 +163,8 @@ const OverView = () => {
                       <RightIcon color="#696868" />
                     </div>
                   </div>
-                  <div className="md:flex justify-between">
-                    <div className="bg-ch-beige my-2 h-28 flex items-center pl-4 rounded-xl md:w-64">
+                  <div className="md:flex space-x-2 justify-between">
+                    <div className="bg-ch-beige flex-grow my-2 h-28 flex items-center pl-4 rounded-xl md:w-64 lg:max-w-sm">
                       <div className="flex space-x-4 items-center">
                         <div>
                           <SavingIcon color="#277C78" />
@@ -175,14 +175,14 @@ const OverView = () => {
                         </div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-2 px-2 md:w-7/12">
+                    <div className="grid grid-cols-2 px-2 md:w-7/12 lg:w-8/12">
                       {savingsData.map((saving, index) => (
                         <div key={index} className="flex space-x-3 my-2 ">
                           <div
                             className={`w-1 h-11 rounded-xl bg-${saving.color}`}
                           ></div>
                           <div className="flex flex-col justify-center">
-                            <span className="text-ch-grey text-xs whitespace-nowrap">
+                            <span className="text-ch-grey text-xs">
                               {saving.name}
                             </span>
                             <div className="font-bold my-1">
