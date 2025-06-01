@@ -1,4 +1,4 @@
-import React, { useState, useEffect, FC } from "react";
+import { useState, useEffect, FC, useRef } from "react";
 
 interface PieProps {
   data: number[];
@@ -50,7 +50,7 @@ const PieChart: FC<PieChartProps> = ({ amount, limit }) => {
   );
 };
 
-const Pie: React.FC<PieProps> = ({
+const Pie: FC<PieProps> = ({
   data,
   radius,
   hole,
@@ -66,7 +66,6 @@ const Pie: React.FC<PieProps> = ({
 
   return (
     <svg
-      className={``}
       width={diameter}
       height={diameter}
       viewBox={`0 0 ${diameter} ${diameter}`}
@@ -99,75 +98,63 @@ const Pie: React.FC<PieProps> = ({
   );
 };
 
-const Slice: React.FC<SliceProps> = ({
-  value,
+const Slice: FC<SliceProps> = ({
   startAngle,
   angle,
   radius,
   hole,
-  trueHole,
   fill,
   stroke,
   strokeWidth,
   amount,
   limit,
 }) => {
-  const [path, setPath] = useState("");
+  const [animatedAngle, setAnimatedAngle] = useState(0);
+  const animationRef = useRef<number>(0)
 
   useEffect(() => {
-    animate();
-  }, [
-    value,
+    setAnimatedAngle(0);
+
+    const duration = 1000;
+    const startTime = performance.now()
+
+    const animate = (currentTime: number) => {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      setAnimatedAngle(angle * progress);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      }
+    }
+
+    animationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if(animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    }
+  }, [angle])
+
+  const a = getAnglePoint(startAngle, startAngle + animatedAngle, radius, radius, radius);
+  const b = getAnglePoint(
     startAngle,
-    angle,
+    startAngle + animatedAngle,
+    radius - hole,
     radius,
-    hole,
-    trueHole,
-    fill,
-    stroke,
-    strokeWidth,
-  ]);
-
-  const animate = () => {
-    draw(0);
-  };
-
-  const draw = (s: number) => {
-    const step = angle / (37.5 / 2);
-    if (angle) {
-      if (s + step > angle) {
-        s = angle;
-      }
-    }
-
-    const a = getAnglePoint(startAngle, startAngle + s, radius, radius, radius);
-    const b = getAnglePoint(
-      startAngle,
-      startAngle + s,
-      radius - hole,
-      radius,
-      radius
-    );
-
-    const newPath = [
-      `M${a.x1},${a.y1}`,
-      `A${radius},${radius} 0 ${s > 180 ? 1 : 0},1 ${a.x2},${a.y2}`,
-      `L${b.x2},${b.y2}`,
-      `A${radius - hole},${radius - hole} 0 ${s > 180 ? 1 : 0},0 ${b.x1},${
-        b.y1
-      }`,
-      "Z",
-    ].join(" ");
-
-    setPath(newPath);
-
-    if (s < angle) {
-      if (step) {
-        setTimeout(() => draw(s + step), 20);
-      }
-    }
-  };
-
+    radius
+  );
+  
+  const path = [
+    `M${a.x1},${a.y1}`,
+    `A${radius},${radius} 0 ${animatedAngle > 180 ? 1 : 0},1 ${a.x2},${a.y2}`,
+    `L${b.x2},${b.y2}`,
+    `A${radius - hole},${radius - hole} 0 ${animatedAngle > 180 ? 1 : 0},0 ${b.x1},${
+      b.y1
+    }`,
+    "Z",
+  ].join(" ");
   return (
     <g overflow="hidden">
       <path
