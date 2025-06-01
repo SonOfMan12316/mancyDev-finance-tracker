@@ -31,7 +31,7 @@ export const Transaction = () => {
       value: "Latest",
     });
   const [selectedCategoryOption, setSelectedCategoryOption] =
-    useState<OptionsInterface<string> | null>(null);
+  useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
   const [pageSize] = useState<number>(PAGE.SIZE);
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
@@ -41,9 +41,15 @@ export const Transaction = () => {
   const [transactionSearch, setTransactionSearch] = useState<string>("");
   const delaySearch = useDebounce(transactionSearch, 1500);
 
+  const filteredTransactions = useMemo(() => {
+    return (transactions || []).filter((tx) =>
+      tx.name.toLowerCase().includes(delaySearch.toLowerCase())
+    );
+  }, [transactions, delaySearch]);
+
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
-  const currentItems = transactions.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredTransactions.slice(indexOfFirstItem, indexOfLastItem);
 
   useEffect(() => {
     let queryRef = query(
@@ -89,11 +95,7 @@ export const Transaction = () => {
     ) {
       q = query(q, where("category", "==", selectedCategoryOption.value));
     }
-
-    if (delaySearch) {
-      const end = delaySearch + "\uf8ff";
-      q = query(q, where("name", ">=", delaySearch), where("name", "<=", end));
-    }
+    setPageNumber(1);
     return q;
   }, [baseQuery, selectedCategoryOption, delaySearch]);
 
@@ -157,21 +159,30 @@ export const Transaction = () => {
                 </div>
               </div>
             </div>
-
+            <div className="flex-grow">  
             <TransactionTable
               transaction={currentItems}
               isLoading={isLoading}
               transactionSearch={transactionSearch}
             />
-            <TransactionCard isLoading={isLoading} transaction={currentItems} />
-            {transactions && transactions.length > 0 && !isLoading && (
+            <TransactionCard isLoading={isLoading} transaction={currentItems} transactionSearch={transactionSearch} />
+            </div>
+            <div className="mt-auto">
+            {filteredTransactions && filteredTransactions.length > 0 && !isLoading && (
+              <>
               <Pagination
                 currentPage={pageNumber}
                 pageSize={pageSize}
-                totalItems={transactions.length}
+                totalItems={filteredTransactions.length}
                 onPageChange={setPageNumber}
               />
+              <p className="text-ch-grey text-sm font-normal mt-4 text-right">
+                Showing {Math.min(indexOfLastItem, filteredTransactions.length)} of {filteredTransactions.length}{" "}
+                transactions
+              </p>
+              </>
             )}
+            </div>
           </div>
         </div>
       </Layout>
