@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import OverView from "./components/pages/overview";
 import "./App.css";
@@ -14,11 +13,8 @@ import Budget from "./components/pages/budget";
 import Pots from "./components/pages/pots";
 import RecurringBill from "./components/pages/recurring-bill";
 
-const queryClient = new QueryClient();
-
 const App = () => {
   return (
-    <QueryClientProvider client={queryClient}>
     <Router>
       <Toaster
         toastOptions={{
@@ -45,7 +41,6 @@ const App = () => {
         <Route path="recurring-bills" element={<RecurringBill />} />
       </Routes>
     </Router>
-    </QueryClientProvider>
   );
 };
 
