@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import Lottie from "lottie-react";
 import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -12,6 +12,7 @@ import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
 import useTransactions from "../../hooks/useTransactions";
 import { transactionInterface } from "../../types/global";
+import loadingLottie from "../../assets/lottie/lottie.json";
 
 const OverView = () => {
   const navigate = useNavigate();
@@ -109,14 +110,21 @@ const OverView = () => {
     <div className="">
       <Layout title="overview">
         {isLoading ? (
-          <div className="w-full h-96 flex flex-col items-center justify-center">
-            <div className="text-center mt-4">
-              <DotLottieReact
-                src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
-                loop
-                autoplay
-              />
-            </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
+            <Lottie
+              animationData={loadingLottie}
+              loop={true}
+              autoplay={true}
+              style={{
+                height: "100%",
+                width: "100%",
+                maxHeight: 80,
+                maxWidth: 80,
+              }}
+              rendererSettings={{
+                preserveAspectRatio: "xMidYMid slice",
+              }}
+            />
             <p className="text-ch-black text-lg font-normal">Loading ...</p>
           </div>
         ) : (
