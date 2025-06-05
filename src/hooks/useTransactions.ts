@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { Query, onSnapshot } from "firebase/firestore";
+import { Query, DocumentData, onSnapshot, getDocs } from "firebase/firestore";
 import { transactionInterface } from "../types/global";
 
 interface UseTransactionsProps {
-  queryRef: Query;
+  queryRef: Query<DocumentData>;
   onSuccess?: (data: transactionInterface[]) => void;
   onError?: (error: Error) => void;
 }
@@ -16,18 +16,35 @@ const useTransactions = ({
 }: UseTransactionsProps) => {
   const queryClient = useQueryClient();
   const queryKey = ["transactions", queryRef];
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
 
   const query = useQuery<transactionInterface[], Error>({
     queryKey,
-    queryFn: () => [],
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
+    queryFn: async () => {
+      const cachedData = queryClient.getQueryData<transactionInterface[]>(queryKey);
+      if (cachedData) {
+        return cachedData;
+      }
+
+      try {
+        const snapshot = await getDocs(queryRef);
+        const data = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        })) as transactionInterface[];
+        queryClient.setQueryData(queryKey, data);
+        return data;
+      } catch (err) {
+        console.error("Initial getDocs failed:", err);
+        throw err; 
+      }
+    },
+    staleTime: Infinity,          
+    refetchOnWindowFocus: false, 
+    refetchOnReconnect: false,   
+    retry: false,                
   });
 
   useEffect(() => {
-    setIsInitialLoad(true);
-
     const unsubscribe = onSnapshot(
       queryRef,
       (snapshot) => {
@@ -37,23 +54,23 @@ const useTransactions = ({
         })) as transactionInterface[];
 
         queryClient.setQueryData(queryKey, data);
-        setIsInitialLoad(false);
-
+      
         onSuccess?.(data);
       },
       (error) => {
-        setIsInitialLoad(false);
         onError?.(error);
       }
     );
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, [queryRef]);
 
   return {
-    data: query.data,
-    isLoading: isInitialLoad,
-    error: !!query.error,
+    ...query,
+    isLoading: query.isLoading,
+    isError: query.isError ,
   };
 };
 
