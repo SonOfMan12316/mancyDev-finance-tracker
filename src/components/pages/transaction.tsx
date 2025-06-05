@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from "react";
 import { db } from "../../firebase";
 import { collection, query, where, Query, orderBy } from "firebase/firestore";
 import toast from "react-hot-toast";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 import { Search, DropdownIcon } from "../icons";
 import { Layout } from "../layout";
@@ -15,6 +14,8 @@ import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";
 import useDebounce from "../../hooks/useDebounce";
 import useTransactions from "../../hooks/useTransactions";
+import Lottie from "lottie-react";
+import loadingLottie from "../../assets/lottie/lottie.json";
 
 interface TransactionInterface {
   transaction: transactionInterface[];
@@ -31,7 +32,7 @@ export const Transaction = () => {
       value: "Latest",
     });
   const [selectedCategoryOption, setSelectedCategoryOption] =
-  useState<OptionsInterface<string> | null>(null);
+    useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
   const [pageSize] = useState<number>(PAGE.SIZE);
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
@@ -109,7 +110,7 @@ export const Transaction = () => {
     <div className="w-screen">
       <Layout title="transactions">
         <div className="px-4 md:px-8">
-          <div className="bg-white min-h-90 p-4 md:p-8 rounded-md w-full">
+          <div className="bg-white min-h-full p-4 md:p-8 rounded-md w-full">
             <div className="flex justify-between items-center w-full gap-4">
               <div className="flex-1">
                 <Input
@@ -159,29 +160,29 @@ export const Transaction = () => {
                 </div>
               </div>
             </div>
-            <div className="flex-grow">  
-            <TransactionTable
-              transaction={currentItems}
-              isLoading={isLoading}
-              transactionSearch={transactionSearch}
-            />
-            <TransactionCard isLoading={isLoading} transaction={currentItems} transactionSearch={transactionSearch} />
+            <div className="flex-grow">
+              <TransactionTable
+                transaction={currentItems}
+                isLoading={isLoading}
+                transactionSearch={transactionSearch}
+              />
+              <TransactionCard isLoading={isLoading} transaction={currentItems} transactionSearch={transactionSearch} />
             </div>
             <div className="mt-auto">
-            {filteredTransactions && filteredTransactions.length > 0 && !isLoading && (
-              <>
-              <Pagination
-                currentPage={pageNumber}
-                pageSize={pageSize}
-                totalItems={filteredTransactions.length}
-                onPageChange={setPageNumber}
-              />
-              <p className="text-ch-grey text-sm font-normal mt-4 text-right">
-                Showing {Math.min(indexOfLastItem, filteredTransactions.length)} of {filteredTransactions.length}{" "}
-                transactions
-              </p>
-              </>
-            )}
+              {filteredTransactions && filteredTransactions.length > 0 && !isLoading && (
+                  <>
+                    <Pagination
+                      currentPage={pageNumber}
+                      pageSize={pageSize}
+                      totalItems={filteredTransactions.length}
+                      onPageChange={setPageNumber}
+                    />
+                    <p className="text-ch-grey text-xs md:text-sm font-normal mt-4 text-right">
+                      Showing {Math.min(indexOfLastItem, filteredTransactions.length)} of {filteredTransactions.length}{" "} 
+                      transactions
+                    </p>
+                  </>
+                )}
             </div>
           </div>
         </div>
@@ -213,17 +214,25 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             })}
           </tr>
         </thead>
-        <tbody className="w-full relative">
+        <tbody className="w-full">
           {isLoading ? (
             <tr>
-              <td colSpan={6} className="text-center py-10">
-                <DotLottieReact
-                  src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
-                  loop
-                  autoplay
-                  className="w-3/5 h-3/5 mx-auto"
-                />
-                <p className="text-ch-black text-lg font-normal">Loading ...</p>
+              <td colSpan={6} className="text-center py-32">
+                <Lottie
+                  animationData={loadingLottie}
+                  loop={true}
+                  autoplay={true}
+                  style={{
+                    height: "100%",
+                    width: "100vw",
+                    maxHeight: 80,
+                    maxWidth: 80,
+                    margin: '0 auto'
+                  }}
+                  rendererSettings={{
+                    preserveAspectRatio: "xMidYMid slice",
+                  }}
+                  />
               </td>
             </tr>
           ) : transaction && transaction.length > 0 && !isLoading ? (
@@ -282,14 +291,23 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             })
           ) : (
             <tr>
-              <td colSpan={6} className="text-center py-10">
-                <DotLottieReact
-                  src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
-                  loop
-                  autoplay
-                  className="w-3/5 h-3/5 mx-auto"
+              <td colSpan={6} className="text-center py-32">
+                <Lottie
+                  animationData={loadingLottie}
+                  loop={true}
+                  autoplay={true}
+                  style={{
+                    height: "100%",
+                    width: "100%",
+                    maxHeight: 80,
+                    maxWidth: 80,
+                    margin: '0 auto'
+                  }}
+                  rendererSettings={{
+                    preserveAspectRatio: "xMidYMid slice",
+                  }}
                 />
-                <p className="text-ch-black text-base font-normal">
+                <p className="text-ch-black text-sm font-normal">
                   No transaction{" "}
                   {transactionSearch !== "" ? "with such name" : ""} found.
                 </p>
@@ -310,14 +328,21 @@ const TransactionCard: React.FC<TransactionInterface> = ({
   return (
     <div className="md:hidden">
       {isLoading ? (
-        <div className="w-full h-80 flex flex-col items-center justify-center">
-          <div className="text-center mt-4">
-            <DotLottieReact
-              src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
-              loop
-              autoplay
-            />
-          </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
+          <Lottie
+            animationData={loadingLottie}
+            loop={true}
+            autoplay={true}
+            style={{
+              height: "100%",
+              width: "100%",
+              maxHeight: 80,
+              maxWidth: 80,
+            }}
+            rendererSettings={{
+              preserveAspectRatio: "xMidYMid slice",
+            }}
+          />
           <p className="text-ch-black text-lg font-normal">Loading ...</p>
         </div>
       ) : transaction && transaction.length > 0 && !isLoading ? (
@@ -365,15 +390,22 @@ const TransactionCard: React.FC<TransactionInterface> = ({
           </div>
         ))
       ) : (
-        <div className="w-full h-80 flex flex-col items-center justify-center">
-          <div className="text-center mt-4">
-            <DotLottieReact
-              src="https://lottie.host/df769f50-c4f3-4f5a-a967-dc21e728bdd4/qCDaeBxHKM.lottie"
-              loop
-              autoplay
-            />
-          </div>
-          <p className="text-ch-black text-center text-base font-normal">
+        <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
+          <Lottie
+            animationData={loadingLottie}
+            loop={true}
+            autoplay={true}
+            style={{
+              height: "100%",
+              width: "100%",
+              maxHeight: 80,
+              maxWidth: 80,
+            }}
+            rendererSettings={{
+              preserveAspectRatio: "xMidYMid slice",
+            }}
+          />
+          <p className="text-ch-black text-center text-sm font-normal">
             No transaction {transactionSearch !== "" ? "with such name" : ""}{" "}
             found.
           </p>
