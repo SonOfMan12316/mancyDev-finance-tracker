@@ -1,15 +1,15 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
 import { createBudget } from "../../api/resource/budget";
 import { Layout } from "../layout";
-import budgets from "../../data/data";
+import loadingLottie from "../../assets/lottie/lottie.json"
 import BudgetCard from "../Budgets/budgetCard";
 import Modal from "../global/Modal";
 import Input from "../ui/Input/Input";
-import { BudgetInfo, budgetInterface } from "../../types/global";
+import { OptionsInterface } from "../../types/global";
 import Select from "../ui/Dropdown/Select";
 import { DollarSign, DropdownIcon } from "../icons";
 import { CategoryOptions, ThemeOptions } from "../../lib/getSelectOptions";
@@ -19,6 +19,22 @@ import BudgetSpendingSummaryCard from "../Budgets/BudgetSpendingSummaryCard";
 import useUIStore from "../../store/ui-store";
 
 import { queryClient } from "../../main";
+import useBudgets from "../../hooks/useBudget";
+import Lottie from "lottie-react";
+
+type BudgetData = {
+  category: string;
+  maximum: string;
+  amount_spent: string;
+  theme: string;
+}
+
+type BudgetValues = {
+  category: OptionsInterface<string> | null;
+  maximum: string;
+  amount_spent: string;
+  theme: OptionsInterface<string> | null;
+};
 
 const Budget = () => {
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
@@ -30,10 +46,11 @@ const Budget = () => {
     formState: { errors },
     setValue,
     reset,
-  } = useForm<BudgetInfo>({
+  } = useForm<BudgetValues>({
     defaultValues: {
       category: null,
       maximum: "",
+      amount_spent: "",
       theme: null,
     },
   });
@@ -51,19 +68,20 @@ const Budget = () => {
       reset({
         category: matchedCategory ?? null,
         maximum: selectedBudget.maximum.toString() ?? "",
-        theme: matchedTheme,
+        theme: matchedTheme ?? null,
       });
     } else if (openModal?.type === "add") {
       reset({
         category: { value: "Entertainment", label: "Entertainment" },
         maximum: "",
+        amount_spent: "",
         theme: { value: ThemeOptions[0].value, label: ThemeOptions[0].label },
       });
     }
   }, [openModal, selectedBudget, reset]);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: BudgetInfo) => createBudget(data),
+    mutationFn: (data: BudgetData) => createBudget(data),
     onSuccess: () => {
       toast.success("New budget added Successfully");
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
@@ -74,9 +92,27 @@ const Budget = () => {
     },
   });
 
-  const handleAddBudget: SubmitHandler<BudgetInfo> = (data) => {
-    mutate(data);
+  const handleAddBudget: SubmitHandler<BudgetValues> = (data) => {
+    const budgetData = {
+      category: data.category?.value || "",
+      maximum: data.maximum,
+      amount_spent: data.amount_spent,
+      theme: data.theme?.value || ""
+    }
+    mutate(budgetData);
   };
+
+  const [budgets, setBudgets] = useState<BudgetData[]>([])
+
+  const { isLoading } = useBudgets({
+    onSuccess(data) {
+      setBudgets(data)
+    },
+    onError(error) {
+      toast.error(`${error.message}`)
+    }
+  })
+
 
   return (
     <Layout
@@ -85,17 +121,35 @@ const Budget = () => {
       buttonTitle="+ Add New Budget"
       onClick={() => setOpenModal({ type: "add" })}
     >
-      <div className="p-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-4">
+      {isLoading ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
+            <Lottie
+              animationData={loadingLottie}
+              loop={true}
+              autoplay={true}
+              style={{
+                height: "100%",
+                width: "100%",
+                maxHeight: 80,
+                maxWidth: 80,
+              }}
+              rendererSettings={{
+                preserveAspectRatio: "xMidYMid slice",
+              }}
+            />
+          </div>
+        ) : (
+        <div className="p-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-4">
         <BudgetSpendingSummaryCard budgets={budgets} />
         <>
           {budgets.map(({ category, maximum, amount_spent, theme }) => (
             <BudgetCard
               key={category}
               title={category}
-              progressBarValue={(amount_spent / maximum) * 100}
+              progressBarValue={(Number(amount_spent) / Number(maximum)) * 100}
               progressColor={theme}
-              amountSpent={amount_spent}
-              maximum={maximum}
+              amountSpent={Number(amount_spent)}
+              maximum={Number(maximum)}
               budget={
                 budgets.find((budget) => budget.category === category) || null
               }
@@ -155,6 +209,32 @@ const Budget = () => {
                 </span>
               )}
             </div>
+            <div className="mt-3">
+              <Input
+                typeOfInput="modal"
+                variant="primary"
+                label="amount spent"
+                placeholder="e.g. 2000"
+                icon={<DollarSign />}
+                placement="start"
+                {...register("amount_spent", {
+                  required: "Amount spent is required",
+                  min: { value: 1, message: "Amount must be positive" },
+                })}
+                onChange={(e) => {
+                  const rawValue = e.target.value.replace(/\D/g, "");
+                  setValue("amount_spent", rawValue, {
+                    shouldValidate: true,
+                  });
+                  e.target.value = rawValue;
+                }}
+              />
+              {errors.amount_spent && (
+                <span role="alert" className="text-xs text-ch-red">
+                  {errors.maximum?.message}
+                </span>
+              )}
+            </div>
             <div className="my-2">
               <Select
                 label="Theme"
@@ -194,6 +274,7 @@ const Budget = () => {
           confirmText="No, Go Back"
         />
       </div>
+      )}
     </Layout>
   );
 };

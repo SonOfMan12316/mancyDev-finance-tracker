@@ -1,51 +1,40 @@
 import { useQuery } from "@tanstack/react-query";
-import { Query, onSnapshot } from "firebase/firestore";
-import { budgetInterface } from "../types/global";
-import { queryClient } from "../main";
-import { useState } from "react";
+import { getDocs, collection, orderBy, query } from "firebase/firestore";
+import { budgetInfo } from "../types/global";
+import { db } from "../firebase";
+import { useEffect } from "react";
 
-interface UseTransactionsProps {
-  queryRef: Query;
-  onSuccess?: (data: budgetInterface[]) => void;
+interface UseBudgetsProps {
+  onSuccess?: (data: budgetInfo[]) => void;
   onError?: (error: Error) => void;
 }
 
-const useBudget = ({ queryRef, onSuccess, onError }: UseTransactionsProps) => {
-  const queryKey = ["transactions", queryRef];
-  const [loading, setLoading] = useState(true);
-
-  const query = useQuery<budgetInterface[], Error>({
-    queryKey,
-    queryFn: () => [],
-    staleTime: Infinity,
-    refetchOnWindowFocus: false,
+const useBudgets = ({ onSuccess, onError }: UseBudgetsProps = {}) => {
+  const result = useQuery<budgetInfo[], Error>({
+    queryKey: ["budgets"],
+    queryFn: async () => {
+        const snapshot = await getDocs(query(collection(db, "budgets"), orderBy("category", "asc")));
+        return snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as budgetInfo[];
+    },
+    refetchOnWindowFocus: false
   });
 
-  setLoading(true);
-  const unsubscribe = onSnapshot(
-    queryRef,
-    (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-      })) as budgetInterface[];
-
-      queryClient.setQueryData(queryKey, data);
-      setLoading(false);
-      onSuccess?.(data);
-    },
-    (error) => {
-      onError?.(error);
-      setLoading(false);
+  useEffect(() => {
+    if (result.data && onSuccess) {
+      onSuccess(result.data);
     }
-  );
+  }, [result.data, onSuccess]);
 
-  return {
-    data: query.data,
-    isLoading: loading,
-    error: !!query.error,
-    return: unsubscribe(),
-  };
-  return () => unsubscribe();
+  useEffect(() => {
+    if (result.error && onError) {
+      onError(result.error);
+    }
+  }, [result.error, onError]);
+
+  return result;
 };
 
-export default useBudget;
+export default useBudgets;

@@ -4,7 +4,7 @@ import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import { CardHeader } from "../layout";
 import useUIStore from "../../store/ui-store";
-import { budgetInterface } from "../../types/global";
+import { budgetInfo } from "../../types/global";
 import { ProgressBar } from "../global";
 // import Progress
 
@@ -15,7 +15,7 @@ interface BudgetCardProps {
   progressBarValue: number;
   progressColor: string;
   onClick?: () => void;
-  budget: budgetInterface | null;
+  budget: budgetInfo | null;
 }
 
 const BudgetCard: React.FC<BudgetCardProps> = ({
