@@ -13,10 +13,11 @@ export interface transactionInterface {
   recurring: boolean;
 }
 
-export interface budgetInterface {
+export interface budgetInfo {
+  id?: string;
   category: string;
-  maximum: number;
-  amount_spent: number;
+  maximum: string;
+  amount_spent: string;
   theme: string;
 }
 
