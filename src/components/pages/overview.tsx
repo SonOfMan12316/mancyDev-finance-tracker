@@ -125,7 +125,6 @@ const OverView = () => {
                 preserveAspectRatio: "xMidYMid slice",
               }}
             />
-            <p className="text-ch-black text-lg font-normal">Loading ...</p>
           </div>
         ) : (
           <div className="px-4 md:px-8">
