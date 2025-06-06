@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { budgetInterface, potInterface, transactionInterface } from "../types/global";
+import { budgetInfo, potInterface, transactionInterface } from "../types/global";
 
 type ModalType = "add" | "delete" | "edit" | "addMoney" | "withdraw";
 
@@ -13,7 +13,7 @@ type UI = {
   activeNavItem: string;
   openModal: ModalState;
   popoverState: boolean;
-  selectedBudget: budgetInterface | null;
+  selectedBudget: budgetInfo | null;
   selectedPot: potInterface | null;
   transactions: transactionInterface[] | [];
 };
