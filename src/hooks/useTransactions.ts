@@ -34,7 +34,6 @@ const useTransactions = ({
         queryClient.setQueryData(queryKey, data);
         return data;
       } catch (err) {
-        console.error("Initial getDocs failed:", err);
         throw err; 
       }
     },
