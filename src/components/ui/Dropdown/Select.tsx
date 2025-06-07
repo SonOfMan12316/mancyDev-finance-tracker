@@ -1,6 +1,6 @@
 import { useState, ReactNode } from "react";
 import { OptionsInterface } from "../../../types/global";
-import { useClickOutside } from "../../../hooks/useClickOutside";
+import { useClickOutside } from "../../../hooks";
 import { Button } from "../Button/Button";
 import "./Select.css";
 import { Checkmark, Download, Filter } from "../../icons";

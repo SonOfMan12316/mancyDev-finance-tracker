@@ -12,8 +12,7 @@ import { OptionsInterface, transactionInterface } from "../../types/global";
 import { toDMYString } from "../../utils/date";
 import Pagination from "../global/Pagination";
 import { PAGE } from "../../utils/global";
-import useDebounce from "../../hooks/useDebounce";
-import useTransactions from "../../hooks/useTransactions";
+import { useDebounce, useTransactions } from "../../hooks";
 import Lottie from "lottie-react";
 import loadingLottie from "../../assets/lottie/lottie.json";
 
@@ -50,7 +49,10 @@ export const Transaction = () => {
 
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
-  const currentItems = filteredTransactions.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredTransactions.slice(
+    indexOfFirstItem,
+    indexOfLastItem
+  );
 
   useEffect(() => {
     let queryRef = query(
@@ -166,10 +168,16 @@ export const Transaction = () => {
                 isLoading={isLoading}
                 transactionSearch={transactionSearch}
               />
-              <TransactionCard isLoading={isLoading} transaction={currentItems} transactionSearch={transactionSearch} />
+              <TransactionCard
+                isLoading={isLoading}
+                transaction={currentItems}
+                transactionSearch={transactionSearch}
+              />
             </div>
             <div className="mt-auto">
-              {filteredTransactions && filteredTransactions.length > 0 && !isLoading && (
+              {filteredTransactions &&
+                filteredTransactions.length > 0 &&
+                !isLoading && (
                   <>
                     <Pagination
                       currentPage={pageNumber}
@@ -178,8 +186,9 @@ export const Transaction = () => {
                       onPageChange={setPageNumber}
                     />
                     <p className="text-ch-grey text-xs md:text-sm font-normal mt-4 text-right">
-                      Showing {Math.min(indexOfLastItem, filteredTransactions.length)} of {filteredTransactions.length}{" "} 
-                      transactions
+                      Showing{" "}
+                      {Math.min(indexOfLastItem, filteredTransactions.length)}{" "}
+                      of {filteredTransactions.length} transactions
                     </p>
                   </>
                 )}
@@ -227,12 +236,12 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                     width: "100vw",
                     maxHeight: 80,
                     maxWidth: 80,
-                    margin: '0 auto'
+                    margin: "0 auto",
                   }}
                   rendererSettings={{
                     preserveAspectRatio: "xMidYMid slice",
                   }}
-                  />
+                />
               </td>
             </tr>
           ) : transaction && transaction.length > 0 && !isLoading ? (
@@ -301,7 +310,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                     width: "100%",
                     maxHeight: 80,
                     maxWidth: 80,
-                    margin: '0 auto'
+                    margin: "0 auto",
                   }}
                   rendererSettings={{
                     preserveAspectRatio: "xMidYMid slice",

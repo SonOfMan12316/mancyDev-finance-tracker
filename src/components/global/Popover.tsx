@@ -2,7 +2,7 @@ import React, { ReactNode } from "react";
 import { Button } from "../ui/Button/Button";
 import { ButtonVariant } from "../ui/Button/Button/Button";
 import classnames from "classnames";
-import { useClickOutside } from "../../hooks/useClickOutside";
+import { useClickOutside } from "../../hooks";
 import useUIStore from "../../store/ui-store";
 
 interface PopoverProps {
