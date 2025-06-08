@@ -23,7 +23,7 @@ module.exports = {
         'ch-brown': '#93674C',
         'ch-blue': '#3F82B2',
         'ch-black': '#000000',
-        'ch-modal': 'rgba(0,0,0,0.7)',
+        'ch-modal': '#000000b3',
         'ch-red': '#C94736'
       },
       flexGrow: {
