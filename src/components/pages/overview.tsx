@@ -10,13 +10,15 @@ import { addCommasToNumber } from "../../utils/number";
 import { RightIcon, SavingIcon } from "../icons";
 import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
-import useTransactions from "../../hooks/useTransactions";
-import { transactionInterface } from "../../types/global";
+import { useTransactions, useBudgets, useBudgetTotals } from "../../hooks";
+import { budgetInfo, transactionInterface } from "../../types/global";
 import loadingLottie from "../../assets/lottie/lottie.json";
 
 const OverView = () => {
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
+  const [budgets, setBudgets] = useState<budgetInfo[]>([]);
+  const { limit, amountSpent, categories } = useBudgetTotals(budgets);
 
   const figure = [
     {
@@ -54,28 +56,6 @@ const OverView = () => {
       color: "ch-yellow",
     },
   ];
-  const budgetsData = [
-    {
-      name: "Entertainment",
-      amount: 50,
-      color: "ch-green",
-    },
-    {
-      name: "Bills",
-      amount: 750,
-      color: "ch-cyan",
-    },
-    {
-      name: "Dining Out",
-      amount: 75,
-      color: "ch-yellow",
-    },
-    {
-      name: "Personal Care",
-      amount: 100,
-      color: "ch-navy",
-    },
-  ];
   const billsData = [
     {
       name: "Paid Bills",
@@ -104,6 +84,15 @@ const OverView = () => {
     onSuccess: (data) => setTransactions(data),
     onError: (error) =>
       toast.error("Failed to fetch transactions: " + error.message),
+  });
+
+  useBudgets({
+    onSuccess(data) {
+      setBudgets(data);
+    },
+    onError(error) {
+      toast.error(`${error.message}`);
+    },
   });
 
   return (
@@ -277,10 +266,14 @@ const OverView = () => {
                   </div>
                   <div className="md:flex md:items-center md:justify-between lg:justify-center">
                     <div className="mt-6 mb-2 md:mt-0 flex justify-center md:w-10/12 lg:w-9/12">
-                      <PieChart amount={338} limit={975} />
+                      <PieChart
+                        categories={categories}
+                        amount={amountSpent}
+                        limit={limit}
+                      />
                     </div>
                     <div className="grid grid-cols-2 md:flex md:flex-col px-2 my-2 md:w-2/12 lg:w-3/12">
-                      {budgetsData.map((saving, index) => (
+                      {budgets.slice(0, 4).map((saving, index) => (
                         <div
                           key={index}
                           className="flex space-x-5 my-2 lg:my-1"
@@ -288,14 +281,14 @@ const OverView = () => {
                           <div className="flex flex-col justify-center">
                             <div className="flex items-center space-x-3">
                               <div
-                                className={`w-1 h-11 rounded-xl bg-${saving.color}`}
+                                className={`w-1 h-11 rounded-xl bg-ch-${saving.theme}`}
                               ></div>
                               <div className="flex flex-col pt-2">
                                 <h1 className="text-ch-grey text-xs whitespace-nowrap">
-                                  {saving.name}
+                                  {saving.category}
                                 </h1>
                                 <span className="font-bold text-black text-sm py-2">
-                                  {"$" + saving.amount.toFixed(2)}
+                                  {"$" + Number(saving.amount_spent).toFixed(2)}
                                 </span>
                               </div>
                             </div>

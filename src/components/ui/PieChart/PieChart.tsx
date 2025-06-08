@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, FC, useRef } from "react";
 import { pieChartCategory } from "../../../types/global";
+import { tailwindToHex } from "../../../utils/color";
 
 interface PieProps {
   data: number[];
@@ -37,10 +38,10 @@ const PieChart: FC<PieChartProps> = ({ amount, limit, categories }) => {
   const chartData = useMemo(() => {
     return categories.map((cat) => ({
       percentage: limit > 0 ? (cat.amountSpent / limit) * 100 : 0,
+      color: tailwindToHex(`ch-${cat.color}`),
     }));
   }, [categories]);
-
-  const colors = ["#82C9D7", "#F2CDAC", "#626070", "#277C78"];
+  chartData.map((x) => x.percentage);
 
   return (
     <div>
@@ -50,7 +51,7 @@ const PieChart: FC<PieChartProps> = ({ amount, limit, categories }) => {
         data={chartData.map((x) => x.percentage)}
         radius={125}
         hole={60}
-        colors={colors}
+        colors={chartData.map((x) => x.color)}
         strokeWidth={1}
       />
     </div>
