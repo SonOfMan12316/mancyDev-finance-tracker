@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { RightIcon } from "../icons";
-import { transactions } from "../../data/transaction";
 import { toDMYString } from "../../utils/date";
 import { CardHeader } from "../layout";
 import useUIStore from "../../store/ui-store";
-import { budgetInfo } from "../../types/global";
+import { budgetInfo, transactionInterface } from "../../types/global";
 import { ProgressBar } from "../global";
-// import Progress
 
 interface BudgetCardProps {
   title: string;
@@ -16,6 +14,7 @@ interface BudgetCardProps {
   progressColor: string;
   onClick?: () => void;
   budget: budgetInfo | null;
+  transactions: transactionInterface[];
 }
 
 const BudgetCard: React.FC<BudgetCardProps> = ({
@@ -24,6 +23,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   maximum,
   amountSpent,
   budget,
+  transactions,
 }) => {
   const { setOpenModal, setSelectedBudget } = useUIStore();
 
