@@ -34,3 +34,8 @@ export interface recurringbillInterface {
   amount: number;
   Duration: string;
 }
+
+export type pieChartCategory = {
+  amountSpent: number;
+  color: string;
+};

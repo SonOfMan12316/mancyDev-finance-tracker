@@ -1,4 +1,5 @@
-import { useState, useEffect, FC, useRef } from "react";
+import { useState, useEffect, useMemo, FC, useRef } from "react";
+import { pieChartCategory } from "../../../types/global";
 
 interface PieProps {
   data: number[];
@@ -29,10 +30,16 @@ interface SliceProps {
 interface PieChartProps {
   amount: number;
   limit: number;
+  categories: pieChartCategory[];
 }
 
-const PieChart: FC<PieChartProps> = ({ amount, limit }) => {
-  const [data] = useState([61.4, 16.5, 16, 6.1]);
+const PieChart: FC<PieChartProps> = ({ amount, limit, categories }) => {
+  const chartData = useMemo(() => {
+    return categories.map((cat) => ({
+      percentage: limit > 0 ? (cat.amountSpent / limit) * 100 : 0,
+    }));
+  }, [categories]);
+
   const colors = ["#82C9D7", "#F2CDAC", "#626070", "#277C78"];
 
   return (
@@ -40,7 +47,7 @@ const PieChart: FC<PieChartProps> = ({ amount, limit }) => {
       <Pie
         amount={amount}
         limit={limit}
-        data={data}
+        data={chartData.map((x) => x.percentage)}
         radius={125}
         hole={60}
         colors={colors}
@@ -110,13 +117,13 @@ const Slice: FC<SliceProps> = ({
   limit,
 }) => {
   const [animatedAngle, setAnimatedAngle] = useState(0);
-  const animationRef = useRef<number>(0)
+  const animationRef = useRef<number>(0);
 
   useEffect(() => {
     setAnimatedAngle(0);
 
     const duration = 1000;
-    const startTime = performance.now()
+    const startTime = performance.now();
 
     const animate = (currentTime: number) => {
       const elapsed = currentTime - startTime;
@@ -126,18 +133,24 @@ const Slice: FC<SliceProps> = ({
       if (progress < 1) {
         requestAnimationFrame(animate);
       }
-    }
+    };
 
     animationRef.current = requestAnimationFrame(animate);
 
     return () => {
-      if(animationRef.current) {
+      if (animationRef.current) {
         cancelAnimationFrame(animationRef.current);
       }
-    }
-  }, [angle])
+    };
+  }, [angle]);
 
-  const a = getAnglePoint(startAngle, startAngle + animatedAngle, radius, radius, radius);
+  const a = getAnglePoint(
+    startAngle,
+    startAngle + animatedAngle,
+    radius,
+    radius,
+    radius
+  );
   const b = getAnglePoint(
     startAngle,
     startAngle + animatedAngle,
@@ -145,14 +158,14 @@ const Slice: FC<SliceProps> = ({
     radius,
     radius
   );
-  
+
   const path = [
     `M${a.x1},${a.y1}`,
     `A${radius},${radius} 0 ${animatedAngle > 180 ? 1 : 0},1 ${a.x2},${a.y2}`,
     `L${b.x2},${b.y2}`,
-    `A${radius - hole},${radius - hole} 0 ${animatedAngle > 180 ? 1 : 0},0 ${b.x1},${
-      b.y1
-    }`,
+    `A${radius - hole},${radius - hole} 0 ${animatedAngle > 180 ? 1 : 0},0 ${
+      b.x1
+    },${b.y1}`,
     "Z",
   ].join(" ");
   return (
