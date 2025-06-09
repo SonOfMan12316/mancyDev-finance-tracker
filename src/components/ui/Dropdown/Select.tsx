@@ -18,6 +18,8 @@ type DropdownProps<T> = {
   isModal?: boolean;
   themeColor?: string;
   showSecondSelect?: boolean;
+  usedThemes?: Set<string>;
+  showUsedIndicator?: boolean;
 };
 
 const Dropdown = <T extends string | number>({
@@ -33,6 +35,8 @@ const Dropdown = <T extends string | number>({
   isModal = false,
   themeColor,
   showSecondSelect = false,
+  usedThemes = new Set(),
+  showUsedIndicator = false,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -132,6 +136,7 @@ const Dropdown = <T extends string | number>({
               themeColor={themeColor}
               isLast={index === allOptions.length - 1}
               placeholder={placeholder}
+              isUsed={showUsedIndicator && usedThemes.has(String(option.value))}
             />
           ))}
         </ul>
@@ -148,6 +153,7 @@ const DropdownItem = <T extends string | number>({
   themeColor,
   isLast = false,
   placeholder,
+  isUsed = false,
 }: {
   option: OptionsInterface<T>;
   isSelected: boolean;
@@ -157,14 +163,16 @@ const DropdownItem = <T extends string | number>({
   themeColor?: string;
   isLast?: boolean;
   placeholder?: string;
+  isUsed?: boolean;
 }) => (
   <li
     className={`relative cursor-pointer select-none py-3 mx-4 text-sm flex items-center justify-between ${
       isLast ? "" : "border-b border-ch-grey/0.15"
-    }`}
+    } ${isUsed ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
     role="option"
     aria-selected={isSelected}
-    onClick={() => onClick(option)}
+    aria-disabled={isUsed}
+    onClick={isUsed ? undefined : () => onClick(option)}
   >
     <span className="truncate flex items-center font-normal text-sm">
       {themeColor && (
@@ -180,10 +188,12 @@ const DropdownItem = <T extends string | number>({
         {option.label}
       </span>
     </span>
-    {(isSelected || (isPlaceholder && option.value === placeholder)) && (
+    {isSelected || (isPlaceholder && option.value === placeholder) ? (
       <span className="">
         <Checkmark />
       </span>
+    ) : (
+      isUsed && <span className="text-xs text-ch-grey">Already Used</span>
     )}
   </li>
 );
