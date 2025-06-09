@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 
-import { createBudget } from "../../api/resource/budget";
+import { createBudget } from "../../api/resource/addBudget";
 import { Layout } from "../layout";
 import loadingLottie from "../../assets/lottie/lottie.json";
 import BudgetCard from "../Budgets/budgetCard";
@@ -22,8 +22,8 @@ import ConfirmDialog from "../global/ConfirmDialog";
 import BudgetSpendingSummaryCard from "../Budgets/BudgetSpendingSummaryCard";
 import useUIStore from "../../store/ui-store";
 
-import { queryClient } from "../../main";
-import { useBudgets, useTransactions } from "../../hooks";
+import { queryClient } from "../../App";
+import { useBudgets, useBudgetTotals, useTransactions } from "../../hooks";
 import Lottie from "lottie-react";
 import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -37,6 +37,7 @@ type BudgetValues = {
 
 const Budget = () => {
   const [budgets, setBudgets] = useState<budgetInfo[]>([]);
+  const { usedThemes } = useBudgetTotals(budgets);
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
   const transactionsQuery = useMemo(
@@ -86,14 +87,14 @@ const Budget = () => {
   }, [openModal, selectedBudget, reset]);
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: budgetInfo) => createBudget(data),
+    mutationFn: createBudget,
     onSuccess: () => {
       toast.success("New budget added Successfully");
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
       setOpenModal(null);
     },
-    onError: () => {
-      toast.error("Error adding new budget", { id: "add-budget-err" });
+    onError: (error: Error) => {
+      toast.error(error.message, { id: "add-budget-err" });
     },
   });
 
@@ -258,6 +259,8 @@ const Budget = () => {
                   isModal={true}
                   themeColor={watch("theme")?.value}
                   {...register("theme", { required: "theme is required" })}
+                  usedThemes={usedThemes}
+                  showUsedIndicator={true}
                 />
                 {errors.theme && (
                   <span role="alert" className="text-xs text-ch-red">
@@ -268,6 +271,7 @@ const Budget = () => {
               <Button
                 type="submit"
                 className="mt-3 mb-4 flex items-center justify-center"
+                disabled={isPending}
               >
                 <Spinner isPending={isPending} />
                 {openModal?.type === "add" ? "Add Budget" : "Save Changes"}
