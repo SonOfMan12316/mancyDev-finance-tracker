@@ -1,6 +1,5 @@
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { shallow } from "zustand/shallow";
 import classnames from "classnames";
 
 import { Bill, Budget, Home, Saving, Transaction } from "../icons";
@@ -20,10 +19,6 @@ const BottomNav = () => {
       ?.filter((part) => part !== "")[0]
       .replace("-", " ")
   );
-
-  useEffect(() => {
-    console.log(activeNavItem);
-  }, [activeNavItem]);
 
   const handleNavClick = (label: string) => {
     setActiveNavItem(label.replace("-", " "));
