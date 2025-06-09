@@ -1,8 +1,19 @@
 import { useMemo } from "react";
 import { budgetInfo } from "../types/global";
 
-const useBudgetTotals = (budgets: budgetInfo[]) => {
+interface BudgetTotals {
+  limit: number;
+  amountSpent: number;
+  categories: Array<{
+    amountSpent: number;
+    color: string;
+  }>;
+  usedThemes: Set<string>;
+}
+
+const useBudgetTotals = (budgets: budgetInfo[]): BudgetTotals => {
   return useMemo(() => {
+    const usedThemes = new Set<string>();
     const totals = {
       limit: 0,
       amountSpent: 0,
@@ -10,6 +21,7 @@ const useBudgetTotals = (budgets: budgetInfo[]) => {
         amountSpent: number;
         color: string;
       }>,
+      usedThemes,
     };
 
     if (budgets?.length > 0) {
@@ -20,12 +32,11 @@ const useBudgetTotals = (budgets: budgetInfo[]) => {
       );
 
       totals.categories = budgets.map((budget) => {
-        const limit = Number(budget.maximum);
-        const amountSpent = Number(budget.amount_spent);
+        usedThemes.add(budget.theme);
 
         return {
-          limit,
-          amountSpent,
+          limit: Number(budget.maximum),
+          amountSpent: Number(budget.amount_spent),
           color: budget.theme,
         };
       });
