@@ -86,15 +86,37 @@ const Budget = () => {
     }
   }, [openModal, selectedBudget, reset]);
 
+  // const { mutate, isPending } = useMutation({
+  //   mutationFn: createBudget,
+  //   onMutate: () => {
+  //     toast.success("New budget added Successfully");
+  //     queryClient.invalidateQueries({ queryKey: ["budgets"] });
+  //     setOpenModal(null);
+  //   },
+  //   onError: (error: Error) => {
+  //     toast.error(error.message, { id: "add-budget-err" });
+  //   },
+  // });
+
   const { mutate, isPending } = useMutation({
     mutationFn: createBudget,
-    onSuccess: () => {
-      toast.success("New budget added Successfully");
-      queryClient.invalidateQueries({ queryKey: ["budgets"] });
-      setOpenModal(null);
+    onMutate: async (newBudget) => {
+      await queryClient.cancelQueries({ queryKey: ["budgets"] });
+
+      const previousBudgets = queryClient.getQueryData(["budgets"]);
+
+      queryClient.setQueryData(["budgets"], (old: budgetInfo[]) => [
+        ...old,
+        newBudget,
+      ]);
+
+      return { previousBudgets };
     },
-    onError: (error: Error) => {
-      toast.error(error.message, { id: "add-budget-err" });
+    onError: () => {
+      toast.error("Failed to add budget");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["budgets"] });
     },
   });
 
@@ -105,7 +127,12 @@ const Budget = () => {
       amount_spent: data.amount_spent,
       theme: data.theme?.value || "",
     };
-    mutate(budgetData);
+    mutate(budgetData, {
+      onSuccess: () => {
+        toast.success("Budget added!");
+        setOpenModal(null);
+      },
+    });
   };
 
   const { isLoading } = useBudgets({
@@ -150,24 +177,20 @@ const Budget = () => {
       ) : (
         <div className="p-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-4">
           <BudgetSpendingSummaryCard budgets={budgets} />
-          <>
-            {budgets.map(({ category, maximum, amount_spent, theme }) => (
-              <BudgetCard
-                key={category}
-                title={category}
-                progressBarValue={
-                  (Number(amount_spent) / Number(maximum)) * 100
-                }
-                progressColor={theme}
-                amountSpent={Number(amount_spent)}
-                maximum={Number(maximum)}
-                budget={
-                  budgets.find((budget) => budget.category === category) || null
-                }
-                transactions={transactions}
-              />
-            ))}
-          </>
+          {budgets.map(({ category, maximum, amount_spent, theme }) => (
+            <BudgetCard
+              key={category}
+              title={category}
+              progressBarValue={(Number(amount_spent) / Number(maximum)) * 100}
+              progressColor={theme}
+              amountSpent={Number(amount_spent)}
+              maximum={Number(maximum)}
+              budget={
+                budgets.find((budget) => budget.category === category) || null
+              }
+              transactions={transactions}
+            />
+          ))}
           <Modal
             isOpen={openModal?.type === "add" || openModal?.type === "edit"}
             title={openModal?.type === "add" ? "Add Budget" : "Edit Budget"}
