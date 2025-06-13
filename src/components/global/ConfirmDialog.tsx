@@ -1,6 +1,7 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, ReactNode } from "react";
 import Modal from "./Modal";
 import { Button } from "../ui/Button/Button";
+import Spinner from "../icons/Spinner";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
@@ -9,18 +10,29 @@ interface ConfirmDialogProps {
   message?: string;
   confirmText?: string;
   cancelText?: string;
-  onCancel?: () => void;
+  onCancel: () => void;
+  handleConfirm?: () => void;
+  icon?: ReactNode;
 }
 
 const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
-  const { isOpen, zIndex, title, message, confirmText, onCancel, cancelText } =
-    props;
+  const {
+    isOpen,
+    zIndex,
+    title,
+    message,
+    confirmText,
+    onCancel,
+    cancelText,
+    handleConfirm,
+    icon,
+  } = props;
   return (
     <Modal
       zIndex={zIndex ? zIndex : 30}
       isOpen={isOpen}
       title={title}
-      onClose={onCancel}
+      onClose={() => onCancel()}
     >
       <div className="">
         <div className="mt-5 mb-3">
@@ -28,21 +40,22 @@ const ConfirmDialog: React.FC<ConfirmDialogProps> = (props) => {
         </div>
         <div className="flex flex-col items-center mt-5">
           <Button
-            variant="destroy"
             size="sm"
-            aria-label="cancel dialog"
-            onClick={onCancel}
+            variant="destroy"
+            className="font-normal flex items-center justify-center"
+            aria-label="confirm dialog"
+            onClick={handleConfirm}
           >
-            {cancelText}
+            {icon && <span>{icon}</span>}
+            {confirmText}
           </Button>
           <Button
             size="sm"
             variant="tertiary"
-            className="font-normal"
-            aria-label="confirm dialog"
+            aria-label="cancel dialog"
             onClick={onCancel}
           >
-            {confirmText}
+            {cancelText}
           </Button>
         </div>
       </div>
