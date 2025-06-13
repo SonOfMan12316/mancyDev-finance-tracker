@@ -1,11 +1,18 @@
 import { create } from "zustand";
-import { budgetInfo, potInterface, transactionInterface } from "../types/global";
+import {
+  budgetInfo,
+  potInterface,
+  transactionInterface,
+} from "../types/global";
 
 type ModalType = "add" | "delete" | "edit" | "addMoney" | "withdraw";
 
 type ModalState = {
   type: ModalType;
-  data?: string;
+  data?: {
+    id?: string;
+    title?: string;
+  };
 } | null;
 
 type UI = {
