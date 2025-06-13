@@ -20,7 +20,7 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
     <div className="w-screen h-screen relative overflow-hidden">
       <div className="w-full h-full flex">
         <SideNav />
-        <main className="relative flex-1 overflow-auto bg-ch-beige">
+        <main className="relative flex-1 lg:block flex flex-col bg-ch-beige">
           <Header
             title={title}
             className={className}
@@ -28,8 +28,8 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
             buttonTitle={buttonTitle}
             onClick={onClick}
           />
-          <div className="pb-4 lg:pb-8">{children}</div>
-          <div className="static bottom-0">
+          <div className="flex-1 overflow-auto pb-4 lg:pb-8">{children}</div>
+          <div className="w-full">
             <BottomNav />
           </div>
         </main>
