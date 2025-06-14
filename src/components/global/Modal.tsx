@@ -10,7 +10,7 @@ interface ModalProps {
   title: string | ReactElement;
   onClose: () => void;
   zIndex?: 30 | 40;
-  modalHeader: string;
+  modalHeader?: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
