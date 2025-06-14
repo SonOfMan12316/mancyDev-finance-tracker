@@ -24,7 +24,7 @@ const BudgetSpendingSummaryCard: React.FC<BudgetSpendingSummaryCardProp> = ({
         <div className="md:w-6/12 lg:w-full">
           <h1 className="text-xl font-bold">Spending Summary</h1>
           <div className="">
-            {budgets.map((budget, index) => (
+            {budgets.slice(0, 4).map((budget, index) => (
               <div
                 key={index}
                 className={`flex justify-between my-2 ${
