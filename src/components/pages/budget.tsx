@@ -97,7 +97,7 @@ const Budget = () => {
     },
   });
 
-  const { mutate, isPending } = useMutation({
+  const { mutate, isPending } = useMutation<budgetInfo, Error, Omit<budgetInfo, 'id'>>({
     mutationFn: createBudget,
     onMutate: async (newBudget) => {
       await queryClient.cancelQueries({ queryKey: ["budgets"] });
@@ -111,11 +111,16 @@ const Budget = () => {
 
       return { previousBudgets };
     },
-    onError: (error: Error, _, context) => {
+    onSuccess: (newBudget) => {
+      queryClient.setQueryData<budgetInfo[]>(["budgets"], (current = []) => [
+        ...current,
+        newBudget,
+      ]);
+      toast.success("Budget added!");
+      setOpenModal(null);
+    },
+    onError: (error: Error) => {
       toast.error(error.message, { id: "add-budget-err" });
-      if (context?.previousBudgets) {
-        queryClient.setQueryData(["budgets"], context.previousBudgets);
-      }
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
@@ -123,17 +128,11 @@ const Budget = () => {
   });
 
   const handleAddBudget: SubmitHandler<BudgetValues> = (data) => {
-    const budgetData = {
+    mutate({
       category: data.category?.value || "",
       maximum: data.maximum,
       amount_spent: data.amount_spent,
       theme: data.theme?.value || "",
-    };
-    mutate(budgetData, {
-      onSuccess: () => {
-        toast.success("Budget added!");
-        setOpenModal(null);
-      },
     });
   };
 

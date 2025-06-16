@@ -33,10 +33,10 @@ const PotCard: React.FC<PotCardProps> = ({
         setPopOpen={setPopOpen}
         type="pot"
         onEdit={() => {
-          setOpenModal({ type: "edit", data: title });
+          setOpenModal({ type: "edit", data: {title: title} });
           setSelectedPot(pot);
         }}
-        onDelete={() => setOpenModal({ type: "delete", data: title })}
+        onDelete={() => setOpenModal({ type: "delete", data: {title: title} })}
       />
       <div className="mt-3">
         <PotManagement
@@ -49,7 +49,7 @@ const PotCard: React.FC<PotCardProps> = ({
         <div className="flex justify-between items-center space-x-3 mt-8 md:mb-0 mb-8">
           <Button
             onClick={() => {
-              setOpenModal({ type: "addMoney", data: title });
+              setOpenModal({ type: "addMoney", data: {title: title} });
               setSelectedPot(pot);
             }}
             className="font-bold"
@@ -60,7 +60,7 @@ const PotCard: React.FC<PotCardProps> = ({
           </Button>
           <Button
             onClick={() => {
-              setOpenModal({ type: "withdraw", data: title });
+              setOpenModal({ type: "withdraw", data: {title: title} });
               setSelectedPot(pot);
             }}
             className="font-bold"
