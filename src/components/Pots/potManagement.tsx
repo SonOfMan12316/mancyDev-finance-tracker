@@ -1,5 +1,5 @@
 import { ProgressBar } from "../global";
-import { useMemo, useEffect } from "react";
+import { useMemo } from "react";
 
 interface potManagementProps {
   title: string;

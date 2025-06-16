@@ -9,7 +9,6 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps & HeaderProps> = ({
   children,
-  displayHeader = true,
   title,
   className,
   buttonTitle,
