@@ -14,7 +14,7 @@ const BudgetSpendingSummaryCard: React.FC<BudgetSpendingSummaryCardProp> = ({
   return (
     <div className="bg-white px-6 rounded-xl my-2 lg:my-0 pb-1 lg:pb-0 md:py-8 lg:py-4 shadow-sm">
       <div className="md:flex md:items-center md:justify-between lg:flex-col lg:justify-center">
-        <div className="my-4 lg:my-0 pt-8 md:pt-0 mx-auto md:mx-0 lg:mx-auto md:w-6/12 lg:w-7/12">
+        <div className="my-4 lg:my-0 pt-8 flex justify-center items-center md:block md:pt-0 mx-auto md:mx-0 lg:mx-auto md:w-6/12 lg:w-7/12">
           <PieChart
             categories={categories}
             amount={amountSpent}
