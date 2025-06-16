@@ -1,7 +1,6 @@
 import React, { ReactElement, ReactNode } from "react";
 import Modal from "./Modal";
 import { Button } from "../ui/Button/Button";
-import Spinner from "../icons/Spinner";
 
 interface ConfirmDialogProps {
   isOpen: boolean;
