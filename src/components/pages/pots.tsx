@@ -234,6 +234,7 @@ const Pots = () => {
                     isModal={true}
                     themeColor={watch("theme")?.value}
                     {...register("theme", { required: "theme is required" })}
+                    usedAsInput={true}
                   />
                   {errors.theme && (
                     <span role="alert" className="text-xs text-ch-red">
