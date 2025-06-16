@@ -262,6 +262,7 @@ const Budget = () => {
             icon={<DropdownIcon />}
             isModal={true}
             {...register("category", { required: "category is required" })}
+            usedAsInput={true}
           />
           {errors.category && (
             <span role="alert" className="text-xs text-ch-red">
@@ -334,6 +335,7 @@ const Budget = () => {
               {...register("theme", { required: "theme is required" })}
               usedThemes={usedThemes}
               showUsedIndicator={true}
+              usedAsInput={true}
             />
             {errors.theme && (
               <span role="alert" className="text-xs text-ch-red">

@@ -20,6 +20,7 @@ type DropdownProps<T> = {
   showSecondSelect?: boolean;
   usedThemes?: Set<string>;
   showUsedIndicator?: boolean;
+  usedAsInput?: boolean;
 };
 
 const Dropdown = <T extends string | number>({
@@ -37,6 +38,7 @@ const Dropdown = <T extends string | number>({
   showSecondSelect = false,
   usedThemes = new Set(),
   showUsedIndicator = false,
+  usedAsInput,
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -68,54 +70,59 @@ const Dropdown = <T extends string | number>({
         </label>
       )}
       <div>
-        <div onClick={() => setIsOpen(!isOpen)}>
-          <Button
-            variant="action"
-            size="lg"
-            aria-haspopup="listbox"
-            aria-expanded={isOpen}
-            className={`flex items-center ${
-              isModal ? "justify-between" : ""
-            } hidden md:flex`}
-          >
-            <span className="truncate flex items-center font-normal">
-              {themeColor && (
-                <div
-                  className={`h-4 w-4 rounded-full bg-ch-${
-                    selectedOption?.value ? selectedOption?.value : ""
-                  } `}
-                ></div>
-              )}{" "}
-              <span className={themeColor ? "pl-2" : ""}>
-                {selectedOption?.label || placeholder}
+        {usedAsInput ? (
+          <div onClick={() => setIsOpen(!isOpen)}>
+            <Button
+              variant="action"
+              size="lg"
+              aria-haspopup="listbox"
+              aria-expanded={isOpen}
+              className={`flex items-center ${
+                isModal ? "justify-between" : ""
+              }`}
+            >
+              <span className="truncate flex items-center font-normal">
+                {themeColor && (
+                  <div
+                    className={`h-4 w-4 rounded-full bg-ch-${
+                      selectedOption?.value ? selectedOption?.value : ""
+                    } `}
+                  ></div>
+                )}{" "}
+                <span className={themeColor ? "pl-2" : ""}>
+                  {selectedOption?.label || placeholder}
+                </span>
               </span>
-            </span>
 
-            {icon && (
-              <span
-                className={`ml-4 transition-transform duration-500 ${
-                  isOpen ? "transform rotate-180" : ""
-                }`}
-              >
-                {icon}
-              </span>
-            )}
-          </Button>
-        </div>
-        <div
-          className="flex justify-between md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
-        >
-          {showSecondSelect ? (
-            <div>
-              <Filter />
+              {icon && (
+                <span
+                  className={`ml-4 transition-transform duration-500 ${
+                    isOpen ? "transform rotate-180" : ""
+                  }`}
+                >
+                  {icon}
+                </span>
+              )}
+            </Button>
+          </div>
+        ) : (
+          <>
+            <div
+              className="flex justify-between md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {showSecondSelect ? (
+                <div>
+                  <Filter />
+                </div>
+              ) : (
+                <div>
+                  <Download />
+                </div>
+              )}
             </div>
-          ) : (
-            <div>
-              <Download />
-            </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
 
       {isOpen && (
