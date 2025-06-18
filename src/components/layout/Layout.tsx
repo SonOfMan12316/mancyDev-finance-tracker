@@ -19,6 +19,7 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
     <div className="w-screen h-screen flex">
       <SideNav />
       <main className="flex-1 flex flex-col bg-ch-beige">
+      <div className="flex-1 overflow-auto pb-20 md:pb-28 lg:pb-6">
         <Header
           title={title}
           className={className}
@@ -26,8 +27,9 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
           buttonTitle={buttonTitle}
           onClick={onClick}
         />
-        <div className="flex-1 overflow-auto pb-20">
+        <div className="flex-1 overflow-auto">
           {children}
+        </div>
         </div>
         <div className="fixed bottom-0 left-0 w-full lg:hidden z-50">
           <BottomNav />
