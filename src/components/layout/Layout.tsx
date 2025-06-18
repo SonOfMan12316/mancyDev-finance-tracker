@@ -16,25 +16,23 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
   onClick,
 }) => {
   return (
-    <div className="w-screen min-h-screen relative flex flex-col">
-      <div className="w-full h-full flex overflow-hidden">
-        <SideNav />
-        <main className="relative flex-1 flex flex-col bg-ch-beige">
-          <div className="flex-1 overflow-auto">
-            <Header
-              title={title}
-              className={className}
-              displayButton={displayButton}
-              buttonTitle={buttonTitle}
-              onClick={onClick}
-            />
-            <div className="pb-2">{children}</div>
-          </div>
-          <div className="">
-            <BottomNav />
-          </div>
-        </main>
-      </div>
+    <div className="w-screen h-screen flex">
+      <SideNav />
+      <main className="flex-1 flex flex-col bg-ch-beige">
+        <Header
+          title={title}
+          className={className}
+          displayButton={displayButton}
+          buttonTitle={buttonTitle}
+          onClick={onClick}
+        />
+        <div className="flex-1 overflow-auto pb-20">
+          {children}
+        </div>
+        <div className="fixed bottom-0 left-0 w-full lg:hidden z-50">
+          <BottomNav />
+        </div>
+      </main>
     </div>
   );
 };
