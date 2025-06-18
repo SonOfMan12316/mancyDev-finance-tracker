@@ -27,7 +27,7 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
           buttonTitle={buttonTitle}
           onClick={onClick}
         />
-        <div className="flex-1 overflow-auto">
+        <div className="mt-4">
           {children}
         </div>
         </div>
