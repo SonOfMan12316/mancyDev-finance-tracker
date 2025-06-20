@@ -63,15 +63,15 @@ const BottomNav = () => {
   ];
 
   return (
-    <ul className="lg:hidden bg-ch-dark-grey flex items-center justify-around h-16 md:h-24 rounded-t-xl w-screen relative">
+    <ul className="lg:hidden bg-ch-dark-grey flex items-center h-16 md:h-24 px-4 rounded-t-xl w-screen relative">
       {NavItem.map((i: NavItem, index: number) => (
         <li
           key={index}
           className={classnames(
-            "cursor-pointer transition-all duration-300 ease-in-out relative",
-            "h-14 md:h-20", // Set fixed height for consistent positioning
+            "cursor-pointer relative",
+            "h-14 md:h-20 flex-1 flex justify-center items-center",
             {
-              "": activeNavItem === i?.label,
+              "absolute top-1 bg-white rounded-t-xl border-b-4 border-ch-green": activeNavItem === i?.label
             }
           )}
           onClick={() => {
@@ -79,18 +79,17 @@ const BottomNav = () => {
             i?.action && i?.action();
           }}
         >
-          <div className="z-10 relative flex flex-col items-center h-full justify-center">
+          <div className="z-10 flex-1 flex flex-col items-center justify-center">
             <div
-              className={classnames("pl-4 md:pl-6", {
+              className={classnames("", {
                 "text-ch-green": activeNavItem === i?.label,
                 "text-ch-lighter-grey": activeNavItem !== i?.label,
               })}
             >
               {i?.icon && <>{i?.icon}</>}
             </div>
-            <div className="mx-auto">
               <span
-                className={`capitalize hidden md:block font-bold text-base text-right pt-2 md:pl-6 ${
+                className={`capitalize hidden md:block font-bold text-base pt-2 ${
                   activeNavItem === i?.label
                     ? "text-black"
                     : "text-ch-lighter-grey"
@@ -98,13 +97,7 @@ const BottomNav = () => {
               >
                 {i?.label}
               </span>
-            </div>
           </div>
-
-          {/* Active Indicator */}
-          {activeNavItem === i?.label && (
-            <span className="absolute inset-x-0 -bottom-1 top-0 bg-white px-4 w-16 md:w-32 border-ch-green border-b-8 rounded-t-xl z-0" />
-          )}
         </li>
       ))}
     </ul>
