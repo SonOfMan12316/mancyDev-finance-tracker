@@ -29,6 +29,7 @@ import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useDeleteBudget } from "../../api/resource/deleteBudget";
 import Spinner from "../icons/Spinner";
+import { LottieLoader } from "../global";
 
 type BudgetValues = {
   category: OptionsInterface<string> | null;
@@ -185,23 +186,8 @@ const Budget = () => {
       onClick={() => setOpenModal({ type: "add" })}
     >
       {isLoading ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
-          <Lottie
-            animationData={loadingLottie}
-            loop={true}
-            autoplay={true}
-            style={{
-              height: "100%",
-              width: "100%",
-              maxHeight: 80,
-              maxWidth: 80,
-            }}
-            rendererSettings={{
-              preserveAspectRatio: "xMidYMid slice",
-            }}
-          />
-        </div>
-      ) : budgets && budgets.length > 0 && !isLoading ? (
+        <LottieLoader/>
+      ) : budgets?.length > 0 ? (
         <div className="p-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-4">
           <BudgetSpendingSummaryCard budgets={budgets} />
           {budgets.map(({ category, maximum, amount_spent, theme }) => (
@@ -220,26 +206,12 @@ const Budget = () => {
           ))}
         </div>
       ) : (
-        <div className="py-32 lg:py-40">
-          <Lottie
-            animationData={loadingLottie}
-            loop={true}
-            autoplay={true}
-            style={{
-              height: "100%",
-              width: "100%",
-              maxHeight: 80,
-              maxWidth: 80,
-              margin: "0 auto",
-            }}
-            rendererSettings={{
-              preserveAspectRatio: "xMidYMid slice",
-            }}
-          />
+        <>
+        <LottieLoader/>
           <p className="text-ch-black text-center text-sm font-normal">
             No budget found.
           </p>
-        </div>
+        </>
       )}
       <Modal
         isOpen={openModal?.type === "add" || openModal?.type === "edit"}

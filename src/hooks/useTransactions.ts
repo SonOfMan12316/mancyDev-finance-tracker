@@ -20,11 +20,6 @@ const useTransactions = ({
   const query = useQuery<transactionInterface[], Error>({
     queryKey,
     queryFn: async () => {
-      const cachedData =
-        queryClient.getQueryData<transactionInterface[]>(queryKey);
-      if (cachedData) {
-        return cachedData;
-      }
       const snapshot = await getDocs(queryRef);
       const data = snapshot.docs.map((doc) => ({
         ...doc.data(),
@@ -49,7 +44,7 @@ const useTransactions = ({
         })) as transactionInterface[];
 
         queryClient.setQueryData(queryKey, data);
-
+        
         onSuccess?.(data);
       },
       (error) => {
@@ -57,14 +52,12 @@ const useTransactions = ({
       }
     );
 
-    return () => {
-      unsubscribe();
-    };
+    return unsubscribe
   }, [queryRef]);
 
   return {
     ...query,
-    isLoading: query.isLoading,
+    isLoading: query.isLoading && !query.data,
     isError: query.isError,
   };
 };

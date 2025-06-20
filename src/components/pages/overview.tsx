@@ -1,18 +1,17 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import Lottie from "lottie-react";
 import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 
 import { Layout } from "../layout";
+import { LottieLoader } from "../global";
 import { addCommasToNumber } from "../../utils/number";
 import { RightIcon, SavingIcon } from "../icons";
 import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
 import { useTransactions, useBudgets, useBudgetTotals } from "../../hooks";
 import { budgetInfo, transactionInterface } from "../../types/global";
-import loadingLottie from "../../assets/lottie/lottie.json";
 
 const OverView = () => {
   const navigate = useNavigate();
@@ -86,7 +85,7 @@ const OverView = () => {
       toast.error("Failed to fetch transactions: " + error.message),
   });
 
-  useBudgets({
+  const { isLoading: getBudgetLoading } = useBudgets({
     onSuccess(data) {
       setBudgets(data);
     },
@@ -98,23 +97,8 @@ const OverView = () => {
   return (
     <div className="">
       <Layout title="overview">
-        {isLoading ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
-            <Lottie
-              animationData={loadingLottie}
-              loop={true}
-              autoplay={true}
-              style={{
-                height: "100%",
-                width: "100%",
-                maxHeight: 80,
-                maxWidth: 80,
-              }}
-              rendererSettings={{
-                preserveAspectRatio: "xMidYMid slice",
-              }}
-            />
-          </div>
+        {isLoading || getBudgetLoading ? (
+          <LottieLoader/>
         ) : (
           <div className="px-4 md:px-8">
             <div className="md:flex md:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
@@ -249,7 +233,7 @@ const OverView = () => {
                 </div>
               </div>
               <div className="lg:flex flex-col gap-5 lg:w-2/4">
-                <div className="bg-white my-8 px-4 md:px-8 lg:px-6 pt-6 pb-4 lg:my-0 rounded-xl">
+                <div className="bg-white min-h-22 my-8 px-4 md:px-8 lg:px-6 pt-6 pb-4 lg:my-0 rounded-xl">
                   <div className="flex justify-between items-center">
                     <div>
                       <h1 className="text-xl font-bold">Budgets</h1>
@@ -265,6 +249,8 @@ const OverView = () => {
                     </div>
                   </div>
                   <div className="md:flex md:items-center md:justify-between lg:justify-center">
+                    {budgets?.length > 0 ? (
+                      <>
                     <div className="mt-6 mb-2 md:mt-0 flex justify-center md:w-10/12 lg:w-9/12">
                       <PieChart
                         categories={categories}
@@ -273,29 +259,35 @@ const OverView = () => {
                       />
                     </div>
                     <div className="grid grid-cols-2 md:flex md:flex-col px-2 my-2 md:w-2/12 lg:w-3/12">
-                      {budgets.slice(0, 4).map((saving, index) => (
-                        <div
-                          key={index}
-                          className="flex space-x-5 my-2 lg:my-1"
-                        >
-                          <div className="flex flex-col justify-center">
-                            <div className="flex items-center space-x-3">
-                              <div
-                                className={`w-1 h-11 rounded-xl bg-ch-${saving.theme}`}
-                              ></div>
-                              <div className="flex flex-col pt-2">
-                                <h1 className="text-ch-grey text-xs whitespace-nowrap">
-                                  {saving.category}
-                                </h1>
-                                <span className="font-bold text-black text-sm py-2">
-                                  {"$" + Number(saving.amount_spent).toFixed(2)}
-                                </span>
+                        {budgets.slice(0, 4).map((saving, index) => (
+                          <div
+                            key={index}
+                            className="flex space-x-5 my-2 lg:my-1"
+                          >
+                            <div className="flex flex-col justify-center">
+                              <div className="flex items-center space-x-3">
+                                <div
+                                  className={`w-1 h-11 rounded-xl bg-ch-${saving.theme}`}
+                                ></div>
+                                <div className="flex flex-col pt-2">
+                                  <h1 className="text-ch-grey text-xs whitespace-nowrap">
+                                    {saving.category}
+                                  </h1>
+                                  <span className="font-bold text-black text-sm py-2">
+                                    {"$" + Number(saving.amount_spent).toFixed(2)}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))}
+                        ))}
                     </div>
+                    </>
+                      ): (
+                        <div className="flex justify-center items-center">
+                          <span className="text-ch-black text-sm font-normal py-32">No budget found</span>
+                        </div>
+                      )}
                   </div>
                 </div>
                 <div className="bg-white mt-8 mb-4 px-4 md:px-8 lg:px-6 py-5 lg:my-0 rounded-xl">

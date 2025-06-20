@@ -10,11 +10,9 @@ import Select from "../ui/Dropdown/Select";
 import { CategoryOptions, SortOptions } from "../../lib/getSelectOptions";
 import { OptionsInterface, transactionInterface } from "../../types/global";
 import { toDMYString } from "../../utils/date";
-import Pagination from "../global/Pagination";
+import { Pagination, LottieLoader } from "../global";
 import { PAGE } from "../../utils/global";
 import { useDebounce, useTransactions } from "../../hooks";
-import Lottie from "lottie-react";
-import loadingLottie from "../../assets/lottie/lottie.json";
 
 interface TransactionInterface {
   transaction: transactionInterface[];
@@ -34,18 +32,35 @@ export const Transaction = () => {
     useState<OptionsInterface<string> | null>(null);
   const [pageNumber, setPageNumber] = useState<number>(PAGE.NUMBER);
   const [pageSize] = useState<number>(PAGE.SIZE);
-  const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const [baseQuery, setBaseQuery] = useState<Query>(
     query(collection(db, "transactions"), orderBy("date", "desc"))
   );
   const [transactionSearch, setTransactionSearch] = useState<string>("");
   const delaySearch = useDebounce(transactionSearch, 1500);
 
+  const activeQuery = useMemo(() => {
+    let q = baseQuery;
+
+    if (
+      selectedCategoryOption?.value &&
+      selectedCategoryOption.value !== "All transactions"
+    ) {
+      q = query(q, where("category", "==", selectedCategoryOption.value));
+    }
+    setPageNumber(1);
+    return q;
+  }, [baseQuery, selectedCategoryOption, delaySearch]);
+
+  const { isLoading, data = [] } = useTransactions({
+    queryRef: activeQuery,
+    onError: (error) => toast.error(`${error.message}`),
+  });
+
   const filteredTransactions = useMemo(() => {
-    return (transactions || []).filter((tx) =>
+    return (data || []).filter((tx) =>
       tx.name.toLowerCase().includes(delaySearch.toLowerCase())
-    );
-  }, [transactions, delaySearch]);
+  );
+}, [data, delaySearch]);
 
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
@@ -89,30 +104,12 @@ export const Transaction = () => {
     setBaseQuery(queryRef);
   }, [selectedSortOption]);
 
-  const activeQuery = useMemo(() => {
-    let q = baseQuery;
-
-    if (
-      selectedCategoryOption?.value &&
-      selectedCategoryOption.value !== "All transactions"
-    ) {
-      q = query(q, where("category", "==", selectedCategoryOption.value));
-    }
-    setPageNumber(1);
-    return q;
-  }, [baseQuery, selectedCategoryOption, delaySearch]);
-
-  const { isLoading } = useTransactions({
-    queryRef: activeQuery,
-    onSuccess: (data) => setTransactions(data),
-    onError: (error) => toast.error(`${error.message}`),
-  });
 
   return (
     <div className="w-screen">
       <Layout title="transactions">
         <div className="px-4 md:px-8">
-          <div className="bg-white min-h-full p-4 md:p-8 rounded-md w-full">
+          <div className="bg-white min-h-screen p-4 md:p-8 rounded-md w-full">
             <div className="flex justify-between items-center w-full gap-4">
               <div className="flex-1">
                 <Input
@@ -225,28 +222,14 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             })}
           </tr>
         </thead>
-        <tbody className="w-full">
+        <tbody>
           {isLoading ? (
             <tr>
-              <td colSpan={6} className="text-center py-32">
-                <Lottie
-                  animationData={loadingLottie}
-                  loop={true}
-                  autoplay={true}
-                  style={{
-                    height: "100%",
-                    width: "100vw",
-                    maxHeight: 80,
-                    maxWidth: 80,
-                    margin: "0 auto",
-                  }}
-                  rendererSettings={{
-                    preserveAspectRatio: "xMidYMid slice",
-                  }}
-                />
+              <td colSpan={6}>
+                <LottieLoader/>
               </td>
             </tr>
-          ) : transaction && transaction.length > 0 && !isLoading ? (
+          ) : transaction?.length > 0 ? (
             transaction.map((txn, index) => {
               return (
                 <tr
@@ -257,18 +240,18 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                   }`}
                   key={index}
                 >
-                  <td className="w-2/4 items-center py-4 ">
+                  <td className="w-2/4 items-center py-4">
                     <div className="flex items-center gap-x-4">
                       <img
                         className="w-10 h-10 rounded-full"
                         src={txn.avatar}
                       />
-                      <h1 className="whitespace-nowrap font-bold text-sm">
+                      <span className="whitespace-nowrap font-bold text-sm">
                         {txn.name}
-                      </h1>
+                      </span>
                     </div>
                   </td>
-                  <td className="w-1/4 ">
+                  <td className="w-1/4">
                     <span className="text-left text-ch-grey text-sm font-normal font-publicSans">
                       {txn.category}
                     </span>
@@ -279,7 +262,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                     </span>
                   </td>
                   <td className="w-1/4">
-                    <h1
+                    <span
                       className={`${
                         txn.amount < 0 ? "text-black" : "text-ch-green"
                       } font-bold text-base`}
@@ -294,7 +277,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                             style: "currency",
                             currency: "USD",
                           })}
-                    </h1>
+                    </span>
                   </td>
                   <td className="border-b border-ch-grey/0.15"></td>
                 </tr>
@@ -302,22 +285,8 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             })
           ) : (
             <tr>
-              <td colSpan={6} className="text-center py-32">
-                <Lottie
-                  animationData={loadingLottie}
-                  loop={true}
-                  autoplay={true}
-                  style={{
-                    height: "100%",
-                    width: "100%",
-                    maxHeight: 80,
-                    maxWidth: 80,
-                    margin: "0 auto",
-                  }}
-                  rendererSettings={{
-                    preserveAspectRatio: "xMidYMid slice",
-                  }}
-                />
+              <td colSpan={6}>
+                <LottieLoader/>
                 <p className="text-ch-black text-sm font-normal">
                   No transaction{" "}
                   {transactionSearch !== "" ? "with such name" : ""} found.
@@ -339,24 +308,8 @@ const TransactionCard: React.FC<TransactionInterface> = ({
   return (
     <div className="md:hidden">
       {isLoading ? (
-        <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
-          <Lottie
-            animationData={loadingLottie}
-            loop={true}
-            autoplay={true}
-            style={{
-              height: "100%",
-              width: "100%",
-              maxHeight: 80,
-              maxWidth: 80,
-            }}
-            rendererSettings={{
-              preserveAspectRatio: "xMidYMid slice",
-            }}
-          />
-          <p className="text-ch-black text-lg font-normal">Loading ...</p>
-        </div>
-      ) : transaction && transaction.length > 0 && !isLoading ? (
+        <LottieLoader/>
+      ) :  transaction?.length > 0 ? (
         transaction.map((txn, index) => (
           <div
             key={index}
@@ -401,26 +354,13 @@ const TransactionCard: React.FC<TransactionInterface> = ({
           </div>
         ))
       ) : (
-        <div className="absolute inset-0 flex flex-col items-center justify-center grayscale-[50%]">
-          <Lottie
-            animationData={loadingLottie}
-            loop={true}
-            autoplay={true}
-            style={{
-              height: "100%",
-              width: "100%",
-              maxHeight: 80,
-              maxWidth: 80,
-            }}
-            rendererSettings={{
-              preserveAspectRatio: "xMidYMid slice",
-            }}
-          />
+        <>
+        <LottieLoader/>
           <p className="text-ch-black text-center text-sm font-normal">
             No transaction {transactionSearch !== "" ? "with such name" : ""}{" "}
             found.
           </p>
-        </div>
+        </>
       )}
     </div>
   );
