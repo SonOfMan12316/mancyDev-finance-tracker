@@ -41,7 +41,6 @@ const PieChart: FC<PieChartProps> = ({ amount, limit, categories }) => {
       color: tailwindToHex(`ch-${cat.color}`),
     }));
   }, [categories]);
-  chartData.map((x) => x.percentage);
 
   return (
     <div>
@@ -145,34 +144,12 @@ const Slice: FC<SliceProps> = ({
     };
   }, [angle]);
 
-  const a = getAnglePoint(
-    startAngle,
-    startAngle + animatedAngle,
-    radius,
-    radius,
-    radius
-  );
-  const b = getAnglePoint(
-    startAngle,
-    startAngle + animatedAngle,
-    radius - hole,
-    radius,
-    radius
-  );
-
-  const path = [
-    `M${a.x1},${a.y1}`,
-    `A${radius},${radius} 0 ${animatedAngle > 180 ? 1 : 0},1 ${a.x2},${a.y2}`,
-    `L${b.x2},${b.y2}`,
-    `A${radius - hole},${radius - hole} 0 ${animatedAngle > 180 ? 1 : 0},0 ${
-      b.x1
-    },${b.y1}`,
-    "Z",
-  ].join(" ");
-  return (
+  return angle >= 360 ? (
     <g overflow="hidden">
-      <path
-        d={path}
+      <circle
+        cx={radius}
+        cy={radius}
+        r={radius}
         fill={fill}
         stroke={stroke}
         strokeWidth={strokeWidth || 3}
@@ -215,6 +192,81 @@ const Slice: FC<SliceProps> = ({
         of {"$" + limit} limit
       </text>
     </g>
+  ) : (
+    (() => {
+      const a = getAnglePoint(
+        startAngle,
+        startAngle + animatedAngle,
+        radius,
+        radius,
+        radius
+      );
+      const b = getAnglePoint(
+        startAngle,
+        startAngle + animatedAngle,
+        radius - hole,
+        radius,
+        radius
+      );
+
+      const path = [
+        `M${a.x1},${a.y1}`,
+        `A${radius},${radius} 0 ${animatedAngle > 180 ? 1 : 0},1 ${a.x2},${a.y2}`,
+        `L${b.x2},${b.y2}`,
+        `A${radius - hole},${radius - hole} 0 ${animatedAngle > 180 ? 1 : 0},0 ${
+          b.x1
+        },${b.y1}`,
+        "Z",
+      ].join(" ");
+      
+      return (
+        <g overflow="hidden">
+          <path
+            d={path}
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={strokeWidth || 3}
+          />
+          <circle
+            cx={radius}
+            cy={radius}
+            r={radius * 0.75}
+            fill="#f3ebeb"
+            opacity="0.15"
+          />
+          <circle cx={radius} cy={radius} r={radius * 0.65} fill="white" />
+          <text
+            x={radius}
+            y={radius - 10}
+            style={{
+              fontFamily: "'Public Sans', sans-serif",
+              fontWeight: 700,
+              fontSize: "32px",
+              fill: "#201F24",
+            }}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+            dominantBaseline="middle"
+          >
+            {"$" + amount}
+          </text>
+          <text
+            x={radius}
+            y={radius + 25}
+            style={{
+              fontFamily: "'Public Sans', sans-serif",
+              fontWeight: 400,
+              fontSize: "12px",
+              fill: "#696868",
+            }}
+            textAnchor="middle"
+            alignmentBaseline="middle"
+          >
+            of {"$" + limit} limit
+          </text>
+        </g>
+      );
+    })()
   );
 };
 
