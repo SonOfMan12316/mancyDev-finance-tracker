@@ -5,7 +5,6 @@ import toast from "react-hot-toast";
 
 import { createBudget } from "../../api/resource/addBudget";
 import { Layout } from "../layout";
-import loadingLottie from "../../assets/lottie/lottie.json";
 import BudgetCard from "../Budgets/budgetCard";
 import Modal from "../global/Modal";
 import Input from "../ui/Input/Input";
@@ -24,7 +23,6 @@ import useUIStore from "../../store/ui-store";
 
 import { queryClient } from "../../App";
 import { useBudgets, useBudgetTotals, useTransactions } from "../../hooks";
-import Lottie from "lottie-react";
 import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useDeleteBudget } from "../../api/resource/deleteBudget";
