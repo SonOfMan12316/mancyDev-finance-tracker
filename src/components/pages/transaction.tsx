@@ -141,7 +141,7 @@ export const Transaction = () => {
                     placeholder="Latest"
                     icon={<DropdownIcon />}
                     className="w-full"
-                    usedAsInput={false}
+                    responsive={true}
                   />
                 </div>
                 <div className="flex items-center gap-2">
@@ -155,7 +155,7 @@ export const Transaction = () => {
                     placeholder="All transactions"
                     icon={<DropdownIcon />}
                     showSecondSelect={true}
-                    usedAsInput={false}
+                    responsive={true}
                     className="w-full"
                   />
                 </div>

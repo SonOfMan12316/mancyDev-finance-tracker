@@ -96,7 +96,7 @@ const RecurringBill = () => {
                     placeholder="Latest"
                     icon={<DropdownIcon />}
                     className="w-full"
-                    usedAsInput={false}
+                    responsive={true}
                   />
                 </div>
               </div>

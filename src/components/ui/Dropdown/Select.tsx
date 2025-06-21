@@ -20,7 +20,7 @@ type DropdownProps<T> = {
   showSecondSelect?: boolean;
   usedThemes?: Set<string>;
   showUsedIndicator?: boolean;
-  usedAsInput?: boolean;
+  responsive?: boolean;
 };
 
 const Dropdown = <T extends string | number>({
@@ -38,7 +38,7 @@ const Dropdown = <T extends string | number>({
   showSecondSelect = false,
   usedThemes = new Set(),
   showUsedIndicator = false,
-  usedAsInput,
+  responsive
 }: DropdownProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -70,8 +70,24 @@ const Dropdown = <T extends string | number>({
         </label>
       )}
       <div>
-        {usedAsInput ? (
-          <div onClick={() => setIsOpen(!isOpen)}>
+        {
+          responsive && (
+            <div
+              className="flex justify-between md:hidden"
+              onClick={() => setIsOpen(!isOpen)}
+            >
+              {showSecondSelect ? (
+                <div>
+                  <Filter />
+                </div>
+              ) : (
+                <div>
+                  <Download />
+                </div>
+              )}
+            </div>
+          )}
+          <div className={responsive ? 'hidden md:block' : ''} onClick={() => setIsOpen(!isOpen)}>
             <Button
               variant="action"
               size="lg"
@@ -105,24 +121,6 @@ const Dropdown = <T extends string | number>({
               )}
             </Button>
           </div>
-        ) : (
-          <>
-            <div
-              className="flex justify-between md:hidden"
-              onClick={() => setIsOpen(!isOpen)}
-            >
-              {showSecondSelect ? (
-                <div>
-                  <Filter />
-                </div>
-              ) : (
-                <div>
-                  <Download />
-                </div>
-              )}
-            </div>
-          </>
-        )}
       </div>
 
       {isOpen && (
