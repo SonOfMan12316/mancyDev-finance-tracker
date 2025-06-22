@@ -8,3 +8,4 @@ export { default as Modal } from "./Modal";
 export { default as Pagination } from "./Pagination";
 export { default as Popover } from "./Popover";
 export { default as LottieLoader } from "./LottieLoader";
+export { default as EmptyLottie } from "./EmptyLottie";

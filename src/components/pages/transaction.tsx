@@ -10,7 +10,7 @@ import Select from "../ui/Dropdown/Select";
 import { CategoryOptions, SortOptions } from "../../lib/getSelectOptions";
 import { OptionsInterface, transactionInterface } from "../../types/global";
 import { toDMYString } from "../../utils/date";
-import { Pagination, LottieLoader } from "../global";
+import { Pagination, LottieLoader, EmptyLottie } from "../global";
 import { PAGE } from "../../utils/global";
 import { useDebounce, useTransactions } from "../../hooks";
 import useUIStore from "../../store/ui-store";
@@ -39,7 +39,7 @@ export const Transaction = () => {
   const [transactionSearch, setTransactionSearch] = useState<string>("");
   const delaySearch = useDebounce(transactionSearch, 1500);
 
-  const { sharedTitle } = useUIStore()
+  const { sharedTitle } = useUIStore();
 
   const activeQuery = useMemo(() => {
     let q = baseQuery;
@@ -62,8 +62,8 @@ export const Transaction = () => {
   const filteredTransactions = useMemo(() => {
     return (data || []).filter((tx) =>
       tx.name.toLowerCase().includes(delaySearch.toLowerCase())
-  );
-}, [data, delaySearch]);
+    );
+  }, [data, delaySearch]);
 
   const indexOfLastItem = pageNumber * pageSize;
   const indexOfFirstItem = indexOfLastItem - pageSize;
@@ -108,14 +108,14 @@ export const Transaction = () => {
   }, [selectedSortOption]);
 
   useEffect(() => {
-    setSelectedCategoryOption({label: sharedTitle, value: sharedTitle})
-  }, [sharedTitle])
+    setSelectedCategoryOption({ label: sharedTitle, value: sharedTitle });
+  }, [sharedTitle]);
 
   return (
     <div className="w-screen">
       <Layout title="transactions">
         <div className="px-4 md:px-8">
-          <div className="bg-white min-h-screen p-4 md:p-8 rounded-md w-full">
+          <div className="bg-white min-h-full p-4 md:p-8 rounded-md w-full">
             <div className="flex justify-between items-center w-full gap-4">
               <div className="flex-1">
                 <Input
@@ -232,7 +232,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({
           {isLoading ? (
             <tr>
               <td colSpan={6}>
-                <LottieLoader/>
+                <LottieLoader />
               </td>
             </tr>
           ) : transaction?.length > 0 ? (
@@ -291,8 +291,8 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             })
           ) : (
             <tr>
-              <td colSpan={6}>
-                <LottieLoader/>
+              <td colSpan={6} className="pt-32 pb-20">
+                <EmptyLottie />
                 <p className="text-ch-black text-center text-sm font-normal">
                   No transaction{" "}
                   {transactionSearch !== "" ? "with such name" : ""} found.
@@ -314,8 +314,8 @@ const TransactionCard: React.FC<TransactionInterface> = ({
   return (
     <div className="md:hidden">
       {isLoading ? (
-        <LottieLoader/>
-      ) :  transaction?.length > 0 ? (
+        <LottieLoader />
+      ) : transaction?.length > 0 ? (
         transaction.map((txn, index) => (
           <div
             key={index}
@@ -360,13 +360,13 @@ const TransactionCard: React.FC<TransactionInterface> = ({
           </div>
         ))
       ) : (
-        <>
-        <LottieLoader/>
+        <div className="pt-24 pb-24">
+          <EmptyLottie />
           <p className="text-ch-black text-center text-sm font-normal">
             No transaction {transactionSearch !== "" ? "with such name" : ""}{" "}
             found.
           </p>
-        </>
+        </div>
       )}
     </div>
   );

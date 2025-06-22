@@ -27,7 +27,7 @@ import { collection, orderBy, query } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useDeleteBudget } from "../../api/resource/deleteBudget";
 import Spinner from "../icons/Spinner";
-import { LottieLoader } from "../global";
+import { EmptyLottie, LottieLoader } from "../global";
 
 type BudgetValues = {
   category: OptionsInterface<string> | null;
@@ -96,7 +96,11 @@ const Budget = () => {
     },
   });
 
-  const { mutate, isPending } = useMutation<budgetInfo, Error, Omit<budgetInfo, 'id'>>({
+  const { mutate, isPending } = useMutation<
+    budgetInfo,
+    Error,
+    Omit<budgetInfo, "id">
+  >({
     mutationFn: createBudget,
     onMutate: async (newBudget) => {
       await queryClient.cancelQueries({ queryKey: ["budgets"] });
@@ -184,7 +188,7 @@ const Budget = () => {
       onClick={() => setOpenModal({ type: "add" })}
     >
       {isLoading ? (
-        <LottieLoader/>
+        <LottieLoader />
       ) : budgets?.length > 0 ? (
         <div className="p-4 md:px-8 flex flex-col lg:grid lg:grid-cols-2 gap-4">
           <BudgetSpendingSummaryCard budgets={budgets} />
@@ -204,12 +208,12 @@ const Budget = () => {
           ))}
         </div>
       ) : (
-        <>
-        <LottieLoader/>
+        <div className="pt-32 lg:pt-40">
+          <EmptyLottie />
           <p className="text-ch-black text-center text-sm font-normal">
             No budget found.
           </p>
-        </>
+        </div>
       )}
       <Modal
         isOpen={openModal?.type === "add" || openModal?.type === "edit"}

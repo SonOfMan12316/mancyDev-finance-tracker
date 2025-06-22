@@ -6,6 +6,7 @@ import useUIStore from "../../store/ui-store";
 import { budgetInfo, transactionInterface } from "../../types/global";
 import { ProgressBar } from "../global";
 import { useNavigate } from "react-router-dom";
+import EmptyLottie from "../global/EmptyLottie";
 
 interface BudgetCardProps {
   title: string;
@@ -27,9 +28,12 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   transactions,
 }) => {
   const { setOpenModal, setSelectedBudget, setSharedTitle } = useUIStore();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [popOpen, setPopOpen] = useState<boolean>(false);
+  const filteredTransaction = transactions.filter(
+    (transaction) => transaction.category === title
+  );
   return (
     <div className="bg-white px-6 rounded-xl lg:my-0 shadow-sm">
       <CardHeader
@@ -93,19 +97,19 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
           <div>
             <h1 className="text-base font-bold">Latest spending</h1>
           </div>
-          <div className="flex text-ch-grey hover:text-black items-center space-x-2 cursor-pointer" 
-          onClick={() => {
-            navigate("/transactions")
-            setSharedTitle(title)
-          }} >
+          <div
+            className="flex text-ch-grey hover:text-black items-center space-x-2 cursor-pointer"
+            onClick={() => {
+              navigate("/transactions");
+              setSharedTitle(title);
+            }}
+          >
             <h1 className="text-xs font-normal">See all</h1>
             <RightIcon />
           </div>
         </div>
-        {transactions
-          .filter((transaction) => transaction.category === title)
-          .slice(0, 3)
-          .map((txn, index) => (
+        {filteredTransaction.length > 0 ? (
+          filteredTransaction.slice(0, 3).map((txn, index) => (
             <div
               key={index}
               className={`flex justify-between my-2  ${
@@ -131,7 +135,15 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
                 </span>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="h-full text-center py-8">
+            <EmptyLottie />
+            <span className="text-ch-black text-sm font-normal ">
+              No budget found for this category
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );
