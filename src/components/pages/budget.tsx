@@ -102,18 +102,6 @@ const Budget = () => {
     Omit<budgetInfo, "id">
   >({
     mutationFn: createBudget,
-    onMutate: async (newBudget) => {
-      await queryClient.cancelQueries({ queryKey: ["budgets"] });
-      const previousBudgets =
-        queryClient.getQueryData<budgetInfo[]>(["budgets"]) || [];
-
-      queryClient.setQueryData(["budgets"], (old: budgetInfo[] | undefined) => [
-        ...(old || []),
-        newBudget,
-      ]);
-
-      return { previousBudgets };
-    },
     onSuccess: (newBudget) => {
       queryClient.setQueryData<budgetInfo[]>(["budgets"], (current = []) => [
         ...current,

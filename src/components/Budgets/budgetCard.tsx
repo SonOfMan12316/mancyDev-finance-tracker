@@ -137,9 +137,9 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             </div>
           ))
         ) : (
-          <div className="h-full text-center py-8">
+          <div className="h-full text-center pt-9 pb-16">
             <EmptyLottie />
-            <span className="text-ch-black text-sm font-normal ">
+            <span className="text-ch-black text-xs sm:text-sm font-normal ">
               No budget found for this category
             </span>
           </div>
