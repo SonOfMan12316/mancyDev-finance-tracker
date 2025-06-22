@@ -20,6 +20,7 @@ type UI = {
   activeNavItem: string;
   openModal: ModalState;
   popoverState: boolean;
+  sharedTitle: string;
   selectedBudget: budgetInfo | null;
   selectedPot: potInterface | null;
   transactions: transactionInterface[] | [];
@@ -33,6 +34,7 @@ type Actions = {
   setSelectedBudget: (state: UI["selectedBudget"]) => void;
   setSelectedPot: (state: UI["selectedPot"]) => void;
   setTransactions: (state: UI["transactions"]) => void;
+  setSharedTitle: (state: UI["sharedTitle"]) => void;
 };
 
 export type UIActions = UI & Actions;
@@ -44,6 +46,7 @@ const useUIStore = create<UIActions>((set) => ({
   popoverState: false,
   selectedBudget: null,
   selectedPot: null,
+  sharedTitle: "",
   transactions: [],
   updateSidenavState: () =>
     set((state) => ({ sidenavState: !state.sidenavState })),
@@ -54,6 +57,7 @@ const useUIStore = create<UIActions>((set) => ({
   setSelectedBudget: (budget) => set({ selectedBudget: budget }),
   setSelectedPot: (pot) => set({ selectedPot: pot }),
   setTransactions: (transaction) => set({ transactions: transaction }),
+  setSharedTitle: (state) => set({ sharedTitle: state }),
 }));
 
 export default useUIStore;

@@ -5,6 +5,7 @@ import { CardHeader } from "../layout";
 import useUIStore from "../../store/ui-store";
 import { budgetInfo, transactionInterface } from "../../types/global";
 import { ProgressBar } from "../global";
+import { useNavigate } from "react-router-dom";
 
 interface BudgetCardProps {
   title: string;
@@ -25,7 +26,8 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   budget,
   transactions,
 }) => {
-  const { setOpenModal, setSelectedBudget } = useUIStore();
+  const { setOpenModal, setSelectedBudget, setSharedTitle } = useUIStore();
+  const navigate = useNavigate()
 
   const [popOpen, setPopOpen] = useState<boolean>(false);
   return (
@@ -91,7 +93,11 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
           <div>
             <h1 className="text-base font-bold">Latest spending</h1>
           </div>
-          <div className="flex text-ch-grey items-center space-x-2">
+          <div className="flex text-ch-grey hover:text-black items-center space-x-2 cursor-pointer" 
+          onClick={() => {
+            navigate("/transactions")
+            setSharedTitle(title)
+          }} >
             <h1 className="text-xs font-normal">See all</h1>
             <RightIcon />
           </div>

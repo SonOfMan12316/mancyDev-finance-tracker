@@ -13,6 +13,7 @@ import { toDMYString } from "../../utils/date";
 import { Pagination, LottieLoader } from "../global";
 import { PAGE } from "../../utils/global";
 import { useDebounce, useTransactions } from "../../hooks";
+import useUIStore from "../../store/ui-store";
 
 interface TransactionInterface {
   transaction: transactionInterface[];
@@ -37,6 +38,8 @@ export const Transaction = () => {
   );
   const [transactionSearch, setTransactionSearch] = useState<string>("");
   const delaySearch = useDebounce(transactionSearch, 1500);
+
+  const { sharedTitle } = useUIStore()
 
   const activeQuery = useMemo(() => {
     let q = baseQuery;
@@ -104,6 +107,9 @@ export const Transaction = () => {
     setBaseQuery(queryRef);
   }, [selectedSortOption]);
 
+  useEffect(() => {
+    setSelectedCategoryOption({label: sharedTitle, value: sharedTitle})
+  }, [sharedTitle])
 
   return (
     <div className="w-screen">
@@ -287,7 +293,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({
             <tr>
               <td colSpan={6}>
                 <LottieLoader/>
-                <p className="text-ch-black text-sm font-normal">
+                <p className="text-ch-black text-center text-sm font-normal">
                   No transaction{" "}
                   {transactionSearch !== "" ? "with such name" : ""} found.
                 </p>
