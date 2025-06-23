@@ -197,6 +197,7 @@ const OverView = () => {
                       <div className="flex space-x-5 items-center">
                         <div className="w-8">
                           <img
+                            loading="lazy"
                             className="rounded-full"
                             src={transaction.avatar}
                           />

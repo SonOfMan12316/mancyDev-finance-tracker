@@ -137,7 +137,7 @@ const RecurringBillTable: React.FC<RecurringBillInterface> = ({ bills }) => {
           >
             <td className="w-2/3 items-center py-4 ">
               <div className="flex items-center gap-x-4">
-                <img className="w-10 h-10 rounded-full" src={bill.avatar} />
+                <img loading="lazy" className="w-10 h-10 rounded-full" src={bill.avatar}/>
                 <h1 className="whitespace-nowrap font-bold text-sm">
                   {bill.header}
                 </h1>
@@ -188,7 +188,7 @@ const RecurringBillCard: React.FC<RecurringBillInterface> = ({ bills }) => {
         >
           <div className="flex space-x-2 pb-1.5">
             <div className="flex items-center space-x-2">
-              <img className="w-8 h-8 rounded-full" src={bill.avatar} />
+              <img loading="lazy" className="w-8 h-8 rounded-full" src={bill.avatar}/>
               <div>
                 <h1 className="font-bold text-sm whitespace-nowrap">
                   {bill.header}

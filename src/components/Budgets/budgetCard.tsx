@@ -119,6 +119,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
               <div className="flex items-center md:space-x-4">
                 <div className="hidden md:block">
                   <img
+                    loading="lazy"
                     className="w-10 h-10 rounded-full"
                     src={txn.avatar}
                     alt={txn.name}

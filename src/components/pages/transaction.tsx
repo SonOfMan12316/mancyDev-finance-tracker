@@ -249,6 +249,7 @@ const TransactionTable: React.FC<TransactionInterface> = ({
                   <td className="w-2/4 items-center py-4">
                     <div className="flex items-center gap-x-4">
                       <img
+                        loading="lazy"
                         className="w-10 h-10 rounded-full"
                         src={txn.avatar}
                       />
@@ -326,7 +327,11 @@ const TransactionCard: React.FC<TransactionInterface> = ({
             } flex items-center justify-between py-4 mt-1`}
           >
             <div className="flex items-center gap-x-2">
-              <img className="w-8 h-8 rounded-full" src={txn.avatar} />
+              <img
+                loading="lazy"
+                className="w-8 h-8 rounded-full"
+                src={txn.avatar}
+              />
               <div className="space-y-1">
                 <h1 className="whitespace-nowrap font-bold text-sm">
                   {txn.name}
