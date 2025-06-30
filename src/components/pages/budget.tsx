@@ -23,7 +23,7 @@ import useUIStore from "../../store/ui-store";
 
 import { queryClient } from "../../App";
 import { useBudgets, useBudgetTotals, useTransactions } from "../../hooks";
-import { collection, orderBy, query } from "firebase/firestore";
+import { collection, doc, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { useDeleteBudget } from "../../api/resource/deleteBudget";
 import Spinner from "../icons/Spinner";
@@ -38,7 +38,7 @@ type BudgetValues = {
 
 const Budget = () => {
   const [budgets, setBudgets] = useState<budgetInfo[]>([]);
-  const { usedThemes } = useBudgetTotals(budgets);
+  const { usedThemes, usedCategories } = useBudgetTotals(budgets);
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
   const transactionsQuery = useMemo(
@@ -63,20 +63,24 @@ const Budget = () => {
   });
 
   useEffect(() => {
-    if (openModal?.type === "edit" && selectedBudget) {
-      const matchedCategory = CategoryOptions.find(
-        (opt) => opt.value === selectedBudget.category
-      );
+    if (openModal?.type === "edit" && openModal.data?.id) {
+      const budget = queryClient.getQueryData<budgetInfo[]>(["budgets"])
+        ?.find(budget => budget.id === openModal.data?.id);
+        
+        if (budget) {
+        const matchedCategory = CategoryOptions.find(
+          (opt) => opt.value === budget.category
+        );
+  
+        const matchedTheme = ThemeOptions.find(
+          (opt) => opt.value === budget.theme
+        );
 
-      const matchedTheme = ThemeOptions.find(
-        (opt) => opt.value === selectedBudget.theme
-      );
-
-      reset({
-        category: matchedCategory ?? null,
-        maximum: selectedBudget.maximum.toString() ?? "",
-        theme: matchedTheme ?? null,
-      });
+        setValue("category", matchedCategory || null);
+        setValue("maximum", budget.maximum);
+        setValue("amount_spent", budget.amount_spent);
+        setValue("theme", matchedTheme || null);
+      }
     } else if (openModal?.type === "add") {
       reset({
         category: { value: "Entertainment", label: "Entertainment" },
@@ -96,35 +100,56 @@ const Budget = () => {
     },
   });
 
-  const { mutate, isPending } = useMutation<
+  const { mutate: addOrEditBudget, isPending } = useMutation<
     budgetInfo,
     Error,
-    Omit<budgetInfo, "id">
+    Omit<budgetInfo, "id"> & {id?: string}
   >({
-    mutationFn: createBudget,
-    onSuccess: (newBudget) => {
-      queryClient.setQueryData<budgetInfo[]>(["budgets"], (current = []) => [
-        ...current,
-        newBudget,
-      ]);
-      toast.success("Budget added!");
+    mutationFn: async (data) => {
+      if(data.id) {
+        await updateDoc(doc(db, "budgets", data.id), {
+          category: data.category,
+          maximum: data.maximum,
+          amount_spent: data.amount_spent,
+          theme: data.theme,
+        });
+        return { ...data, id: data.id };
+      } else {
+        return await createBudget(data)
+      }
+    },
+    onSuccess: (updatedBudget, variables) => {
+      queryClient.setQueryData<budgetInfo[]>(["budgets"], (current = []) => {
+        if (variables.id) {
+          return current.map((budget) =>
+            budget.id === variables.id ? updatedBudget : budget
+          );
+        } else {
+          return [...current, updatedBudget];
+        }
+      });
+      toast.success(variables.id ? "Budget updated!" : "Budget added!");
       setOpenModal(null);
     },
-    onError: (error: Error) => {
-      toast.error(error.message, { id: "add-budget-err" });
+    onError: (error: Error, variables) => {
+      toast.error(error.message, { 
+        id: variables.id ? "edit-budget-err" : "add-budget-err" });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
     },
   });
 
-  const handleAddBudget: SubmitHandler<BudgetValues> = (data) => {
-    mutate({
+  const handleSubmitBudget: SubmitHandler<BudgetValues> = (data) => {
+    const budgetData = {
       category: data.category?.value || "",
       maximum: data.maximum,
       amount_spent: data.amount_spent,
       theme: data.theme?.value || "",
-    });
+      ...(openModal?.type === "edit" && { id: openModal.data?.id })
+    }
+
+    addOrEditBudget(budgetData);
   };
 
   const mutation = useDeleteBudget();
@@ -213,7 +238,7 @@ const Budget = () => {
             : "As your budgets change, feel free to update your spending limits."
         }
       >
-        <form onSubmit={handleSubmit(handleAddBudget)}>
+        <form onSubmit={handleSubmit(handleSubmitBudget)}>
           <Select
             label="Budget category"
             onSelect={(option) => setValue("category", option)}
@@ -225,6 +250,8 @@ const Budget = () => {
             isModal={true}
             {...register("category", { required: "category is required" })}
             responsive={false}
+            showUsedIndicator={true}
+            usedCategories={usedCategories}
           />
           {errors.category && (
             <span role="alert" className="text-xs text-ch-red">

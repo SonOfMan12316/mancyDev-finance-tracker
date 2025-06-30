@@ -9,11 +9,13 @@ interface BudgetTotals {
     color: string;
   }>;
   usedThemes: Set<string>;
+  usedCategories: Set<string>;
 }
 
 const useBudgetTotals = (budgets: budgetInfo[]): BudgetTotals => {
   return useMemo(() => {
     const usedThemes = new Set<string>();
+    const usedCategories = new Set<string>();
     const totals = {
       limit: 0,
       amountSpent: 0,
@@ -22,6 +24,7 @@ const useBudgetTotals = (budgets: budgetInfo[]): BudgetTotals => {
         color: string;
       }>,
       usedThemes,
+      usedCategories
     };
 
     if (budgets?.length > 0) {
@@ -33,6 +36,7 @@ const useBudgetTotals = (budgets: budgetInfo[]): BudgetTotals => {
 
       totals.categories = budgets.map((budget) => {
         usedThemes.add(budget.theme);
+        usedCategories.add(budget.category);
 
         return {
           limit: Number(budget.maximum),

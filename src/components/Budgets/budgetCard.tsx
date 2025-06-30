@@ -43,7 +43,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
         setPopOpen={setPopOpen}
         type="budget"
         onEdit={() => {
-          setOpenModal({ type: "edit", data: { title: title } });
+          setOpenModal({ type: "edit", data: { id: budget?.id, title: title } });
           setSelectedBudget(budget);
         }}
         onDelete={() => {
