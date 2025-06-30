@@ -19,6 +19,7 @@ type DropdownProps<T> = {
   themeColor?: string;
   showSecondSelect?: boolean;
   usedThemes?: Set<string>;
+  usedCategories?: Set<string>;
   showUsedIndicator?: boolean;
   responsive?: boolean;
 };
@@ -37,6 +38,7 @@ const Dropdown = <T extends string | number>({
   themeColor,
   showSecondSelect = false,
   usedThemes = new Set(),
+  usedCategories = new Set(),
   showUsedIndicator = false,
   responsive
 }: DropdownProps<T>) => {
@@ -61,6 +63,11 @@ const Dropdown = <T extends string | number>({
       : []),
     ...options,
   ];
+
+  const [usedItems] = useState(() => new Set([
+    ...Array.from(usedThemes),
+    ...Array.from(usedCategories),
+  ]))
 
   return (
     <div ref={dropdownRef} className={`relative ${className}`}>
@@ -141,7 +148,7 @@ const Dropdown = <T extends string | number>({
               themeColor={themeColor}
               isLast={index === allOptions.length - 1}
               placeholder={placeholder}
-              isUsed={showUsedIndicator && usedThemes.has(String(option.value))}
+              isUsed={showUsedIndicator && usedItems.has(String(option.value))}
             />
           ))}
         </ul>
