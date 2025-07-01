@@ -21,10 +21,11 @@ export interface budgetInfo {
   theme: string;
 }
 
-export interface potInterface {
+export interface potInfo {
+  id?: string;
   name: string;
-  target: number;
-  total: number;
+  target: string;
+  total: string;
   theme: string;
 }
 

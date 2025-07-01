@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import {
   budgetInfo,
-  potInterface,
+  potInfo,
   transactionInterface,
 } from "../types/global";
 
@@ -22,7 +22,7 @@ type UI = {
   popoverState: boolean;
   sharedTitle: string;
   selectedBudget: budgetInfo | null;
-  selectedPot: potInterface | null;
+  selectedPot: potInfo | null;
   transactions: transactionInterface[] | [];
 };
 
