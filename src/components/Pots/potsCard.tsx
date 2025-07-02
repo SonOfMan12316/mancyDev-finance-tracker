@@ -2,7 +2,7 @@ import { useState } from "react";
 import { CardHeader } from "../layout";
 import { Button } from "../ui/Button/Button";
 import useUIStore from "../../store/ui-store";
-import { potInterface } from "../../types/global";
+import { potInfo } from "../../types/global";
 import PotManagement from "./potManagement";
 
 interface PotCardProps {
@@ -10,7 +10,7 @@ interface PotCardProps {
   progressColor: string;
   target: number;
   total: number;
-  pot: potInterface | null;
+  pot: potInfo | null;
 }
 
 const PotCard: React.FC<PotCardProps> = ({
@@ -33,10 +33,13 @@ const PotCard: React.FC<PotCardProps> = ({
         setPopOpen={setPopOpen}
         type="pot"
         onEdit={() => {
-          setOpenModal({ type: "edit", data: {title: title} });
+          setOpenModal({ type: "edit", data: { id: pot?.id, title: title } });
           setSelectedPot(pot);
         }}
-        onDelete={() => setOpenModal({ type: "delete", data: {title: title} })}
+        onDelete={() => setOpenModal({
+          type: "delete",
+          data: { id: pot?.id, title: title },
+        })}
       />
       <div className="mt-3">
         <PotManagement

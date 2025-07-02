@@ -52,7 +52,7 @@ const PotManagement: React.FC<potManagementProps> = ({
             ? targetReachedPercentage
             : targetReachedPercentage - (percentageChange ?? 0)
         }
-        secondValue={percentageChange || 0}
+        secondValue={Number(percentageChange) || 0}
         innerHeight="h-2"
         height="h-2"
         progressColor={progressColor}
