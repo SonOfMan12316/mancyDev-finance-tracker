@@ -21,7 +21,7 @@ const PotCard: React.FC<PotCardProps> = ({
   pot,
 }) => {
   const [popOpen, setPopOpen] = useState<boolean>(false);
-  const percentage = (total / target) * 100;
+  const percentage = (Number(total) / Number(target)) * 100;
 
   const { setOpenModal, setSelectedPot } = useUIStore();
   return (
@@ -36,10 +36,12 @@ const PotCard: React.FC<PotCardProps> = ({
           setOpenModal({ type: "edit", data: { id: pot?.id, title: title } });
           setSelectedPot(pot);
         }}
-        onDelete={() => setOpenModal({
-          type: "delete",
-          data: { id: pot?.id, title: title },
-        })}
+        onDelete={() =>
+          setOpenModal({
+            type: "delete",
+            data: { id: pot?.id, title: title },
+          })
+        }
       />
       <div className="mt-3">
         <PotManagement
@@ -52,7 +54,7 @@ const PotCard: React.FC<PotCardProps> = ({
         <div className="flex justify-between items-center space-x-3 mt-8 md:mb-0 mb-8">
           <Button
             onClick={() => {
-              setOpenModal({ type: "addMoney", data: {title: title} });
+              setOpenModal({ type: "addMoney", data: { title: title } });
               setSelectedPot(pot);
             }}
             className="font-bold"
@@ -63,7 +65,7 @@ const PotCard: React.FC<PotCardProps> = ({
           </Button>
           <Button
             onClick={() => {
-              setOpenModal({ type: "withdraw", data: {title: title} });
+              setOpenModal({ type: "withdraw", data: { title: title } });
               setSelectedPot(pot);
             }}
             className="font-bold"
