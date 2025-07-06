@@ -38,7 +38,7 @@ type BudgetValues = {
 
 const Budget = () => {
   const [budgets, setBudgets] = useState<budgetInfo[]>([]);
-  const { usedThemes, usedCategories } = useBudgetTotals(budgets);
+  const { usedBudgetThemes, usedCategories } = useBudgetTotals(budgets);
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
   const transactionsQuery = useMemo(
@@ -66,12 +66,12 @@ const Budget = () => {
     if (openModal?.type === "edit" && openModal.data?.id) {
       const budget = queryClient.getQueryData<budgetInfo[]>(["budgets"])
         ?.find(budget => budget.id === openModal.data?.id);
-        
-        if (budget) {
+
+      if (budget) {
         const matchedCategory = CategoryOptions.find(
           (opt) => opt.value === budget.category
         );
-  
+
         const matchedTheme = ThemeOptions.find(
           (opt) => opt.value === budget.theme
         );
@@ -132,7 +132,7 @@ const Budget = () => {
       setOpenModal(null);
     },
     onError: (error: Error, variables) => {
-      toast.error(error.message, { 
+      toast.error(error.message, {
         id: variables.id ? "edit-budget-err" : "add-budget-err" });
     },
     onSettled: () => {
@@ -322,7 +322,7 @@ const Budget = () => {
               isModal={true}
               themeColor={watch("theme")?.value}
               {...register("theme", { required: "theme is required" })}
-              usedThemes={usedThemes}
+              usedThemes={usedBudgetThemes}
               showUsedIndicator={true}
               responsive={false}
             />
