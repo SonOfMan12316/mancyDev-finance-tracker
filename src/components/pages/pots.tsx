@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { useMutation } from "@tanstack/react-query";
+import { MutateOptions, useMutation } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -21,6 +21,7 @@ import { queryClient } from "../../App";
 import Spinner from "../icons/Spinner";
 import usePots from "../../hooks/usePots";
 import { useBudgetTotals } from "../../hooks";
+import { useDeletePot } from "../../api/resource/deletePot";
 
 type PotValues = {
   potName: string;
@@ -180,6 +181,41 @@ const Pots = () => {
       toast.error(`${error.message}`);
     },
   });
+
+  const mutation = useDeletePot();
+
+  const handleDeletePot = (potId: string) => {
+    mutation.mutate(potId, {
+      onMutate: async () => {
+        await queryClient.cancelQueries({ queryKey: ["pots"] });
+        const previousPots =
+          queryClient.getQueryData<potInfo[]>(["pots"]) || [];
+
+        queryClient.setQueryData(["pots"], (old: potInfo[]) => [...old]);
+
+        return { previousPots };
+      },
+      onSuccess: () => {
+        setOpenModal(null);
+        queryClient.invalidateQueries({ queryKey: ["pots"] });
+        toast.success("Pot deleted!");
+      },
+      onError: (error, _, context) => {
+        toast.error(`Failed to delete: ${error.message}`);
+        if (context?.previousPots) {
+          queryClient.setQueryData(["budgets"], context.previousBudgets);
+        }
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["budgets"] });
+      },
+    } as MutateOptions<
+      void,
+      Error,
+      string,
+      { previousBudgets?: potInfo[] }
+    >)
+  };
 
   const handleSubmitBudget: SubmitHandler<PotValues> = (data) => {
     const potData = {
