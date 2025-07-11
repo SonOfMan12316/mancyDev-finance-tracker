@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, FC, useRef } from "react";
 import { pieChartCategory } from "../../../types/global";
 import { tailwindToHex } from "../../../utils/color";
+import { formatNumberShort } from "../../../utils/number";
 
 interface PieProps {
   data: number[];
@@ -175,7 +176,7 @@ const Slice: FC<SliceProps> = ({
         alignmentBaseline="middle"
         dominantBaseline="middle"
       >
-        {"$" + amount}
+        {"$" + formatNumberShort(amount)}
       </text>
       <text
         x={radius}
@@ -189,7 +190,7 @@ const Slice: FC<SliceProps> = ({
         textAnchor="middle"
         alignmentBaseline="middle"
       >
-        of {"$" + limit} limit
+        of {"$" + formatNumberShort(limit)} limit
       </text>
     </g>
   ) : (
@@ -248,7 +249,7 @@ const Slice: FC<SliceProps> = ({
             alignmentBaseline="middle"
             dominantBaseline="middle"
           >
-            {"$" + amount}
+            {"$" + formatNumberShort(amount)}
           </text>
           <text
             x={radius}
@@ -262,7 +263,7 @@ const Slice: FC<SliceProps> = ({
             textAnchor="middle"
             alignmentBaseline="middle"
           >
-            of {"$" + limit} limit
+            of {"$" + formatNumberShort(limit)} limit
           </text>
         </g>
       );

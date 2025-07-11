@@ -277,7 +277,7 @@ const OverView = () => {
                                     </h1>
                                     <span className="font-bold text-black text-sm py-2">
                                       {"$" +
-                                        Number(saving.amount_spent).toFixed(2)}
+                                        formatNumberShort(Number(saving.amount_spent))}
                                     </span>
                                   </div>
                                 </div>

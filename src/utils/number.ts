@@ -25,7 +25,7 @@ export const addPlusSignToNonNegativeNumber = (
 };
 
 export const formatNumberShort = (num: number) =>  {
-  if (num >= 10000) {
+  if (num >= 1000) {
     const rounded = Math.floor(num / 100) / 10;
     return Number.isInteger(rounded) ? `${rounded}k` : `${rounded.toFixed(1)}k`;
   }
