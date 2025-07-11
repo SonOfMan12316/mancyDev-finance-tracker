@@ -16,9 +16,9 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
   onClick,
 }) => {
   return (
-    <div className="w-screen h-screen flex">
+    <div className="min-h-screen flex bg-ch-beige">
   <SideNav />
-  <main className="flex-1 flex flex-col bg-ch-beige overflow-hidden">
+  <div className="flex-1 flex flex-col h-screen">
     <div className="flex-none">
       <Header
         title={title}
@@ -36,7 +36,7 @@ const Layout: React.FC<LayoutProps & HeaderProps> = ({
     <div className="fixed bottom-0 left-0 w-full lg:hidden z-50">
       <BottomNav />
     </div>
-  </main>
+  </div>
 </div>
   );
 };
