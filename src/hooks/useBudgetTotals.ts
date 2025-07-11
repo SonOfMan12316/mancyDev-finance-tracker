@@ -12,6 +12,7 @@ interface BudgetTotals {
   usedBudgetThemes: Set<string>;
   usedCategories: Set<string>;
   usedPotName: Set<string>;
+  potTotal: number;
 }
 
 const useBudgetTotals = (
@@ -34,6 +35,7 @@ const useBudgetTotals = (
       usedPotThemes,
       usedCategories,
       usedPotName,
+      potTotal: 0
     };
 
     if (budgets && budgets?.length > 0) {
@@ -55,10 +57,13 @@ const useBudgetTotals = (
       });
     }
 
-    if (pots && pots?.length > 0) {
-      pots?.map((pot) => {
+    if (pots && pots.length > 0) {
+      console.log("pots in useBudgetTotals:", pots);
+      pots.forEach((pot) => {
+        console.log("pot.total:", pot.total);
         usedPotThemes.add(pot.theme);
         usedPotName.add(pot.name);
+        totals.potTotal += Number(pot.total);
       });
     }
 

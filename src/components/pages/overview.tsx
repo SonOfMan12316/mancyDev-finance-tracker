@@ -6,18 +6,20 @@ import { db } from "../../firebase";
 
 import { Layout } from "../layout";
 import { EmptyLottie, LottieLoader } from "../global";
-import { addCommasToNumber } from "../../utils/number";
+import { addCommasToNumber, formatNumberShort } from "../../utils/number";
 import { RightIcon, SavingIcon } from "../icons";
 import { toDMYString } from "../../utils/date";
 import PieChart from "../ui/PieChart";
 import { useTransactions, useBudgets, useBudgetTotals } from "../../hooks";
-import { budgetInfo, transactionInterface } from "../../types/global";
+import { budgetInfo, potInfo, transactionInterface } from "../../types/global";
+import usePots from "../../hooks/usePots";
 
 const OverView = () => {
   const navigate = useNavigate();
   const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const [budgets, setBudgets] = useState<budgetInfo[]>([]);
-  const { limit, amountSpent, categories } = useBudgetTotals(budgets);
+  const [pots, setPots] = useState<potInfo[]>([]);
+  const { limit, amountSpent, categories, potTotal } = useBudgetTotals(budgets, pots);
 
   const figure = [
     {
@@ -33,28 +35,7 @@ const OverView = () => {
       amount: 1700.5,
     },
   ];
-  const savingsData = [
-    {
-      name: "Savings",
-      amount: 159,
-      color: "ch-green",
-    },
-    {
-      name: "Gift",
-      amount: 40,
-      color: "ch-cyan",
-    },
-    {
-      name: "Concert Tickets",
-      amount: 110,
-      color: "ch-navy",
-    },
-    {
-      name: "New Laptop",
-      amount: 10,
-      color: "ch-yellow",
-    },
-  ];
+
   const billsData = [
     {
       name: "Paid Bills",
@@ -94,13 +75,22 @@ const OverView = () => {
     },
   });
 
+  const { isLoading: getPotLoading } = usePots({
+    onSuccess(data) {
+      setPots(data);
+    },
+    onError(error) {
+      toast.error("Failed to get pots: " + error.message);
+    },
+  });
+
   return (
     <div className="">
       <Layout title="overview">
-        {isLoading || getBudgetLoading ? (
+        {isLoading || getBudgetLoading || getPotLoading ? (
           <LottieLoader />
         ) : (
-          <div className="px-4 md:px-8">
+          <div className="px-4 md:px-6">
             <div className="md:flex md:space-x-4 flex-grow flex-shrink space-y-3 md:space-y-0 md:justify-between">
               {figure.map((item, index) => (
                 <div
@@ -143,6 +133,8 @@ const OverView = () => {
                       <RightIcon color="#696868" />
                     </div>
                   </div>
+                  {
+                    pots.length > 0 ? (
                   <div className="md:flex space-x-2 justify-between">
                     <div className="bg-ch-beige flex-grow my-2 h-28 flex items-center pl-4 rounded-xl md:w-64 lg:max-w-sm">
                       <div className="flex space-x-4 items-center">
@@ -151,28 +143,37 @@ const OverView = () => {
                         </div>
                         <div className="pt-3">
                           <h1 className="text-sm text-ch-grey">Total Saved</h1>
-                          <div className="my-3 font-bold text-3xl">$850</div>
+                          <div className="my-3 font-bold text-3xl">${formatNumberShort(potTotal)}</div>
                         </div>
                       </div>
                     </div>
                     <div className="grid grid-cols-2 px-2 md:w-7/12 lg:w-8/12">
-                      {savingsData.map((saving, index) => (
-                        <div key={index} className="flex space-x-3 my-2 ">
+                      {pots.map((saving, index) => (
+                        <div key={index} className="flex items-center space-x-3 my-2 ">
                           <div
-                            className={`w-1 h-11 rounded-xl bg-${saving.color}`}
+                            className={`w-1 h-11 rounded-xl bg-ch-${saving.theme}`}
                           ></div>
                           <div className="flex flex-col justify-center">
                             <span className="text-ch-grey text-xs">
                               {saving.name}
                             </span>
                             <div className="font-bold my-1">
-                              {"$" + saving.amount}
+                              {"$" + formatNumberShort(Number(saving.total))}
                             </div>
                           </div>
                         </div>
                       ))}
                     </div>
                   </div>
+                    ) : (
+                      <div className="pt-10 text-center">
+                        <EmptyLottie />
+                        <span className="text-ch-black text-center text-sm font-normal">
+                          No pot found
+                        </span>
+                      </div>
+                    )
+                  }
                 </div>
                 <div className="bg-white my-8 px-4 lg:px-6 md:px-8 pt-6 lg:my-0 relative rounded-xl overflow-hidden">
                   <div className="flex justify-between items-center">
