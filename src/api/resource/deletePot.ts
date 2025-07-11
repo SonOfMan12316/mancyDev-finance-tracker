@@ -4,7 +4,7 @@ import { db } from "../../firebase";
 import { potInfo } from "../../types/global";
 
 export const useDeletePot = () => {
-  return useMutation<void, Error, string, { previousPotts?: potInfo[] }>({
+  return useMutation<void, Error, string, { previousPots?: potInfo[] }>({
     mutationFn: async (potId: string) => {
       await deleteDoc(doc(db, "pots", potId));
     },

@@ -97,40 +97,49 @@ const Pots = () => {
     }
   };
 
-  useEffect(() => {
-    if (openModal?.type === "edit" && openModal.data?.id) {
-      const pot = queryClient
-        .getQueryData<potInfo[]>(["pots"])
-        ?.find((pot) => pot.id === openModal.data?.id);
+  const { isLoading } = usePots({
+    onSuccess(data) {
+      setPots(data);
+    },
+    onError(error) {
+      toast.error(`${error.message}`);
+    },
+  });
 
-      if (pot) {
-        const matchedTheme = ThemeOptions.find(
-          (opt) => opt.value === pot.theme
-        );
+  const mutation = useDeletePot();
 
-        setValue("potName", pot.name ?? "");
-        setValue("amountTarget", pot.target.toString() ?? "");
-        setValue("theme", matchedTheme || null);
-      }
-    } else if (openModal?.type === "add") {
-      setValue("potName", "");
-      setValue("amountTarget", "");
-      setValue("theme", {
-        label: ThemeOptions[0].label,
-        value: ThemeOptions[0].value,
-      });
-    }
-  }, [openModal, selectedPot, setValue]);
+  const handleDeletePot = (potId: string) => {
+    mutation.mutate(potId, {
+      onMutate: async () => {
+        await queryClient.cancelQueries({ queryKey: ["pots"] });
+        const previousPots =
+          queryClient.getQueryData<potInfo[]>(["pots"]) || [];
 
-  useEffect(() => {
-    const addedAmount = Number(amountToAdd) || 0;
-    setTotalAmount((Number(selectedPot?.total) || 0) + addedAmount);
-  }, [amountToAdd, selectedPot?.total]);
+        queryClient.setQueryData(["pots"], (old: potInfo[]) => [...old]);
 
-  useEffect(() => {
-    const withdrawnAmount = Number(amountToWithdraw) || 0;
-    setTotalAmount((Number(selectedPot?.total) || 0) - withdrawnAmount);
-  }, [amountToWithdraw, selectedPot?.total]);
+        return { previousPots };
+      },
+      onSuccess: () => {
+        setOpenModal(null);
+        queryClient.invalidateQueries({ queryKey: ["pots"] });
+        toast.success("Pot deleted!");
+      },
+      onError: (error, _, context) => {
+        toast.error(`Failed to delete: ${error.message}`);
+        if (context?.previousPots) {
+          queryClient.setQueryData(["pots"], context.previousPots);
+        }
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["pots"] });
+      },
+    } as MutateOptions<
+      void,
+      Error,
+      string,
+      { previousPots?: potInfo[] }
+    >)
+  };
 
   const { mutate: addOrEditPot, isPending } = useMutation<
     potInfo,
@@ -173,63 +182,80 @@ const Pots = () => {
     },
   });
 
-  const { isLoading } = usePots({
-    onSuccess(data) {
-      setPots(data);
-    },
-    onError(error) {
-      toast.error(`${error.message}`);
-    },
-  });
+  const handleSubmitPot: SubmitHandler<PotValues> = (data) => {
+    let total = "0";
 
-  const mutation = useDeletePot();
-
-  const handleDeletePot = (potId: string) => {
-    mutation.mutate(potId, {
-      onMutate: async () => {
-        await queryClient.cancelQueries({ queryKey: ["pots"] });
-        const previousPots =
-          queryClient.getQueryData<potInfo[]>(["pots"]) || [];
-
-        queryClient.setQueryData(["pots"], (old: potInfo[]) => [...old]);
-
-        return { previousPots };
-      },
-      onSuccess: () => {
-        setOpenModal(null);
-        queryClient.invalidateQueries({ queryKey: ["pots"] });
-        toast.success("Pot deleted!");
-      },
-      onError: (error, _, context) => {
-        toast.error(`Failed to delete: ${error.message}`);
-        if (context?.previousPots) {
-          queryClient.setQueryData(["budgets"], context.previousBudgets);
-        }
-      },
-      onSettled: () => {
-        queryClient.invalidateQueries({ queryKey: ["budgets"] });
-      },
-    } as MutateOptions<
-      void,
-      Error,
-      string,
-      { previousBudgets?: potInfo[] }
-    >)
-  };
-
-  const handleSubmitBudget: SubmitHandler<PotValues> = (data) => {
+    if(openModal?.type === "edit") {
+      total = selectedPot?.total.toString() || "0";
+    } else if(openModal?.type === "addMoney") {
+      total = ((Number(selectedPot?.total) || 0) + Number(data.amountToAdd)).toString();
+    } else if(openModal?.type === "withdraw") {
+      total = ((Number(selectedPot?.total) || 0) - Number(data.amountToWithdraw)).toString();
+    }
     const potData = {
       name: data.potName || "",
       target: data.amountTarget,
-      total: data.amountToAdd
-        ? data.amountToAdd + data.amountTarget
-        : data.amountTarget + data.amountToWithdraw,
+      total,
       theme: data.theme?.value || "",
       ...(openModal?.type === "edit" && { id: openModal.data?.id }),
     };
 
     addOrEditPot(potData);
   };
+
+  const handleAddOrWithdrawMoney = () => {
+    if(!selectedPot) return;
+    let newTotal = Number(selectedPot.total);
+    if(openModal?.type === "addMoney") {
+      newTotal += amountToAdd;
+    } else if(openModal?.type === "withdraw") {
+      newTotal -= amountToWithdraw;
+    }
+
+    const updatedPot = {
+      ...selectedPot,
+      id: selectedPot.id,
+      total: newTotal.toString(),
+    }
+    addOrEditPot(updatedPot)
+  }
+
+  useEffect(() => {
+    if (openModal?.type === "edit" && openModal.data?.id) {
+      const pot = queryClient
+        .getQueryData<potInfo[]>(["pots"])
+        ?.find((pot) => pot.id === openModal.data?.id);
+
+      if (pot) {
+        const matchedTheme = ThemeOptions.find(
+          (opt) => opt.value === pot.theme
+        );
+
+        setValue("potName", pot.name ?? "");
+        setValue("amountTarget", pot.target.toString() ?? "");
+        setValue("amountToAdd", "");
+        setValue("amountToWithdraw", "");
+        setValue("theme", matchedTheme || null);
+      }
+    } else if (openModal?.type === "add") {
+      setValue("potName", "");
+      setValue("amountTarget", "");
+      setValue("theme", {
+        label: ThemeOptions[0].label,
+        value: ThemeOptions[0].value,
+      });
+    }
+  }, [openModal, selectedPot, setValue]);
+
+  useEffect(() => {
+    const addedAmount = Number(amountToAdd) || 0;
+    setTotalAmount((Number(selectedPot?.total) || 0) + addedAmount);
+  }, [amountToAdd, selectedPot?.total]);
+
+  useEffect(() => {
+    const withdrawnAmount = Number(amountToWithdraw) || 0;
+    setTotalAmount((Number(selectedPot?.total) || 0) - withdrawnAmount);
+  }, [amountToWithdraw, selectedPot?.total]);
 
   return (
     <Layout
@@ -300,7 +326,7 @@ const Pots = () => {
       >
         {openModal?.type === "add" || openModal?.type === "edit" ? (
           <>
-            <form onSubmit={handleSubmit(handleSubmitBudget)}>
+            <form onSubmit={handleSubmit(handleSubmitPot)}>
               <div>
                 <Input
                   typeOfInput="normal"
@@ -380,8 +406,8 @@ const Pots = () => {
               </div>
               <Button
                 type="submit"
-                onClick={() => handleSubmitBudget}
-                className="mt-3 mb-4"
+                onClick={() => handleSubmitPot}
+                className="mt-3 mb-4 flex items-center justify-center"
                 disabled={isPending}
               >
                 <Spinner isPending={isPending} />
@@ -443,12 +469,12 @@ const Pots = () => {
               )}
             </div>
             <Button
-              onClick={() => setOpenModal(null)}
-              disabled={
-                (amountToAdd || selectedPot?.total) >= selectedPot?.target
-              }
-              className="mt-3 mb-4"
+              onClick={handleAddOrWithdrawMoney}
+              disabled={isPending}
+              
+              className="mt-3 mb-4 flex items-center justify-center"
             >
+              <Spinner isPending={isPending} />
               {openModal?.type === "addMoney"
                 ? "Confirm Addition"
                 : "Confirm Withdrawal"}
@@ -462,11 +488,13 @@ const Pots = () => {
         title={`Delete '${openModal?.data?.title}'?`}
         isOpen={openModal?.type === "delete"}
         onCancel={() => setOpenModal(null)}
+        handleConfirm={() => handleDeletePot(`${openModal?.data?.id}`)}
+        icon={<Spinner isPending={mutation.isPending} />}
         message={
           "Are you sure you want to delete this pot? This action cannot be reversed, and all the data inside it will be removed forever."
         }
-        cancelText="Yes Confirm Deletion"
-        confirmText="No, Go Back"
+        cancelText="No, Go Back"
+        confirmText="Yes Confirm Deletion"
       />
     </Layout>
   );

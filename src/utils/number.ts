@@ -23,3 +23,11 @@ export const addPlusSignToNonNegativeNumber = (
     return number;
   }
 };
+
+export const formatNumberShort = (num: number) =>  {
+  if (num >= 10000) {
+    const rounded = Math.floor(num / 100) / 10;
+    return Number.isInteger(rounded) ? `${rounded}k` : `${rounded.toFixed(1)}k`;
+  }
+  return num.toLocaleString();
+}

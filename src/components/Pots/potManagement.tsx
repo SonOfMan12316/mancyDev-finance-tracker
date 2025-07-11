@@ -1,3 +1,4 @@
+import { formatNumberShort } from "../../utils/number";
 import { ProgressBar } from "../global";
 import { useMemo } from "react";
 
@@ -43,7 +44,7 @@ const PotManagement: React.FC<potManagementProps> = ({
           </h1>
         </div>
         <div>
-          <h2 className="text-3xl font-bold">{"$" + total.toFixed(2)}</h2>
+          <h2 className="text-3xl font-bold">{"$" + formatNumberShort(Number(total.toFixed(2)))}</h2>
         </div>
       </div>
       <ProgressBar
