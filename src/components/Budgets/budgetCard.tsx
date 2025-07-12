@@ -34,6 +34,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   const filteredTransaction = transactions.filter(
     (transaction) => transaction.category === title
   );
+
   return (
     <div className="bg-white px-6 rounded-xl lg:my-0 shadow-sm">
       <CardHeader
@@ -108,7 +109,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             <RightIcon />
           </div>
         </div>
-        {filteredTransaction.length > 0 ? (
+        {filteredTransaction.length > 0  ? (
           filteredTransaction.slice(0, 3).map((txn, index) => (
             <div
               key={index}
@@ -137,7 +138,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
               </div>
             </div>
           ))
-        ) : (
+        ) : filteredTransaction.length === 0 && (
           <div className="h-full text-center pt-9 pb-16">
             <EmptyLottie />
             <span className="text-ch-black text-xs sm:text-sm font-normal ">
