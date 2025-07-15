@@ -72,6 +72,9 @@ module.exports = {
           '100%': { transform: 'translateY(100%)', opacity: 0 },
         },
       },
+      backgroundImage: {
+        'onboarding-bg': "url('/images/onboarding.png')"
+      },
       animation: {
         'sidebar-expand': 'sidebarExpand 0.5s ease-in-out forwards',
         'sidebar-collapse': 'sidebarCollapse 0.3s ease-in-out forwards',
