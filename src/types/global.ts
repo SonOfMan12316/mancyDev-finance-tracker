@@ -40,3 +40,8 @@ export type pieChartCategory = {
   amountSpent: number;
   color: string;
 };
+
+export type Icon = {
+  className: string;
+  onClick: () => void;
+};
