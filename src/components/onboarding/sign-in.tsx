@@ -7,6 +7,8 @@ import OnboardingLayout from "../layout/OnboardingLayout";
 import Input from "../ui/Input/Input";
 import { Button } from "../ui/Button/Button";
 import { EyeClose, EyeOpen } from "../icons";
+import toast from "react-hot-toast";
+import { queryClient } from "../../App";
 
 interface SignInForm {
   email: string;
@@ -24,10 +26,29 @@ const SignIn = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<SignInForm>();
+
+  const handleSignIn: SubmitHandler<SignInForm> = async (data: SignInForm) => {
+    login.mutate(data, {
+      onSuccess: (data) => {
+        toast.success(data?.message ?? "Logged in successfully!", {
+          id: "login-success",
+        });
+        queryClient.setQueryData(["user"], data.user);
+        navigate("/overview");
+      },
+      onError: (error) => {
+        toast.error(error.message, { id: "login-error" });
+      },
+    });
+  };
+
   return (
     <OnboardingLayout>
       <div className="flex flex-col items-center justify-center h-full">
-        <form className="bg-white lg:max-w-lg lg:w-35 rounded-xl px-4 pt-6 md:pb-4 md:px-8 lg:pt-7">
+        <form
+          onSubmit={handleSubmit(handleSignIn)}
+          className="bg-white lg:max-w-lg lg:w-35 rounded-xl px-4 pt-6 md:pb-4 md:px-8 lg:pt-7"
+        >
           <h2 className="text-2xl font-bold mb-4">Login</h2>
           <div className="mt-3">
             <Input
@@ -83,7 +104,7 @@ const SignIn = () => {
               })}
             />
             {errors.password && (
-              <span role="alert" className="text-xs text-right text-ch-red">
+              <span role="alert" className="text-xs text-right text-ch-danger">
                 {errors.password?.message}
               </span>
             )}
@@ -94,7 +115,7 @@ const SignIn = () => {
             size="sm"
             disabled={login.isPending}
           >
-            Login
+            {login.isPending ? "Logging in..." : "Login"}
           </Button>
           <div className="pb-2">
             <p className="text-sm text-ch-grey font-normal text-center">
