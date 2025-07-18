@@ -20,3 +20,5 @@ export { default as Ellipsis } from "./Ellipsis";
 export { default as LightCheckmark } from "./LightCheckmark";
 export { default as EyeOpen } from "./EyeOpen";
 export { default as EyeClose } from "./EyeClose";
+export { default as Profile } from "./Profile";
+export { default as SignOut } from "./SignOut";
