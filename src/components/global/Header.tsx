@@ -1,5 +1,6 @@
 import React from "react";
 import { Button } from "../ui/Button/Button";
+import HeaderProfile from "./HeaderProfile";
 
 export interface HeaderProps {
   title?: string | React.ReactNode;
@@ -25,7 +26,8 @@ const Header: React.FC<HeaderProps> = ({
             </h1>
           )}
         </div>
-        <div>
+        <div className="flex px-2">
+          <HeaderProfile />
           <Button
             size="xs"
             variant="primary"
