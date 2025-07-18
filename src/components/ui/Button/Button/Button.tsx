@@ -7,6 +7,7 @@ export type ButtonVariant =
   | "tertiary"
   | "action"
   | "pagination"
+  | "naked"
   | "destroy";
 type ButtonSize = "lg" | "md" | "sm" | "xs";
 type IconPlacement = "start" | "end";
@@ -65,6 +66,8 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "flex items-center justify-center border border-ch-lighter-beige hover:bg-ch-lighter-beige hover:text-white shadow-sm h-10 px-1 w-10",
       destroy:
         "bg-ch-red text-white hover:opacity-90 focus:opacity-80 active:-translate-y-0.5 h-14",
+      naked:
+        "!w-auto h-auto bg-transparent border-none shadow-none outline-none py-0 px-0",
     };
 
     return (
