@@ -24,7 +24,8 @@ module.exports = {
         'ch-blue': '#3F82B2',
         'ch-black': '#000000',
         'ch-modal': '#000000b3',
-        'ch-red': '#C94736'
+        'ch-red': '#C94736',
+        'ch-danger': '#FE0808',
       },
       flexGrow: {
         1.2: '1.2',
