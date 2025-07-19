@@ -7,6 +7,7 @@ import { budgetInfo, transactionInterface } from "../../types/global";
 import { ProgressBar } from "../global";
 import { useNavigate } from "react-router-dom";
 import EmptyLottie from "../global/EmptyLottie";
+import LoadingDots from "../ui/LoadingDots";
 
 interface BudgetCardProps {
   title: string;
@@ -17,6 +18,7 @@ interface BudgetCardProps {
   onClick?: () => void;
   budget: budgetInfo | null;
   transactions: transactionInterface[];
+  getTransactionLoading: boolean;
 }
 
 const BudgetCard: React.FC<BudgetCardProps> = ({
@@ -26,6 +28,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
   amountSpent,
   budget,
   transactions,
+  getTransactionLoading,
 }) => {
   const { setOpenModal, setSelectedBudget, setSharedTitle } = useUIStore();
   const navigate = useNavigate();
@@ -44,7 +47,10 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
         setPopOpen={setPopOpen}
         type="budget"
         onEdit={() => {
-          setOpenModal({ type: "edit", data: { id: budget?.id, title: title } });
+          setOpenModal({
+            type: "edit",
+            data: { id: budget?.id, title: title },
+          });
           setSelectedBudget(budget);
         }}
         onDelete={() => {
@@ -109,12 +115,14 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             <RightIcon />
           </div>
         </div>
-        {filteredTransaction.length > 0  ? (
+        {getTransactionLoading ? (
+          <LoadingDots />
+        ) : filteredTransaction.length > 0 ? (
           filteredTransaction.slice(0, 3).map((txn, index) => (
             <div
-              key={index}
+              key={txn.id}
               className={`flex justify-between my-2  ${
-                index !== 2 ? "border-b border-ch-grey/0.15" : ""
+                index < 2 ? "border-b border-ch-grey/0.15" : ""
               } py-2 lg:py-2.5`}
             >
               <div className="flex items-center md:space-x-4">
@@ -130,7 +138,10 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
               </div>
               <div className="flex flex-col items-center space-y-2">
                 <p className="text-black text-xs font-bold">
-                  {"$" + txn.amount?.toFixed(2)}{" "}
+                  {new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  }).format(txn.amount)}
                 </p>
                 <span className="text-ch-grey text-xs font-normal">
                   {toDMYString(txn.date)}
@@ -138,7 +149,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
               </div>
             </div>
           ))
-        ) : filteredTransaction.length === 0 && (
+        ) : (
           <div className="h-full text-center pt-9 pb-16">
             <EmptyLottie />
             <span className="text-ch-black text-xs sm:text-sm font-normal ">

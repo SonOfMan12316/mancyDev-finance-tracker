@@ -8,11 +8,7 @@ import { Layout } from "../layout";
 import BudgetCard from "../Budgets/budgetCard";
 import Modal from "../global/Modal";
 import Input from "../ui/Input/Input";
-import {
-  OptionsInterface,
-  budgetInfo,
-  transactionInterface,
-} from "../../types/global";
+import { OptionsInterface, budgetInfo } from "../../types/global";
 import Select from "../ui/Dropdown/Select";
 import { DollarSign, DropdownIcon } from "../icons";
 import { CategoryOptions, ThemeOptions } from "../../lib/getSelectOptions";
@@ -39,7 +35,6 @@ type BudgetValues = {
 const Budget = () => {
   const [budgets, setBudgets] = useState<budgetInfo[]>([]);
   const { usedBudgetThemes, usedCategories } = useBudgetTotals(budgets);
-  const [transactions, setTransactions] = useState<transactionInterface[]>([]);
   const { openModal, setOpenModal, selectedBudget } = useUIStore();
   const transactionsQuery = useMemo(
     () => query(collection(db, "transactions"), orderBy("date", "desc")),
@@ -64,8 +59,9 @@ const Budget = () => {
 
   useEffect(() => {
     if (openModal?.type === "edit" && openModal.data?.id) {
-      const budget = queryClient.getQueryData<budgetInfo[]>(["budgets"])
-        ?.find(budget => budget.id === openModal.data?.id);
+      const budget = queryClient
+        .getQueryData<budgetInfo[]>(["budgets"])
+        ?.find((budget) => budget.id === openModal.data?.id);
 
       if (budget) {
         const matchedCategory = CategoryOptions.find(
@@ -103,10 +99,10 @@ const Budget = () => {
   const { mutate: addOrEditBudget, isPending } = useMutation<
     budgetInfo,
     Error,
-    Omit<budgetInfo, "id"> & {id?: string}
+    Omit<budgetInfo, "id"> & { id?: string }
   >({
     mutationFn: async (data) => {
-      if(data.id) {
+      if (data.id) {
         await updateDoc(doc(db, "budgets", data.id), {
           category: data.category,
           maximum: data.maximum,
@@ -115,7 +111,7 @@ const Budget = () => {
         });
         return { ...data, id: data.id };
       } else {
-        return await createBudget(data)
+        return await createBudget(data);
       }
     },
     onSuccess: (updatedBudget, variables) => {
@@ -133,7 +129,8 @@ const Budget = () => {
     },
     onError: (error: Error, variables) => {
       toast.error(error.message, {
-        id: variables.id ? "edit-budget-err" : "add-budget-err" });
+        id: variables.id ? "edit-budget-err" : "add-budget-err",
+      });
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["budgets"] });
@@ -146,8 +143,8 @@ const Budget = () => {
       maximum: data.maximum,
       amount_spent: data.amount_spent,
       theme: data.theme?.value || "",
-      ...(openModal?.type === "edit" && { id: openModal.data?.id })
-    }
+      ...(openModal?.type === "edit" && { id: openModal.data?.id }),
+    };
 
     addOrEditBudget(budgetData);
   };
@@ -187,11 +184,13 @@ const Budget = () => {
     >);
   };
 
-  useTransactions({
-    queryRef: transactionsQuery,
-    onSuccess: (data) => setTransactions(data),
-    onError: (error) => toast.error(`${error.message}`),
-  });
+  const { isLoading: getTransactionLoading, data: transactions = [] } =
+    useTransactions({
+      queryRef: transactionsQuery,
+      onError: (error) => {
+        toast.error(`${error.message}`);
+      },
+    });
 
   return (
     <Layout
@@ -217,6 +216,7 @@ const Budget = () => {
                 budgets.find((budget) => budget.category === category) || null
               }
               transactions={transactions}
+              getTransactionLoading={getTransactionLoading}
             />
           ))}
         </div>
