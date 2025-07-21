@@ -6,9 +6,9 @@ interface OnboardingLayoutProps {
 
 const OnboardingLayout = ({ children }: OnboardingLayoutProps) => {
   return (
-    <div className="h-screen w-screen bg-ch-beige">
+    <div className="h-full lg:h-screen w-screen bg-ch-beige">
       <div className="flex flex-col lg:flex-row min-h-screen">
-        <div className="flex flex-col justify-between m-4 p-6 lg:py-8 rounded-b-xl lg:rounded-2xl lg:w-1/3 w-full min-h-[50vh] lg:min-h-full bg-onboarding-bg bg-cover bg-no-repeat bg-black ">
+        <div className="flex flex-col justify-between lg:m-4 p-5 lg:py-8 rounded-b-xl lg:rounded-lg lg:w-1/3 w-full min-h-[50vh] lg:min-h-full lg:bg-onboarding-bg bg-cover bg-no-repeat bg-black ">
           <div className="flex justify-center lg:justify-start">
             <Logo />
           </div>
@@ -22,7 +22,7 @@ const OnboardingLayout = ({ children }: OnboardingLayoutProps) => {
             </p>
           </div>
         </div>
-        <div className="flex-1">{children}</div>
+        <div className="my-auto lg:my-0 lg:flex-1">{children}</div>
       </div>
     </div>
   );

@@ -44,12 +44,12 @@ const SignIn = () => {
 
   return (
     <OnboardingLayout>
-      <div className="flex flex-col items-center justify-center h-full">
+      <div className="flex flex-col items-center justify-center h-full px-4">
         <form
           onSubmit={handleSubmit(handleSignIn)}
-          className="bg-white lg:max-w-lg lg:w-35 rounded-xl px-4 pt-6 md:pb-4 md:px-8 lg:pt-7"
+          className="form bg-white rounded-xl px-4 pt-6 md:pb-4 md:px-8 lg:pt-7"
         >
-          <h2 className="text-2xl font-bold mb-4">Login</h2>
+          <h2 className="text-2xl font-bold mb-5 md:mb-7">Login</h2>
           <div className="mt-3">
             <Input
               typeOfInput="normal"
@@ -117,11 +117,11 @@ const SignIn = () => {
           >
             {login.isPending ? "Logging in..." : "Login"}
           </Button>
-          <div className="pb-2">
-            <p className="text-sm text-ch-grey font-normal text-center">
+          <div className="pb-4">
+            <p className="text-xs text-ch-grey font-medium text-center">
               Need to create an account?{" "}
               <span
-                className="text-ch-black font-bold cursor-pointer"
+                className="text-ch-black font-bold cursor-pointer underline"
                 onClick={() => navigate("/sign-up")}
               >
                 Sign Up
