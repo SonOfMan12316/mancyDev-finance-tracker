@@ -80,16 +80,19 @@ export const useAuth = () => {
           message: "Logged in successfully!",
         };
       } catch (error: unknown) {
-        let errorMessage = "An error occurred during login.";
+        let errorMessage = "";
 
         if (error instanceof Error && "code" in error) {
           switch (error.code) {
             case "auth/user-not-found":
-            case "auth/wrong-password":
+            case "auth/invalid-credential":
               errorMessage = "Invalid email or password.";
               break;
             case "auth/too-many-requests":
               errorMessage = "Too many attempts. Account temporarily locked.";
+              break;
+            case "auth/user-disabled":
+              errorMessage = "Account disabled";
               break;
           }
         }
