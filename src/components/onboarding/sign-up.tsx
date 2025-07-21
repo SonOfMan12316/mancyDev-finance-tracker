@@ -201,7 +201,7 @@ const SignUp = () => {
             className="my-7 flex items-center justify-center"
             size="sm"
           >
-            Create Account
+            {signUp.isPending ? "Creating Account..." : "Create Account"}
           </Button>
           <div className="pb-4">
             <p className="text-xs text-ch-grey font-medium text-center">
