@@ -13,7 +13,7 @@ import {
   User,
   UserCredential,
 } from "../../firebase";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, updateProfile } from "firebase/auth";
 
 interface AuthResponse {
   success: boolean;
@@ -26,15 +26,20 @@ export const useAuth = () => {
   const signUpMutation: UseMutationResult<
     AuthResponse,
     Error,
-    { email: string; password: string }
+    { name: string; email: string; password: string }
   > = useMutation({
-    mutationFn: async ({ email, password }) => {
+    mutationFn: async ({ name, email, password }) => {
       try {
         const userCredential: UserCredential =
           await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+
+        await updateProfile(user, {
+          displayName: name,
+        });
+
         return {
           success: true,
-          user: userCredential.user,
           message: "Account created successfully!",
         };
       } catch (error: unknown) {
@@ -140,15 +145,23 @@ export const logoutUser = async (): Promise<void> => {
 };
 
 export const useUser = () => {
-  return useQuery({
+  return useQuery<User | null>({
     queryKey: ["user"],
-    queryFn: async () => {
-      return new Promise<User | null>((resolve) => {
+    queryFn: () =>
+      new Promise((resolve) => {
+        let isMounted = true;
+
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-          unsubscribe();
-          resolve(user);
+          if (isMounted) {
+            resolve(user);
+            queryClient.setQueryData(["user"], user);
+          }
         });
-      });
-    },
+
+        return () => {
+          isMounted = false;
+          unsubscribe();
+        };
+      }),
   });
 };
