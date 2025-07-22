@@ -26,7 +26,7 @@ const Header: React.FC<HeaderProps> = ({
             </h1>
           )}
         </div>
-        <div className="flex px-2">
+        <div className="flex items-center space-x-4 px-2">
           <HeaderProfile />
           <Button
             size="xs"
