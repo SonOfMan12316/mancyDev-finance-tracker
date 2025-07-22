@@ -15,12 +15,14 @@ import Pots from "./components/pages/pots";
 import RecurringBill from "./components/pages/recurring-bill";
 import SignIn from "./components/onboarding/sign-in";
 import SignUp from "./components/onboarding/sign-up";
+import { ProtectedRoute } from "./components/global";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false,
       refetchOnWindowFocus: false,
+      staleTime: Infinity,
     },
   },
 });
@@ -46,12 +48,14 @@ const App = () => {
           }}
         />
         <Routes>
-          <Route path="/" element={<Navigate to="/overview" />} />
-          <Route path="/overview" element={<OverView />} />
-          <Route path="/transactions" element={<Transaction />} />
-          <Route path="/budgets" element={<Budget />} />
-          <Route path="/pots" element={<Pots />} />
-          <Route path="/recurring-bills" element={<RecurringBill />} />
+          <Route path="/" element={<Navigate to="/sign-in" />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/overview" element={<OverView />} />
+            <Route path="/transactions" element={<Transaction />} />
+            <Route path="/budgets" element={<Budget />} />
+            <Route path="/pots" element={<Pots />} />
+            <Route path="/recurring-bills" element={<RecurringBill />} />
+          </Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
         </Routes>
