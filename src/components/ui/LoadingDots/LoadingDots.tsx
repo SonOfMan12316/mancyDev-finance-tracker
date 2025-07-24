@@ -1,21 +1,21 @@
-import { FC } from 'react';
-import classnames from 'classnames';
+import { FC } from "react";
+import classnames from "classnames";
 
-import s from './LoadingDots.module.css';
+import s from "./LoadingDots.module.css";
 
 interface LoadingDotsProps {
-  size?: 'default' | 'sm'
+  size?: "default" | "sm";
 }
 
-const LoadingDots: FC<LoadingDotsProps> = ({ size = 'default' }) => {
-
+const LoadingDots: FC<LoadingDotsProps> = ({ size = "default" }) => {
   return (
     <span className={s.root}>
-      {
-        [...Array(3)].map((dot: unknown, index: number) => (
-          <span className={classnames(s.dot, {[s.smallDot]: size === 'sm'})} key={`dot_${index + 1}`} />
-        ))
-      }
+      {[...Array(3)].map((index: number) => (
+        <span
+          className={classnames(s.dot, { [s.smallDot]: size === "sm" })}
+          key={`dot_${index + 1}`}
+        />
+      ))}
     </span>
   );
 };
