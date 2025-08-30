@@ -37,7 +37,6 @@ export const useAuth = () => {
         await updateProfile(user, {
           displayName: name,
         });
-        
 
         return {
           success: true,
