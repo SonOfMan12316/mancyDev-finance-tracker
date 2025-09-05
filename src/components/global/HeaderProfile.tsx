@@ -8,6 +8,7 @@ import { Button } from "../ui/Button/Button";
 import { Popover } from "./index";
 import { Profile, SignOut } from "../../components/icons";
 import LoadingDots from "../ui/LoadingDots";
+import { getInitials } from "../../utils/global";
 
 const HeaderProfile: FC = () => {
   const [popOpen, setPopOpen] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const HeaderProfile: FC = () => {
             </span>
             <div className="flex items-center pt-2 pb-4 border-b-2 border-[rgba(0,0,0,0.2)]">
               <div className="w-9 h-9 rounded-full flex items-center justify-center mr-2.5 bg-ch-brown text-white text-[100%] font-medium uppercase tracking-wide pl-[0.025em]">
-                {`${user?.displayName?.charAt(0)}`}
+                {getInitials(user?.displayName ?? "")}
               </div>
               <div className="leading-tight">
                 <h2 className="capitalize max-w-[12rem] text-ellipsis overflow-hidden">
