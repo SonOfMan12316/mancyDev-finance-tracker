@@ -127,6 +127,14 @@ const SignIn = () => {
                 Sign Up
               </span>
             </p>
+            <p className="text-xs text-ch-grey font-medium text-center">
+              <span
+                className="text-ch-green font-bold cursor-pointer underline"
+                onClick={() => navigate("/forgot-password")}
+              >
+                Reset Password
+              </span>
+            </p>
           </div>
         </form>
       </div>
@@ -134,4 +142,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignIn

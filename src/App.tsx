@@ -7,15 +7,19 @@ import {
 import { Toaster } from "react-hot-toast";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-import OverView from "./components/pages/overview";
 import "./App.css";
-import { Transaction } from "./components/pages/transaction";
-import Budget from "./components/pages/budget";
-import Pots from "./components/pages/pots";
-import RecurringBill from "./components/pages/recurring-bill";
+import {
+  Budget,
+  Pots,
+  OverView,
+  Transaction,
+  RecurringBill,
+} from "./components/pages"
 import SignIn from "./components/onboarding/sign-in";
 import SignUp from "./components/onboarding/sign-up";
+import ForgotPassword from "./components/onboarding/forgot-password";
 import { ProtectedRoute } from "./components/global";
+import ResetPassword from "./components/onboarding/reset-password";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -58,6 +62,8 @@ const App = () => {
           </Route>
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
         </Routes>
       </Router>
     </QueryClientProvider>

@@ -23,7 +23,7 @@ interface TransactionInterface {
 
 const column = ["Recipient / Sender", "Category", "Transaction Date", "Amount"];
 
-export const Transaction = () => {
+const Transaction = () => {
   const [selectedSortOption, setSelectedSortOption] =
     useState<OptionsInterface<string> | null>({
       label: "Latest",
@@ -376,3 +376,5 @@ const TransactionCard: React.FC<TransactionInterface> = ({
     </div>
   );
 };
+
+export default Transaction;
