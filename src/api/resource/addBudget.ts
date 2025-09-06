@@ -1,40 +1,47 @@
-import { writeBatch, doc, collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { collection, getDocs, where, query, addDoc } from "firebase/firestore";
+import { db, auth } from "../../firebase";
 import { budgetInfo } from "../../types/global";
 
 export const createBudget = async (data: Omit<budgetInfo, 'id'>): Promise<budgetInfo> => {
-  const budgetRef = collection(db, "budgets");
-  const querySnapshot = await getDocs(budgetRef);
-
-  const budgetExist = querySnapshot.docs.find(
-    (doc) => doc.data().category === data.category
-  );
-
-  const budgetThemeExist = querySnapshot.docs.find(
-    (doc) => doc.data().theme === data.theme
-  );
-
-  if (budgetExist) {
-    throw new Error(`${data.category} budget already exists`);
-  }
-  if (budgetThemeExist) {
-    throw new Error("Chosen theme is already in use!");
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not logged in");
   }
 
-  const docRef = doc(budgetRef)
-
-  const newBudget: budgetInfo = {
+  const budgetWithUser = {
     ...data,
-    id: docRef.id
+    userId: user.uid,
   };
 
-  const batch = writeBatch(db);
-  batch.set(doc(budgetRef), data);
-
-  try {
-    await batch.commit();
-    return newBudget;
-  } catch (error: any) {
-    throw new Error("Error creating budget");
+  const categoryQuery = query(
+    collection(db, "budgets"),
+    where("userId", "==", user.uid),
+    where("category", "==", data.category)
+  );
+  
+  const categorySnapshot = await getDocs(categoryQuery);
+  if (!categorySnapshot.empty) {
+    throw new Error(`${data.category} budget already exists`);
   }
+
+  if (data.theme) {
+    const themeQuery = query(
+      collection(db, "budgets"),
+      where("userId", "==", user.uid),
+      where("theme", "==", data.theme)
+    );
+    
+    const themeSnapshot = await getDocs(themeQuery);
+    if (!themeSnapshot.empty) {
+      throw new Error("Chosen theme is already in use!");
+    }
+  }
+
+  const budgetsRef = collection(db, "budgets");
+  const docRef = await addDoc(budgetsRef, budgetWithUser);
+
+  return {
+    ...budgetWithUser,
+    id: docRef.id
+  };
 };

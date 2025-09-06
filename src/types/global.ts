@@ -15,6 +15,7 @@ export interface transactionInterface {
 
 export interface budgetInfo {
   id?: string;
+  userId: string;
   category: string;
   maximum: string;
   amount_spent: string;

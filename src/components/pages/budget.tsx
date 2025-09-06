@@ -20,7 +20,7 @@ import useUIStore from "../../store/ui-store";
 import { queryClient } from "../../App";
 import { useBudgets, useBudgetTotals, useTransactions } from "../../hooks";
 import { collection, doc, orderBy, query, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, auth } from "../../firebase";
 import { useDeleteBudget } from "../../api/resource/deleteBudget";
 import Spinner from "../icons/Spinner";
 import { EmptyLottie, LottieLoader } from "../global";
@@ -138,7 +138,9 @@ const Budget = () => {
   });
 
   const handleSubmitBudget: SubmitHandler<BudgetValues> = (data) => {
+    const user = auth.currentUser;
     const budgetData = {
+      userId: user?.uid || "",
       category: data.category?.value || "",
       maximum: data.maximum,
       amount_spent: data.amount_spent,

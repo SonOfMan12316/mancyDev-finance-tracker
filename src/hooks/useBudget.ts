@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getDocs, collection, orderBy, query } from "firebase/firestore";
+import { getDocs, collection, orderBy, query, where } from "firebase/firestore";
 import { budgetInfo } from "../types/global";
-import { db } from "../firebase";
+import { db, auth, User } from "../firebase";
 import { useEffect } from "react";
 
 interface UseBudgetsProps {
@@ -11,15 +11,23 @@ interface UseBudgetsProps {
 
 const useBudgets = ({ onSuccess, onError }: UseBudgetsProps = {}) => {
   const result = useQuery<budgetInfo[], Error>({
-    queryKey: ["budgets"],
+    queryKey: ["budgets", auth.currentUser?.uid],
     queryFn: async () => {
-        const snapshot = await getDocs(query(collection(db, "budgets"), orderBy("category", "asc")));
+        const user: User | null = auth.currentUser
+        const budgetsQuery = query(
+          collection(db, "budgets"),
+          where("userId", "==", user?.uid),
+          orderBy("category", "asc")
+        );
+
+        const snapshot = await getDocs(budgetsQuery);
         return snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
         })) as budgetInfo[];
     },
-    refetchOnWindowFocus: false
+    refetchOnWindowFocus: false,
+    enabled: !!auth.currentUser,
   });
 
   useEffect(() => {
