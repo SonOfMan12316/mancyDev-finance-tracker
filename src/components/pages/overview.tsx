@@ -63,7 +63,9 @@ const OverView = () => {
     queryRef: transactionQuery,
     onSuccess: (data) => setTransactions(data),
     onError: (error) =>
-      toast.error("Failed to fetch transactions: " + error.message),
+      toast.error("Failed to fetch transactions: " + error.message, {
+        id: 'get-transactions-error',
+      }),
   });
 
   const { isLoading: getBudgetLoading } = useBudgets({
@@ -71,7 +73,9 @@ const OverView = () => {
       setBudgets(data);
     },
     onError(error) {
-      toast.error(`${error.message}`);
+      toast.error(`${error.message}`, {
+        id: 'get-budgets-error',
+      });
     },
   });
 
@@ -80,7 +84,9 @@ const OverView = () => {
       setPots(data);
     },
     onError(error) {
-      toast.error("Failed to get pots: " + error.message);
+      toast.error("Failed to get pots: " + error.message, {
+        id: 'get-pots-error',
+      });
     },
   });
 
