@@ -1,42 +1,49 @@
-import { writeBatch, doc, collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase";
+import { collection, getDocs, where, query, addDoc } from "firebase/firestore";
+import { db, auth } from "../../firebase";
 import { potInfo } from "../../types/global";
 
-export const createPot = async (
-  data: Omit<potInfo, "id">
-): Promise<potInfo> => {
-  const potRef = collection(db, "pots");
-  const querySnapshot = await getDocs(potRef);
-
-  const potExist = querySnapshot.docs.find(
-    (doc) => doc.data().name === data.name
-  );
-
-  const budgetThemeExist = querySnapshot.docs.find(
-    (doc) => doc.data().theme === data.theme
-  );
-
-  if (potExist) {
-    throw new Error(`${data.name} pot already exists`);
-  }
-  if (budgetThemeExist) {
-    throw new Error("Chosen theme is already in use!");
+export const createPot = async (data: Omit<potInfo, "id">): Promise<potInfo> => {
+  const user = auth.currentUser;
+  if (!user) {
+    throw new Error("User not logged in");
   }
 
-  const docRef = doc(potRef);
-
-  const newPot: potInfo = {
+  const potWithUser = {
     ...data,
-    id: docRef.id,
-  };
+    userId: user.uid,
+  }
 
-  const batch = writeBatch(db);
-  batch.set(doc(potRef), data);
+  if (data.theme) {
+    const themeQuery = query(
+      collection(db, "pots"),
+      where("userId", "==", user.uid),
+      where("theme", "==", data.theme)
+    );
+    
+    const themeSnapshot = await getDocs(themeQuery);
+    if (!themeSnapshot.empty) {
+      throw new Error("Chosen theme is already in use!");
+    }
+  }
 
-  try {
-    await batch.commit();
-    return newPot;
-  } catch (error: any) {
-    throw new Error("Error creating pot");
+  if (data.name) {
+    const nameQuery = query(
+      collection(db, "pots"),
+      where("userId", "==", user.uid),
+      where("theme", "==", data.name)
+    );
+    
+    const nameSnapshot = await getDocs(nameQuery);
+    if (!nameSnapshot.empty) {
+      throw new Error(`${data.name} pot already exists`);
+    }
+  }
+
+  const potRef = collection(db, "pots");
+  const docRef = await addDoc(potRef, potWithUser);
+
+  return {
+    ...potWithUser,
+    id: docRef.id
   }
 };

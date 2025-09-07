@@ -24,6 +24,7 @@ export interface budgetInfo {
 
 export interface potInfo {
   id?: string;
+  userId: string;
   name: string;
   target: string;
   total: string;

@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { getDocs, collection, orderBy, query } from "firebase/firestore";
+import { getDocs, collection, orderBy, query, where } from "firebase/firestore";
 import { potInfo } from "../types/global";
-import { db } from "../firebase";
+import { db, auth, User } from "../firebase";
 import { useEffect } from "react";
 
 interface UsePotsProps {
@@ -11,17 +11,26 @@ interface UsePotsProps {
 
 const usePots = ({ onSuccess, onError }: UsePotsProps = {}) => {
   const result = useQuery<potInfo[], Error>({
-    queryKey: ["pots"],
+    queryKey: ["pots", auth.currentUser?.uid],
     queryFn: async () => {
-      const snapshot = await getDocs(
-        query(collection(db, "pots"), orderBy("name", "asc"))
+      const user: User | null = auth.currentUser;
+      const potsQuery = query(
+        collection(db, "pots"),
+        where("userId", "==", user?.uid),
+        orderBy("name", "asc")
       );
+
+      const snapshot = await getDocs(potsQuery);
+      if (snapshot.empty) {
+        return [];
+      }
       return snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       })) as potInfo[];
     },
     refetchOnWindowFocus: false,
+    enabled: !!auth.currentUser,
   });
 
   useEffect(() => {

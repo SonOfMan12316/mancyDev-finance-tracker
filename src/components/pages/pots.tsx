@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { MutateOptions, useMutation } from "@tanstack/react-query";
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../../firebase";
+import { db, auth } from "../../firebase";
 
 import { createPot } from "../../api/resource/addPot";
 import { Layout } from "../layout";
@@ -183,6 +183,7 @@ const Pots = () => {
   });
 
   const handleSubmitPot: SubmitHandler<PotValues> = (data) => {
+    const user = auth.currentUser;
     let total = "0";
 
     if(openModal?.type === "edit") {
@@ -193,6 +194,7 @@ const Pots = () => {
       total = ((Number(selectedPot?.total) || 0) - Number(data.amountToWithdraw)).toString();
     }
     const potData = {
+      userId: user?.uid || "",
       name: data.potName || "",
       target: data.amountTarget,
       total,
@@ -285,7 +287,7 @@ const Pots = () => {
         <div className="pt-32 lg:pt-40">
           <EmptyLottie />
           <p className="text-ch-black text-center text-sm font-normal">
-            No budget found.
+            No pot found.
           </p>
         </div>
       )}
