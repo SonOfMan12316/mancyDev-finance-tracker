@@ -21,6 +21,9 @@ const useBudgets = ({ onSuccess, onError }: UseBudgetsProps = {}) => {
         );
 
         const snapshot = await getDocs(budgetsQuery);
+        if(snapshot.empty) {
+          return []
+        }
         return snapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data(),
