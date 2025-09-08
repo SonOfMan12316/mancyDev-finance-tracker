@@ -22,6 +22,7 @@ import Spinner from "../icons/Spinner";
 import usePots from "../../hooks/usePots";
 import { useBudgetTotals } from "../../hooks";
 import { useDeletePot } from "../../api/resource/deletePot";
+import { formatNumberShort } from "../../utils/number";
 
 type PotValues = {
   potName: string;
@@ -73,7 +74,7 @@ const Pots = () => {
       const maxAmountAllowed =
         Number(selectedPot.target) - Number(selectedPot.total);
       if (newValue > maxAmountAllowed) {
-        toast.error(`Maximum amount allowed is ${maxAmountAllowed}`, {
+        toast.error(`Maximum amount allowed is ${formatNumberShort(maxAmountAllowed)}`, {
           id: "max-added-amount-exceed",
         });
         setValue("amountToAdd", maxAmountAllowed.toString());
@@ -87,7 +88,7 @@ const Pots = () => {
     if (selectedPot) {
       const maxAmountAllowed = Number(selectedPot.total);
       if (newValue > maxAmountAllowed) {
-        toast.error(`Maximum amount allowed is ${maxAmountAllowed}`, {
+        toast.error(`Maximum amount allowed is ${formatNumberShort(maxAmountAllowed)}`, {
           id: "max-withdrawn-amount-exceed",
         });
         setValue("amountToWithdraw", maxAmountAllowed.toString());

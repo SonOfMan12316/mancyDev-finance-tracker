@@ -8,6 +8,7 @@ import { ProgressBar } from "../global";
 import { useNavigate } from "react-router-dom";
 import EmptyLottie from "../global/EmptyLottie";
 import LoadingDots from "../ui/LoadingDots";
+import { formatNumberShort } from "../../utils/number";
 
 interface BudgetCardProps {
   title: string;
@@ -63,7 +64,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
       <>
         <div className="mb-2.5">
           <h2 className="text-ch-grey text-sm font-normal">
-            Maximum of {"$" + maximum?.toFixed(2)}
+            Maximum of {"$" + formatNumberShort(maximum)}
           </h2>
         </div>
         <div>
@@ -81,7 +82,7 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
             <div className="flex flex-col space-y-2">
               <h1 className="text-ch-grey text-xs font-normal">Spent</h1>
               <h1 className="text-black text-sm font-bold">
-                {"$" + amountSpent.toFixed(2)}
+                {"$" + formatNumberShort(amountSpent)}
               </h1>
             </div>
           </div>
@@ -91,9 +92,10 @@ const BudgetCard: React.FC<BudgetCardProps> = ({
               <h1 className="text-ch-grey text-xs font-normal">Remaining</h1>
               <h1 className="text-black text-sm font-bold">
                 {"$" +
-                  Math.ceil(
-                    maximum - amountSpent < 0 ? 0 : maximum - (amountSpent ?? 0)
-                  )?.toFixed(2)}
+                  formatNumberShort(
+                    Math.max(maximum - (amountSpent ?? 0))
+                  )
+                }
               </h1>
             </div>
           </div>

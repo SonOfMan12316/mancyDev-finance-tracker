@@ -1,6 +1,7 @@
 import { budgetInfo } from "../../types/global";
 import PieChart from "../ui/PieChart";
 import { useBudgetTotals } from "../../hooks";
+import { formatNumberShort } from "../../utils/number";
 
 interface BudgetSpendingSummaryCardProp {
   budgets: budgetInfo[];
@@ -41,9 +42,9 @@ const BudgetSpendingSummaryCard: React.FC<BudgetSpendingSummaryCardProp> = ({
                 </div>
                 <div className="flex flex-col items-center">
                   <p className="text-base font-bold">
-                    {"$" + Number(budget.amount_spent).toFixed(2)}{" "}
+                    {"$" + formatNumberShort(Number(budget.amount_spent))}{" "}
                     <span className="text-ch-grey text-sm font-normal">
-                      &nbsp; of {"$" + Number(budget.maximum).toFixed(2)}
+                      &nbsp; of {"$" + formatNumberShort(Number(budget.maximum))}
                     </span>
                   </p>
                 </div>

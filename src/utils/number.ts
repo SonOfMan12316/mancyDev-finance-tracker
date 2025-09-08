@@ -24,10 +24,12 @@ export const addPlusSignToNonNegativeNumber = (
   }
 };
 
-export const formatNumberShort = (num: number) =>  {
-  if (num >= 1000) {
-    const rounded = Math.floor(num / 100) / 10;
-    return Number.isInteger(rounded) ? `${rounded}k` : `${rounded.toFixed(1)}k`;
+export const formatNumberShort = (num: number) => {
+  if (num >= 1_000_000) {
+    return `${(num / 1_000_000).toFixed(num % 1_000_000 === 0 ? 0 : 1)}M`;
+  }
+  if (num >= 1_000) {
+    return `${(num / 1_000).toFixed(num % 1_000 === 0 ? 0 : 1)}k`;
   }
   return num.toLocaleString();
-}
+};

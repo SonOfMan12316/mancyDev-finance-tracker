@@ -74,7 +74,7 @@ const PotManagement: React.FC<potManagementProps> = ({
         </div>
         <div>
           <h4 className="text-xs font-normal text-ch-grey">
-            Target of {"$" + target}
+            Target of {"$" + formatNumberShort(target)}
           </h4>
         </div>
       </div>

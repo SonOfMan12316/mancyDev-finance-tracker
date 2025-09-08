@@ -24,6 +24,7 @@ import { db, auth } from "../../firebase";
 import { useDeleteBudget } from "../../api/resource/deleteBudget";
 import Spinner from "../icons/Spinner";
 import { EmptyLottie, LottieLoader } from "../global";
+import { formatNumberShort } from "../../utils/number";
 
 type BudgetValues = {
   category: OptionsInterface<string> | null;
@@ -56,6 +57,22 @@ const Budget = () => {
       theme: null,
     },
   });
+  const amountSpent = watch("amount_spent");
+  const maximum = watch("maximum");
+
+  const handleAmountSpentOnChange = (newValue: string) => {
+      const sanitizedValue = newValue.replace(/\D/g, "");
+      const numericValue = Number(sanitizedValue);
+      const maxAmountAllowed = Number(maximum)|| 0;
+
+      if (numericValue > maxAmountAllowed) {
+        toast.error(`Maximum amount allowed is ${formatNumberShort(maxAmountAllowed)}`, {
+          id: "max-added-amount-exceed",
+        });
+      } else {
+        setValue("amount_spent", sanitizedValue);
+      }
+  };
 
   useEffect(() => {
     if (openModal?.type === "edit" && openModal.data?.id) {
@@ -297,18 +314,16 @@ const Budget = () => {
               {...register("amount_spent", {
                 required: "Amount spent is required",
                 min: { value: 1, message: "Amount must be positive" },
+                validate: value =>
+                  Number(value) <= Number(watch("maximum" )) || "Amount spent cannot exceed maximum"
               })}
               onChange={(e) => {
-                const rawValue = e.target.value.replace(/\D/g, "");
-                setValue("amount_spent", rawValue, {
-                  shouldValidate: true,
-                });
-                e.target.value = rawValue;
+                handleAmountSpentOnChange(e.target.value);
               }}
             />
             {errors.amount_spent && (
               <span role="alert" className="text-xs text-ch-red">
-                {errors.maximum?.message}
+                {errors.amount_spent?.message}
               </span>
             )}
           </div>
@@ -337,7 +352,13 @@ const Budget = () => {
           <Button
             type="submit"
             className="mt-3 mb-4 flex items-center justify-center"
-            disabled={isPending}
+            disabled={
+              isPending || 
+              !amountSpent ||
+              !maximum ||
+              !watch("category") ||
+              !watch("theme") ||
+              Number(amountSpent) > Number(maximum)}
           >
             <Spinner isPending={isPending} />
             {openModal?.type === "add" ? "Add Budget" : "Save Changes"}
