@@ -273,7 +273,7 @@ const Budget = () => {
             usedCategories={usedCategories}
           />
           {errors.category && (
-            <span role="alert" className="text-xs text-ch-red">
+            <span role="alert" className="text-xs text-ch-danger">
               {errors.category?.message}
             </span>
           )}
@@ -298,7 +298,7 @@ const Budget = () => {
               }}
             />
             {errors.maximum && (
-              <span role="alert" className="text-xs text-ch-red">
+              <span role="alert" className="text-xs text-ch-danger">
                 {errors.maximum?.message}
               </span>
             )}
@@ -322,7 +322,7 @@ const Budget = () => {
               }}
             />
             {errors.amount_spent && (
-              <span role="alert" className="text-xs text-ch-red">
+              <span role="alert" className="text-xs text-ch-danger">
                 {errors.amount_spent?.message}
               </span>
             )}
@@ -344,7 +344,7 @@ const Budget = () => {
               responsive={false}
             />
             {errors.theme && (
-              <span role="alert" className="text-xs text-ch-red">
+              <span role="alert" className="text-xs text-ch-danger">
                 {errors.theme?.message}
               </span>
             )}

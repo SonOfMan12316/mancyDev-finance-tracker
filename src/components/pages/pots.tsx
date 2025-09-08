@@ -354,7 +354,7 @@ const Pots = () => {
                   amountOfCharactersAllowed={characterLeft}
                 />
                 {errors.potName && (
-                  <span role="alert" className="text-xs text-ch-red">
+                  <span role="alert" className="text-xs text-ch-danger">
                     {errors.potName?.message}
                   </span>
                 )}
@@ -380,7 +380,7 @@ const Pots = () => {
                   }}
                 />
                 {errors.amountTarget && (
-                  <span role="alert" className="text-xs text-ch-red">
+                  <span role="alert" className="text-xs text-ch-danger">
                     {errors.amountTarget?.message}
                   </span>
                 )}
@@ -402,7 +402,7 @@ const Pots = () => {
                   usedThemes={usedPotThemes}
                 />
                 {errors.theme && (
-                  <span role="alert" className="text-xs text-ch-red">
+                  <span role="alert" className="text-xs text-ch-danger">
                     {errors.theme?.message}
                   </span>
                 )}
