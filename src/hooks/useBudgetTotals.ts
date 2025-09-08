@@ -58,9 +58,7 @@ const useBudgetTotals = (
     }
 
     if (pots && pots.length > 0) {
-      console.log("pots in useBudgetTotals:", pots);
       pots.forEach((pot) => {
-        console.log("pot.total:", pot.total);
         usedPotThemes.add(pot.theme);
         usedPotName.add(pot.name);
         totals.potTotal += Number(pot.total);

@@ -114,9 +114,7 @@ export const useAuth = () => {
     useMutation({
       mutationFn: async (email) => {
         try {
-          console.log('Sending reset email to:', email)
           await sendPasswordResetEmail(auth, email)
-          console.log('Password reset email sent successfully.')
           return {
             success: true,
             message: 'Password reset email sent!',
