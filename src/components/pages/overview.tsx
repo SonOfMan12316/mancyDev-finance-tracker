@@ -1,25 +1,28 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import toast from "react-hot-toast";
-import { collection, orderBy, query } from "firebase/firestore";
-import { db } from "../../firebase";
+import { useMemo, useState } from "react"
+import { useNavigate } from "react-router-dom"
+import toast from "react-hot-toast"
+import { collection, orderBy, query } from "firebase/firestore"
+import { db } from "../../firebase"
 
-import { Layout } from "../layout";
-import { EmptyLottie, LottieLoader } from "../global";
-import { addCommasToNumber, formatNumberShort } from "../../utils/number";
-import { RightIcon, SavingIcon } from "../icons";
-import { toDMYString } from "../../utils/date";
-import PieChart from "../ui/PieChart";
-import { useTransactions, useBudgets, useBudgetTotals } from "../../hooks";
-import { budgetInfo, potInfo, transactionInterface } from "../../types/global";
-import usePots from "../../hooks/usePots";
+import { Layout } from "../layout"
+import { EmptyLottie, LottieLoader } from "../global"
+import { addCommasToNumber, formatNumberShort } from "../../utils/number"
+import { RightIcon, SavingIcon } from "../icons"
+import { toDMYString } from "../../utils/date"
+import PieChart from "../ui/PieChart"
+import { useTransactions, useBudgets, useBudgetTotals } from "../../hooks"
+import { budgetInfo, potInfo, transactionInterface } from "../../types/global"
+import usePots from "../../hooks/usePots"
 
 const OverView = () => {
-  const navigate = useNavigate();
-  const [transactions, setTransactions] = useState<transactionInterface[]>([]);
-  const [budgets, setBudgets] = useState<budgetInfo[]>([]);
-  const [pots, setPots] = useState<potInfo[]>([]);
-  const { limit, amountSpent, categories, potTotal } = useBudgetTotals(budgets, pots);
+  const navigate = useNavigate()
+  const [transactions, setTransactions] = useState<transactionInterface[]>([])
+  const [budgets, setBudgets] = useState<budgetInfo[]>([])
+  const [pots, setPots] = useState<potInfo[]>([])
+  const { limit, amountSpent, categories, potTotal } = useBudgetTotals(
+    budgets,
+    pots
+  )
 
   const figure = [
     {
@@ -34,7 +37,7 @@ const OverView = () => {
       name: "Expenses",
       amount: 1700.5,
     },
-  ];
+  ]
 
   const billsData = [
     {
@@ -52,43 +55,43 @@ const OverView = () => {
       amount: 59.98,
       color: "ch-navy",
     },
-  ];
+  ]
 
   const transactionQuery = useMemo(
     () => query(collection(db, "transactions"), orderBy("date", "desc")),
     []
-  );
+  )
 
   const { isLoading } = useTransactions({
     queryRef: transactionQuery,
     onSuccess: (data) => setTransactions(data),
     onError: (error) =>
       toast.error("Failed to fetch transactions: " + error.message, {
-        id: 'get-transactions-error',
+        id: "get-transactions-error",
       }),
-  });
+  })
 
   const { isLoading: getBudgetLoading } = useBudgets({
     onSuccess(data) {
-      setBudgets(data);
+      setBudgets(data)
     },
     onError(error) {
       toast.error(`${error.message}`, {
-        id: 'get-budgets-error',
-      });
+        id: "get-budgets-error",
+      })
     },
-  });
+  })
 
   const { isLoading: getPotLoading } = usePots({
     onSuccess(data) {
-      setPots(data);
+      setPots(data)
     },
     onError(error) {
       toast.error("Failed to get pots: " + error.message, {
-        id: 'get-pots-error',
-      });
+        id: "get-pots-error",
+      })
     },
-  });
+  })
 
   return (
     <div className="">
@@ -133,53 +136,70 @@ const OverView = () => {
                       onClick={() => navigate("/pots")}
                       className="flex items-center space-x-3 cursor-pointer"
                     >
-                      <h1 className="text-sm text-ch-grey hover:text-black">
-                        See details
-                      </h1>
-                      <RightIcon color="#696868" />
+                      {pots.length > 0 && (
+                        <>
+                          <h1 className="text-sm text-ch-grey hover:text-black">
+                            See details
+                          </h1>
+                          <RightIcon color="#696868" />
+                        </>
+                      )}
                     </div>
                   </div>
-                  {
-                    pots.length > 0 ? (
-                  <div className="md:flex space-x-2 justify-between">
-                    <div className="bg-ch-beige flex-grow my-2 h-28 flex items-center pl-4 rounded-xl md:w-64 lg:max-w-sm">
-                      <div className="flex space-x-4 items-center">
-                        <div>
-                          <SavingIcon color="#277C78" />
-                        </div>
-                        <div className="pt-3">
-                          <h1 className="text-sm text-ch-grey">Total Saved</h1>
-                          <div className="my-3 font-bold text-3xl">${formatNumberShort(potTotal)}</div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 px-2 md:w-7/12 lg:w-8/12">
-                      {pots.map((saving, index) => (
-                        <div key={index} className="flex items-center space-x-3 my-2 ">
-                          <div
-                            className={`w-1 h-11 rounded-xl bg-ch-${saving.theme}`}
-                          ></div>
-                          <div className="flex flex-col justify-center">
-                            <span className="text-ch-grey text-xs">
-                              {saving.name}
-                            </span>
-                            <div className="font-bold my-1">
-                              {"$" + formatNumberShort(Number(saving.total))}
+                  {pots.length > 0 ? (
+                    <div className="md:flex space-x-2 justify-between">
+                      <div className="bg-ch-beige flex-grow my-2 h-28 flex items-center pl-4 rounded-xl md:w-64 lg:max-w-sm">
+                        <div className="flex space-x-4 items-center">
+                          <div>
+                            <SavingIcon color="#277C78" />
+                          </div>
+                          <div className="pt-3">
+                            <h1 className="text-sm text-ch-grey">
+                              Total Saved
+                            </h1>
+                            <div className="my-3 font-bold text-3xl">
+                              ${formatNumberShort(potTotal)}
                             </div>
                           </div>
                         </div>
-                      ))}
+                      </div>
+                      <div className="grid grid-cols-2 px-2 md:w-7/12 lg:w-8/12">
+                        {pots.map((saving, index) => (
+                          <div
+                            key={index}
+                            className="flex items-center space-x-3 my-2 "
+                          >
+                            <div
+                              className={`w-1 h-11 rounded-xl bg-ch-${saving.theme}`}
+                            ></div>
+                            <div className="flex flex-col justify-center">
+                              <span className="text-ch-grey text-xs">
+                                {saving.name}
+                              </span>
+                              <div className="font-bold my-1">
+                                {"$" + formatNumberShort(Number(saving.total))}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                    ) : (
-                      <div className="pt-10 text-center">
-                        <EmptyLottie />
+                  ) : (
+                    <div className="pt-10 text-center">
+                      <EmptyLottie />
+                      <div className="flex flex-col space-y-1">
                         <span className="text-ch-black text-center text-sm font-normal">
                           No pot found
                         </span>
+                        <span
+                          className="text-ch-green text-xs underline cursor-pointer"
+                          onClick={() => navigate("/pots")}
+                        >
+                          Create Pot
+                        </span>
                       </div>
-                    )
-                  }
+                    </div>
+                  )}
                 </div>
                 <div className="bg-white my-8 px-4 lg:px-6 md:px-8 pt-6 lg:my-0 relative rounded-xl overflow-hidden">
                   <div className="flex justify-between items-center">
@@ -250,10 +270,14 @@ const OverView = () => {
                       onClick={() => navigate("/budgets")}
                       className="flex items-center space-x-3 lg:space-x-2 cursor-pointer"
                     >
-                      <h1 className="text-sm text-ch-grey hover:text-black">
-                        See details
-                      </h1>
-                      <RightIcon color="#696868" />
+                      {budgets.length > 0 && (
+                        <>
+                          <h1 className="text-sm text-ch-grey hover:text-black">
+                            See details
+                          </h1>
+                          <RightIcon color="#696868" />
+                        </>
+                      )}
                     </div>
                   </div>
                   <div className="md:flex md:items-center md:justify-between lg:justify-center">
@@ -283,7 +307,9 @@ const OverView = () => {
                                     </h1>
                                     <span className="font-bold text-black text-sm py-2">
                                       {"$" +
-                                        formatNumberShort(Number(saving.amount_spent))}
+                                        formatNumberShort(
+                                          Number(saving.amount_spent)
+                                        )}
                                     </span>
                                   </div>
                                 </div>
@@ -295,9 +321,17 @@ const OverView = () => {
                     ) : (
                       <div className="pt-20 text-center">
                         <EmptyLottie />
-                        <span className="text-ch-black text-center text-sm font-normal">
-                          No budget found
-                        </span>
+                        <div className="flex flex-col space-y-1">
+                          <span className="text-ch-black text-center text-sm font-normal">
+                            No budget found
+                          </span>
+                          <span
+                            className="text-ch-green text-xs underline ml-2 cursor-pointer"
+                            onClick={() => navigate("/budgets")}
+                          >
+                            Create Budget
+                          </span>
+                        </div>
                       </div>
                     )}
                   </div>
@@ -345,7 +379,7 @@ const OverView = () => {
         )}
       </Layout>
     </div>
-  );
-};
+  )
+}
 
-export default OverView;
+export default OverView
